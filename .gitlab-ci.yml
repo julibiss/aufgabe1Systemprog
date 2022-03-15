@@ -1,0 +1,32 @@
+#
+# Liebe Studierende,
+#
+# bitte modifizieren Sie diese Datei NICHT.
+#
+image: registry.it.hs-heilbronn.de/it/development/git-runners/itadmin-openjdk17_repo-hhnit:latest
+stages:
+  - a1-checks
+
+variables:
+  SIMPLE_LOG_PROPERTY: "-Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn"
+
+#
+# EXERCISE A1
+#
+script-check-a1:
+  image: registry.it.hs-heilbronn.de/it/development/git-runners/itadmin-alpine-psql
+  stage: a1-checks
+  services:
+    - postgres:latest
+  variables:
+    POSTGRES_DB: pdbg
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: "postgres"
+  script:
+    - /bin/sh -c "[ -f "A1/ddl/schema.sql" ] || ( echo Datei schema.sql im Ordner A1/ddl existiert nicht. Bitte legen Sie Ihr DDL in dieser Datei ab! && exit 1 )";
+    # psql returns 0 to the shell if it finished normally,
+    # 1 if a fatal error of its own occurs (e.g., out of memory, file not found),
+    # 2 if the connection to the server went bad and the session was not interactive, and
+    # 3 if an error occurred in a script and the variable ON_ERROR_STOP was set.
+    # https://www.postgresql.org/docs/12/app-psql.html#id-1.9.4.18.7
+    - export PGPASSWORD=postgres; psql --single-transaction -h postgres -d pdbg -U postgres -f A1/ddl/schema.sql -v "ON_ERROR_STOP=1"
