@@ -72,7 +72,7 @@ CREATE TABLE Labortest(
 
 CREATE TABLE Untersuchungsergebnis(
 	ID int PRIMARY KEY,
-	UN_ID REFERENCES Untersuchungsverfahren(ID),
+	UN_ID int REFERENCES Untersuchungsverfahren(ID),
 	ergebniszusammenfassung  varchar,
 	anforderungsdatum date,
 	ergebnisdatum date
@@ -81,7 +81,7 @@ CREATE TABLE Untersuchungsergebnis(
 CREATE TABLE Diagnose(
 	ID int PRIMARY KEY,
 	U_ID int REFERENCES Untersuchungsergebnis(ID),
-	icd-code int,
+	icdcode int,
 	diagnosetext varchar
 );
 
