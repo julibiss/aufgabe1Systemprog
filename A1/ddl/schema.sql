@@ -47,10 +47,6 @@ CREATE TABLE Abteilung(
 	bezeichnung varchar NOT NULL
 );
 
-CREATE TABLE Untersuchungsergebnis(
-
-);
-
 CREATE TABLE Untersuchungsverfahren(
 	ID int PRIMARY KEY,
 	bezeichnung varchar NOT NULL,
@@ -74,3 +70,26 @@ CREATE TABLE Labortest(
 	normwert int  CHECK (normwert <= 1.5 AND normwert >=0.5)
 ) inherits(Untersuchungsverfahren);
 
+CREATE TABLE Untersuchungsergebnis(
+	ID int PRIMARY KEY,
+	UN_ID REFERENCES Untersuchungsverfahren(ID),
+	ergebniszusammenfassung  varchar,
+	anforderungsdatum date,
+	ergebnisdatum date
+);
+
+CREATE TABLE Diagnose(
+	ID int PRIMARY KEY,
+	U_ID int REFERENCES Untersuchungsergebnis(ID),
+	icd-code int,
+	diagnosetext varchar
+);
+
+CREATE TABLE Befund(
+	ID int PRIMARY KEY,
+	A_ID int REFERENCES Arzt(ID),
+	P_ID int REFERENCES Patient(ID),
+	D_ID int REFERENCES Diagnose(ID),
+	datum date,
+	zusammenfassung varchar
+)
