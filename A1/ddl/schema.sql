@@ -55,18 +55,21 @@ CREATE TABLE Untersuchungsverfahren(
 CREATE TABLE Klinischesuntersuchungsverfahren(
     ID INT PRIMARY KEY,
     bezeichnung varchar (30) NOT NULL,
-    koerperregion varchar (30) NOT NULL
+    koerperregion varchar (30) NOT NULL,
+	FOREIGN KEY (ID) REFERENCES Untersuchungsverfahren(ID)
 ) inherits(Untersuchungsverfahren);
 
 CREATE TABLE Apparativesuntersuchungsverfahren(
     ID INT PRIMARY KEY,
-    bezeichnung varchar (30) NOT NULL
+    bezeichnung varchar (30) NOT NULL,
+	FOREIGN KEY (ID) REFERENCES Untersuchungsverfahren(ID)
 ) inherits(Untersuchungsverfahren);
 
 CREATE TABLE Labortest(
     ID INT PRIMARY KEY,
     probenart varchar (30) NOT NULL,
-    normwert int  CHECK (normwert <= 1.5 AND normwert >=0.5)
+    normwert int  CHECK (normwert <= 1.5 AND normwert >=0.5),
+	FOREIGN KEY (ID) REFERENCES Untersuchungsverfahren(ID)	
 ) inherits(Untersuchungsverfahren);
 
 CREATE TABLE Untersuchungsergebnis(
