@@ -7,14 +7,6 @@ CREATE TABLE Patient(
     versicherungsnummer int
 );
 
-CREATE TABLE Aufenthalt(
-    ID int PRIMARY KEY ,
-    P_ID int REFERENCES Patient(ID) ON DELETE RESTRICT,
-    S_ID int REFERENCES Station(ID) ON DELETE RESTRICT,
-    aufnahmedatum date NOT NULL,
-    entlassdatum date
-);
-
 CREATE TABLE Abteilung(
     ID int PRIMARY KEY,
     bezeichnung varchar (15) NOT NULL
@@ -25,6 +17,14 @@ CREATE TABLE Station(
 	AB_ID int REFERENCES Abteilung(ID) ON DELETE RESTRICT,
     bezeichnung varchar (15) NOT NULL,
     bettenzahl int NOT NULL CHECK (bettenzahl > 0)
+);
+
+CREATE TABLE Aufenthalt(
+    ID int PRIMARY KEY ,
+    P_ID int REFERENCES Patient(ID) ON DELETE RESTRICT,
+    S_ID int REFERENCES Station(ID) ON DELETE RESTRICT,
+    aufnahmedatum date NOT NULL,
+    entlassdatum date
 );
 
 CREATE TABLE Arzt(
