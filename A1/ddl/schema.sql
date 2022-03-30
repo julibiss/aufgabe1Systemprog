@@ -73,6 +73,14 @@ CREATE TABLE Labortest(
     normwert int  CHECK (normwert <= 1.5 AND normwert >=0.5)
 ) inherits(Untersuchungsverfahren);
 
+CREATE TABLE Befund(
+    ID int PRIMARY KEY,
+    A_ID int REFERENCES Arzt(ID) ON DELETE RESTRICT,
+    P_ID int REFERENCES Patient(ID) ON DELETE RESTRICT,
+    datum date NOT NULL,
+    zusammenfassung varchar
+);
+
 CREATE TABLE Untersuchungsergebnis(
     ID int PRIMARY KEY,
     UN_ID int REFERENCES Untersuchungsverfahren(ID) ON DELETE CASCADE,
@@ -88,13 +96,7 @@ CREATE TABLE Diagnose(
     diagnosetext varchar
 );
 
-CREATE TABLE Befund(
-    ID int PRIMARY KEY,
-    A_ID int REFERENCES Arzt(ID) ON DELETE RESTRICT,
-    P_ID int REFERENCES Patient(ID) ON DELETE RESTRICT,
-    datum date NOT NULL,
-    zusammenfassung varchar
-);
+
 
 CREATE TABLE Diagnoseliste(
 	B_ID int REFERENCES Befund(ID) ON DELETE RESTRICT,
