@@ -4,7 +4,7 @@ CREATE TABLE Patient(
     nachname varchar (30) NOT NULL,
     geburtsdatum Date NOT NULL,
     krankenkasse varchar (50),
-    versicherungsnummer int (15)
+    versicherungsnummer int
 );
 
 CREATE TABLE Station(
