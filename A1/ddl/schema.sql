@@ -15,6 +15,18 @@ CREATE TABLE Aufenthalt(
     entlassdatum date
 );
 
+CREATE TABLE Abteilung(
+    ID int PRIMARY KEY,
+    bezeichnung varchar (15) NOT NULL
+);
+
+CREATE TABLE Station(
+    ID int PRIMARY KEY ,
+	AB_ID int REFERENCES Abteilung(ID) ON DELETE RESTRICT,
+    bezeichnung varchar (15) NOT NULL,
+    bettenzahl int NOT NULL CHECK (bettenzahl > 0)
+);
+
 CREATE TABLE Arzt(
     ID int PRIMARY KEY,
     V_ID int REFERENCES Arzt(ID) ON DELETE RESTRICT,
@@ -34,19 +46,6 @@ CREATE TABLE Pflegekraft(
     nachname varchar NOT NULL,
     geburtsdatum Date NOT NULL
 );
-
-CREATE TABLE Abteilung(
-    ID int PRIMARY KEY,
-    bezeichnung varchar (15) NOT NULL
-);
-
-CREATE TABLE Station(
-    ID int PRIMARY KEY ,
-	AB_ID int REFERENCES Abteilung(ID) ON DELETE RESTRICT,
-    bezeichnung varchar (15) NOT NULL,
-    bettenzahl int NOT NULL CHECK (bettenzahl > 0)
-);
-
 CREATE TABLE Untersuchungsverfahren(
     ID int PRIMARY KEY,
 	U_ID int REFERENCES Untersuchungsverfahren(ID) ON DELETE RESTRICT,
