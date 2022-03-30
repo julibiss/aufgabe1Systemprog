@@ -23,19 +23,19 @@ CREATE TABLE Aufenthalt(
 
 CREATE TABLE Arzt(
     ID int PRIMARY KEY,
-    V_ID int REFERENCES Arzt(ID) ON DELETE RESTRICT
+    V_ID int REFERENCES Arzt(ID) ON DELETE RESTRICT,
     vorname varchar (50) NOT NULL,
     nachname varchar (30) NOT NULL,
     geburtsdatum Date NOT NULL,
-    akGrad varchar (20) NOT NULL,
+    akGrad varchar (20) NOT NULL
 );
 
 CREATE TABLE Pflegekraft(
     ID int PRIMARY KEY,
-	PF_ID int REFERENCES Pflegekraft(ID) ON DELETE RESTRICT
+	PF_ID int REFERENCES Pflegekraft(ID) ON DELETE RESTRICT,
     vorname varchar NOT NULL,
     nachname varchar NOT NULL,
-    geburtsdatum Date NOT NULL,
+    geburtsdatum Date NOT NULL
 );
 
 CREATE TABLE Abteilung(
