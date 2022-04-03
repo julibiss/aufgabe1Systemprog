@@ -50,7 +50,7 @@ CREATE TABLE Nurse(
 CREATE TABLE Examination(
     ID int PRIMARY KEY,
 	E_ID int REFERENCES Examination(ID) ON DELETE RESTRICT,
-    name varchar (30) NOT NULL,
+    name varchar (30) NOT NULL
 );
 
 CREATE TABLE ClinicalExamination(
