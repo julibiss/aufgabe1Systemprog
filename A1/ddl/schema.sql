@@ -16,7 +16,7 @@ CREATE TABLE Ward(
     ID int PRIMARY KEY ,
 	D_ID int REFERENCES Department(ID) ON DELETE RESTRICT,
     name varchar (15) NOT NULL,
-    numberOfBeds int NOT NULL CHECK (bettenzahl > 0)
+    numberOfBeds int NOT NULL CHECK (numberOfBeds > 0)
 );
 
 CREATE TABLE HospitalStay(
@@ -71,7 +71,7 @@ CREATE TABLE LaboratoryTest(
 	FOREIGN KEY (ID) REFERENCES Examination(ID) ON DELETE CASCADE,	
     testName varchar (30) NOT NULL,
 	testType varchar(30) NOT NULL,
-    standardValue int  CHECK (normwert <= 1.5 AND normwert >=0.5)
+    standardValue int  CHECK (standardValue <= 1.5 AND standardValue >=0.5)
 ) inherits(Examination);
 
 CREATE TABLE Finding(
@@ -96,8 +96,6 @@ CREATE TABLE Diagnosis(
     iCDCode int NOT NULL,
     diagnosisText varchar
 );
-
-
 
 CREATE TABLE Diagnoseliste(
 	F_ID int REFERENCES Finding(ID) ON DELETE RESTRICT,
