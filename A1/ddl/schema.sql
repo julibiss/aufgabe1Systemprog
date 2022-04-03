@@ -43,7 +43,7 @@ CREATE TABLE Nurse(
 	Supervisor int REFERENCES Nurse(ID) ON DELETE RESTRICT,
 	W_ID int REFERENCES Ward(ID) ON DELETE RESTRICT,
     firstname varchar NOT NULL,
-    firstname varchar NOT NULL,
+    lastname varchar NOT NULL,
     dateOfBirth Date NOT NULL
 );
 
