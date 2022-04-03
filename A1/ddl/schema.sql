@@ -24,7 +24,7 @@ CREATE TABLE HospitalStay(
     P_ID int REFERENCES Patient(ID) ON DELETE RESTRICT,
     W_ID int REFERENCES Ward(ID) ON DELETE RESTRICT,
     dateOfAdmission date NOT NULL,
-    dateOfDischarge date
+    dateOfDischarge date CHECK (dateOfDischarge > dateOfAdmission)
 );
 
 CREATE TABLE Physician(
@@ -79,7 +79,7 @@ CREATE TABLE Finding(
     PH_ID int REFERENCES Physician(ID) ON DELETE RESTRICT,
     P_ID int REFERENCES Patient(ID) ON DELETE RESTRICT,
     dateOfFinding date NOT NULL,
-    summary varchar
+    summary varchar NOT NULL
 );
 
 CREATE TABLE ExaminationResult(
@@ -88,13 +88,13 @@ CREATE TABLE ExaminationResult(
 	F_ID int REFERENCES Finding(ID) ON DELETE RESTRICT,
     resultSummary varchar,
     requestDate date NOT NULL,
-    resultDate date
+    resultDate date CHECK (resultDate > requestDate)
 );
 
 CREATE TABLE Diagnosis(
     ID int PRIMARY KEY,
     iCDCode int NOT NULL,
-    diagnosisText varchar
+    diagnosisText varchar NOT NULL
 );
 
 CREATE TABLE Diagnoseliste(
