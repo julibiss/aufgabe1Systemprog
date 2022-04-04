@@ -1,0 +1,33 @@
+<component name="libraryTable">
+  <library name="DB_A2_3rdParty">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/hsqldb-2.6.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/org.eclipse.core.commands-3.16.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/org.eclipse.equinox.common-3.16.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/org.eclipse.osgi-3.17.200.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/org.eclipse.jface-3.25.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/org.eclipse.swt-3.119.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/postgresql-42.3.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/checker-qual-3.5.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/slf4j-api-1.7.36.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/slf4j-simple-1.7.36.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/classgraph-4.8.141.jar!/" />
+      <!-- start of junit5 dependencies -->
+      <root url="jar://$PROJECT_DIR$/lib/junit-jupiter-api-5.8.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/junit-jupiter-engine-5.8.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/junit-jupiter-params-5.8.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/junit-platform-commons-1.8.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/junit-platform-engine-1.8.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/junit-platform-launcher-1.8.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/junit-platform-suite-1.8.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/junit-platform-suite-api-1.8.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/junit-platform-suite-commons-1.8.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/junit-platform-suite-engine-1.8.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/opentest4j-1.2.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/apiguardian-api-1.1.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/checker-qual-3.5.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
