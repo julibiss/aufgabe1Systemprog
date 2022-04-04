@@ -97,7 +97,8 @@ CREATE TABLE Diagnosis(
     diagnosisText varchar NOT NULL
 );
 
-CREATE TABLE Diagnoseliste(
+CREATE TABLE Diagnosis_Finding(
 	F_ID int REFERENCES Finding(ID) ON DELETE RESTRICT,
 	D_ID int REFERENCES Diagnosis(ID) ON DELETE RESTRICT
+    PRIMARY KEY(F_ID,D_ID)
 )
