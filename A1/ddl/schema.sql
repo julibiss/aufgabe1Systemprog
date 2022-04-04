@@ -68,7 +68,7 @@ CREATE TABLE TechnicalExamination(
 ) inherits(Examination);
 CREATE TABLE LaboratoryTest(
  ID INT PRIMARY KEY,
- FOREIGN KEY (ID) REFERENCES Examination(ID) ON DELETE CASCADE, 
+ FOREIGN KEY (ID) REFERENCES Examination(ID) ON DELETE CASCADE,
  testName varchar (30) NOT NULL,
  testType varchar(30) NOT NULL,
  standardValue int CHECK (standardValue <= 1.5 AND standardValue >=0.5)
