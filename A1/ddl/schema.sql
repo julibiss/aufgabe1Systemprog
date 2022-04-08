@@ -4,7 +4,7 @@ CREATE TABLE Patient(
     lastname varchar (30) NOT NULL,
     dateOfBirth Date NOT NULL,
     healthInsuranceCompany varchar (50),
-    insuranceNumber String
+    insuranceNumber varchar (50)
 );
 
 CREATE TABLE Department(
@@ -118,4 +118,3 @@ CREATE TABLE Diagnosis_Finding(
     D_ID int REFERENCES Diagnosis(ID) ON DELETE RESTRICT,
     PRIMARY KEY(F_ID,D_ID)
 )
-
