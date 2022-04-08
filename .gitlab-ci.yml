@@ -6,6 +6,8 @@
 image: registry.it.hs-heilbronn.de/it/development/git-runners/itadmin-openjdk17_repo-hhnit:latest
 stages:
   - a1-checks
+  - a2-checks
+  - a2-tests
 
 variables:
   SIMPLE_LOG_PROPERTY: "-Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn"
@@ -30,3 +32,47 @@ script-check-a1:
     # 3 if an error occurred in a script and the variable ON_ERROR_STOP was set.
     # https://www.postgresql.org/docs/12/app-psql.html#id-1.9.4.18.7
     - export PGPASSWORD=postgres; psql --single-transaction -h postgres -d pdbg -U postgres -f A1/ddl/schema.sql -v "ON_ERROR_STOP=1"
+
+#
+# EXERCISE A2
+#
+test-jdk17-a2:
+  stage: a2-tests
+  services:
+    - postgres:latest
+  variables:
+    POSTGRES_DB: pdbg-a2
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: "postgres"
+  script:
+    - cd A2;
+    - mvn initialize -B $SIMPLE_LOG_PROPERTY
+    - mvn clean test -Ptests-junit -B $SIMPLE_LOG_PROPERTY
+  needs: ["checkstyle-a2"]
+
+checkstyle-a2:
+  stage: a2-checks
+  script:
+    - cd A2;
+    - mvn checkstyle:check -Ptool-checkstyle -B $SIMPLE_LOG_PROPERTY
+  needs: ["checkstyle-report-a2"]
+
+checkstyle-report-a2:
+  stage: a2-checks
+  script:
+    - cd A2;
+    - mvn initialize -B $SIMPLE_LOG_PROPERTY
+    - mvn checkstyle:checkstyle -Ptool-checkstyle-reporting -B $SIMPLE_LOG_PROPERTY
+    - mvn site -Ptool-checkstyle-reporting -B $SIMPLE_LOG_PROPERTY
+  artifacts:
+    paths:
+      - A2/target/site
+    expire_in: 10 minutes
+  needs: ["compile-a2"]
+
+compile-a2:
+  stage: a2-checks
+  script:
+    - cd A2;
+    - mvn initialize -B $SIMPLE_LOG_PROPERTY
+    - mvn compile -B $SIMPLE_LOG_PROPERTY
