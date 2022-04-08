@@ -109,7 +109,7 @@ CREATE TABLE ExaminationResult(
 
 CREATE TABLE Diagnosis(
     ID int PRIMARY KEY,
-    iCDCode String NOT NULL,
+    iCDCode varchar (30) NOT NULL,
     diagnosisText varchar NOT NULL
 );
 
@@ -118,4 +118,3 @@ CREATE TABLE Diagnosis_Finding(
     D_ID int REFERENCES Diagnosis(ID) ON DELETE RESTRICT,
     PRIMARY KEY(F_ID,D_ID)
 )
-
