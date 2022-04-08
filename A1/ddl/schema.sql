@@ -79,7 +79,7 @@ CREATE TABLE LaboratoryTest(
     ID INT PRIMARY KEY,
     FOREIGN KEY (ID) REFERENCES Examination(ID) ON DELETE CASCADE,  
     testType varchar(30) NOT NULL,
-    standardValue int  CHECK (standardValue <= 1.5 AND standardValue >=0.5)
+    standardValue float CHECK (standardValue <= 1.5 AND standardValue >=0.5)
 ) inherits(Examination);
 
 CREATE TABLE Finding(
