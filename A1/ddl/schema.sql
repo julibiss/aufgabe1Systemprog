@@ -72,7 +72,7 @@ CREATE TABLE ClinicalExamination(
 
 CREATE TABLE TechnicalExamination(
     ID INT PRIMARY KEY,
-    FOREIGN KEY (ID) REFERENCES Examination(ID) ON DELETE CASCADE,
+    FOREIGN KEY (ID) REFERENCES Examination(ID) ON DELETE CASCADE
 ) inherits(Examination);
 
 CREATE TABLE LaboratoryTest(
@@ -118,3 +118,4 @@ CREATE TABLE Diagnosis_Finding(
     D_ID int REFERENCES Diagnosis(ID) ON DELETE RESTRICT,
     PRIMARY KEY(F_ID,D_ID)
 )
+
