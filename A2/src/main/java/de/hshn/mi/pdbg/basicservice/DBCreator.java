@@ -7,6 +7,9 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+/**
+ * Klasse.
+ */
 public class DBCreator implements SchemaGenerator {
 
 
@@ -15,6 +18,13 @@ public class DBCreator implements SchemaGenerator {
         new DBCreator().createDatabase(url, "postgres", "password");
     }
 
+    /**
+     * TestMethode.
+     * @ param jdbcUrl j
+     * @ param user u
+     * @ param password p
+     * @ return r
+     */
     public boolean createDatabase(String jdbcUrl, String user, String password) {
         try {
             Connection connection = createConnection(jdbcUrl, user, password);
