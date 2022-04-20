@@ -6,6 +6,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.PreparedStatement;
+
 
 /**
  * Klasse.
@@ -27,7 +29,7 @@ public abstract class PersistentJDBCObject extends AbstractPersistentJDBCObject 
         return i;
     }
 
-    public abstract void setCluster(Statement cluster);
+    public abstract void setCluster(PreparedStatement cluster);
 
-    public abstract long store(Connection connection)throws SQLException;
+    public abstract long store(Connection connection) throws SQLException;
 }

@@ -1,6 +1,7 @@
 package de.hshn.mi.pdbg.basicservice;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -13,7 +14,7 @@ public class WardImpl extends PersistentJDBCObject implements Ward {
     }
 
     @Override
-    public void setCluster(Statement cluster) {
+    public void setCluster(PreparedStatement cluster) {
 
     }
 

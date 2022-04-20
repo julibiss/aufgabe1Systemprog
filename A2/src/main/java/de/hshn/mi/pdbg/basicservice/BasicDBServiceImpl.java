@@ -2,6 +2,10 @@ package de.hshn.mi.pdbg.basicservice;
 
 import de.hshn.mi.pdbg.PersistentObject;
 
+import java.awt.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
@@ -9,7 +13,18 @@ import java.util.List;
  * Klasse.
  */
 public class BasicDBServiceImpl implements BasicDBService {
+    private Connection connection;
+    public BasicDBServiceImpl(String jdbcUrl, String sqlUser, String sqlPassword) {
+        try {
+            connection = getConnection(jdbcUrl, sqlUser, sqlPassword);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
 
+    private Connection getConnection(String jdbcUrl, String user, String password) throws SQLException {
+        return DriverManager.getConnection(jdbcUrl, user, password);
+    }
 
     @Override
     public Patient createPatient(String s, String s1) {

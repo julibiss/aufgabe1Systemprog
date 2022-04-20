@@ -14,6 +14,7 @@ public class BasicDBServiceFactory {
      * @return instance of a {@link BasicDBService} object
      */
     public static BasicDBService createBasicDBService() {
-        throw new UnsupportedOperationException();
+        return new BasicDBServiceImpl
+                ("jdbc:postgresql://localhost:5432/postgres","postgres","password");
     }
 }

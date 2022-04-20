@@ -121,7 +121,7 @@ public class PatientImpl extends PersistentJDBCObject implements Patient {
     }
 
     @Override
-    public void setCluster(Statement cluster) {
+    public void setCluster(PreparedStatement cluster) {
 
     }
 
