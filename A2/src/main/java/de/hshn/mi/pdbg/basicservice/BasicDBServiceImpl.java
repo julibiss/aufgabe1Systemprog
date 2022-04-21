@@ -28,12 +28,13 @@ public class BasicDBServiceImpl implements BasicDBService {
 
     @Override
     public Patient createPatient(String s, String s1) {
-        return null;
+       // return new PatientImpl(s,s1,null,0);
+        return new PatientImpl(null,0,s,s1,null,"","");
     }
 
     @Override
     public Ward createWard(String s, int i) {
-        return null;
+        return new WardImpl(null,0);
     }
 
     @Override

@@ -12,17 +12,17 @@ import java.util.Set;
  */
 public class PatientImpl extends PersistentJDBCObject implements Patient {
 
-    private PreparedStatement cluster;
     private String lastname;
     private String firstname;
+    private Date birthdate = null;
     private String healthInsurance = null;
     private String healtInsuranceNumber = null;
-    private Date birthdate = null;
     private PreparedStatement preparedStatementPatientInsert;
     private PreparedStatement preparedStatementPatientUpdate;
 
     /**
      * Konstruktor.
+     *
      * @ param lastname l
      * @ param firstname f
      * @ param service s
@@ -32,10 +32,12 @@ public class PatientImpl extends PersistentJDBCObject implements Patient {
         super(service, id);
         this.setLastname(lastname);
         this.setFirstname(firstname);
+
     }
 
     /**
      * Konstruktor.
+     *
      * @ param lastname l
      * @ param firstname f
      * @ param service s
@@ -130,36 +132,61 @@ public class PatientImpl extends PersistentJDBCObject implements Patient {
 
         if (!this.isPersistent()) {
             this.setObjectID(this.generateID(connection));
-
+            String sql = """
+                    insert into "patient" (
+                    id,
+                    firstname,
+                    lastname,
+                    dateofbirth,
+                    healthinsurancecompany,
+                    insurancenumber)
+                    values (?, ?, ?, ?, ?, ?)
+                    """;
+            preparedStatementPatientInsert = connection.prepareStatement(sql);
             if (preparedStatementPatientInsert == null) {
                 preparedStatementPatientInsert = getPreparedStatementPatientInsert();
             }
-            preparedStatementPatientInsert.setString(1, this.getHealthInsurance());
-            preparedStatementPatientInsert.setString(2, this.getInsuranceNumber());
-            preparedStatementPatientInsert.setString(3, this.getFirstname());
-            preparedStatementPatientInsert.setString(4, this.getLastname());
+            preparedStatementPatientInsert.setLong(1, this.getObjectID());
+            preparedStatementPatientInsert.setString(2, this.getFirstname());
+            preparedStatementPatientInsert.setString(3, this.getLastname());
             if (this.getDateOfBirth() != null) {
-                preparedStatementPatientInsert.setDate(6,
+                preparedStatementPatientInsert.setDate(4,
                         new java.sql.Date(this.getDateOfBirth().getTime()));
             } else {
-                preparedStatementPatientInsert.setDate(6, null);
+                preparedStatementPatientInsert.setDate(4, null);
             }
-            preparedStatementPatientInsert.executeUpdate();
+            preparedStatementPatientInsert.setString(5, this.getHealthInsurance());
+            preparedStatementPatientInsert.setString(6, this.getInsuranceNumber());
+
+            preparedStatementPatientInsert.execute();
         } else {
+            String sql = """
+                    UPDATE patient
+                    SET id= ?, 
+                    firstname = ?,
+                    lastname = ?,
+                    dateofbirth = ?,
+                    healthinsurancecompany = ?,
+                    insurancenumber = ?
+                    """;
+            preparedStatementPatientUpdate = connection.prepareStatement(sql);
+
             if (preparedStatementPatientUpdate == null) {
                 preparedStatementPatientUpdate = getPreparedStatementPatientUpdate();
             }
-            preparedStatementPatientUpdate.setString(1, this.getHealthInsurance());
-            preparedStatementPatientUpdate.setString(2, this.getInsuranceNumber());
-            preparedStatementPatientUpdate.setString(3, this.getFirstname());
-            preparedStatementPatientUpdate.setString(4, this.getLastname());
+            preparedStatementPatientUpdate.setLong(1, this.getObjectID());
+            preparedStatementPatientUpdate.setString(2, this.getFirstname());
+            preparedStatementPatientUpdate.setString(3, this.getLastname());
             if (this.getDateOfBirth() != null) {
-                preparedStatementPatientUpdate.setDate(5, new java.sql.Date(this.getDateOfBirth().getTime()));
+                preparedStatementPatientUpdate.setDate(4, new java.sql.Date(this.getDateOfBirth().getTime()));
             } else {
-                preparedStatementPatientUpdate.setDate(5, null);
+                preparedStatementPatientUpdate.setDate(4, null);
             }
+            preparedStatementPatientUpdate.setString(5, this.getHealthInsurance());
+            preparedStatementPatientUpdate.setString(6, this.getInsuranceNumber());
+
+            preparedStatementPatientUpdate.execute();
         }
-        preparedStatementPatientUpdate.setLong(6, this.getObjectID());
-        return 0;
+        return getObjectID();
     }
 }
