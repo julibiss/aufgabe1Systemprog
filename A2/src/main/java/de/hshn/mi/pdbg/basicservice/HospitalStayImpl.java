@@ -35,6 +35,7 @@ public class HospitalStayImpl extends PersistentJDBCObject implements HospitalSt
 
     @Override
     public void setAdmissionDate(Date dateOfAdmission) {
+        assert dateOfAdmission.before(dateOfDischarge);
         this.dateOfAdmission = dateOfAdmission;
     }
 
@@ -45,6 +46,7 @@ public class HospitalStayImpl extends PersistentJDBCObject implements HospitalSt
 
     @Override
     public void setDischargeDate(Date dateOfDischarge) {
+        assert dateOfDischarge.after(dateOfAdmission);
         this.dateOfDischarge = dateOfDischarge;
     }
 
@@ -60,7 +62,8 @@ public class HospitalStayImpl extends PersistentJDBCObject implements HospitalSt
 
     @Override
     public Patient getPatient() {
-        return null;
+        assert this.patient.isPersistent();
+        return patient;
     }
 
     @Override
@@ -70,12 +73,19 @@ public class HospitalStayImpl extends PersistentJDBCObject implements HospitalSt
 
     @Override
     public long store(Connection connection) throws SQLException {
-        /* if (!this.isPersistent()) {
+        if (!this.isPersistent()) {
             this.setObjectID(this.generateID(connection));
-
-            if (preparedStatementHospitalStayInsert == null) {
-                preparedStatementHospitalStayInsert = getPreparedStatementHospitalStayInsert();
-            }
+            String sql = """
+                    insert into "hospitalstay" (
+                    id,
+                    p_id,
+                    w_id,
+                    dateofadmission,
+                    dateofdischarge
+                    )
+                    values (?, ?, ?, ?, ?)
+                    """;
+            preparedStatementHospitalStayInsert = connection.prepareStatement(sql);
             preparedStatementHospitalStayInsert.setLong(1, this.getObjectID());
             preparedStatementHospitalStayInsert.setLong(2, patient.getObjectID());
             preparedStatementHospitalStayInsert.setLong(3, ward.getObjectID());
@@ -89,22 +99,26 @@ public class HospitalStayImpl extends PersistentJDBCObject implements HospitalSt
             }
             preparedStatementHospitalStayInsert.executeUpdate();
         } else {
-            if (preparedStatementHospitalStayUpdate == null) {
-                preparedStatementHospitalStayUpdate = getPreparedStatementHospitalStayUpdate();
-            }
-            preparedStatementHospitalStayUpdate.setString(1, this.get());
-            preparedStatementHospitalStayUpdate.setString(2, this.getInsuranceNumber());
-            preparedStatementHospitalStayUpdate.setString(3, this.getFirstname());
-            preparedStatementHospitalStayUpdate.setString(4, this.getLastname());
-            if (this.getDateOfBirth() != null) {
-                preparedStatementHospitalStayUpdate.setDate(5, new java.sql.Date(this.getDateOfBirth().getTime()));
-            } else {
-                preparedStatementHospitalStayUpdate.setDate(5, null);
-            }
+            String sql = """
+                    UPDATE hospitalstay
+                    SET 
+                    p_id = ?,
+                    w_id = ?,
+                    dateofadmission = ?,
+                    dateofdischarge = ?
+                    WHERE id = ?
+                    """;
+            preparedStatementHospitalStayUpdate = connection.prepareStatement(sql);
+            preparedStatementHospitalStayUpdate.setLong(1, patient.getObjectID());
+            preparedStatementHospitalStayUpdate.setLong(2, ward.getObjectID());
+            preparedStatementHospitalStayUpdate.setDate(3, (java.sql.Date) this.getAdmissionDate());
+            preparedStatementHospitalStayUpdate.setDate(4, (java.sql.Date) this.getDischargeDate());
+            preparedStatementHospitalStayUpdate.setLong(5, this.getObjectID());
+
+
+            preparedStatementHospitalStayUpdate.execute();
         }
-        preparedStatementHospitalStayUpdate.setLong(6, this.getObjectID());
-        return getObjectID;
-        */
-        return 0;
+
+        return this.getObjectID();
     }
 }

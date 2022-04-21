@@ -2,7 +2,6 @@ package de.hshn.mi.pdbg.basicservice;
 
 import de.hshn.mi.pdbg.PersistentObject;
 
-import java.awt.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -28,8 +27,9 @@ public class BasicDBServiceImpl implements BasicDBService {
 
     @Override
     public Patient createPatient(String s, String s1) {
-       // return new PatientImpl(s,s1,null,0);
-        return new PatientImpl(null,0,s,s1,null,"","");
+
+        return new PatientImpl(s, s1, this, PersistentObject.INVALID_OBJECT_ID);
+
     }
 
     @Override
@@ -94,7 +94,29 @@ public class BasicDBServiceImpl implements BasicDBService {
 
     @Override
     public long store(PersistentObject persistentObject) {
-        return 0;
+        if (persistentObject instanceof PatientImpl) {
+            try {
+                return ((PatientImpl) persistentObject).store(connection);
+            } catch (SQLException e) {
+                System.err.println(e.getMessage());
+            }
+        }
+        if (persistentObject instanceof WardImpl) {
+            try {
+                return ((WardImpl) persistentObject).store(connection);
+            } catch (SQLException e) {
+                System.err.println(e.getMessage());
+            }
+        }
+        if (persistentObject instanceof HospitalStayImpl) {
+            try {
+                return ((HospitalStayImpl) persistentObject).store(connection);
+            } catch (SQLException e) {
+                System.err.println(e.getMessage());
+            }
+        }
+        return persistentObject.getObjectID();
+
     }
 
     @Override

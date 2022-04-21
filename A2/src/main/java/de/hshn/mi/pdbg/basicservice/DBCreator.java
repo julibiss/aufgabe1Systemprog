@@ -20,6 +20,7 @@ public class DBCreator implements SchemaGenerator {
 
     /**
      * TestMethode.
+     *
      * @ param jdbcUrl j
      * @ param user u
      * @ param password p
@@ -37,14 +38,13 @@ public class DBCreator implements SchemaGenerator {
                      healthInsuranceCompany varchar (50),
                      insuranceNumber varchar (50)
                     );
-                    
+                                        
                     CREATE TABLE Ward(
                      ID int PRIMARY KEY ,
-                     D_ID int,
                      name varchar (15) NOT NULL,
                      numberOfBeds int NOT NULL CHECK (numberOfBeds > 0)
                     );
-                    
+                                        
                     CREATE TABLE HospitalStay(
                      ID int PRIMARY KEY ,
                      P_ID int,
@@ -54,18 +54,20 @@ public class DBCreator implements SchemaGenerator {
                      dateOfAdmission date NOT NULL,
                      dateOfDischarge date CHECK (dateOfDischarge > dateOfAdmission)
                     );
-                    
+                                        
                     create sequence if not exists sequence
                     as bigint increment by 1 minvalue 1 no maxvalue start 1 cache 1;
                     """;
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.execute();
+
             return true;
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
         return false;
     }
+
 
     protected Connection createConnection(String jdbcURL, String user, String password)
             throws ClassNotFoundException, SQLException {

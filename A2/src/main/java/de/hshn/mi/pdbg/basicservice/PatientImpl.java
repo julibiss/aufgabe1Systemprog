@@ -143,9 +143,7 @@ public class PatientImpl extends PersistentJDBCObject implements Patient {
                     values (?, ?, ?, ?, ?, ?)
                     """;
             preparedStatementPatientInsert = connection.prepareStatement(sql);
-            if (preparedStatementPatientInsert == null) {
-                preparedStatementPatientInsert = getPreparedStatementPatientInsert();
-            }
+
             preparedStatementPatientInsert.setLong(1, this.getObjectID());
             preparedStatementPatientInsert.setString(2, this.getFirstname());
             preparedStatementPatientInsert.setString(3, this.getLastname());
@@ -162,28 +160,25 @@ public class PatientImpl extends PersistentJDBCObject implements Patient {
         } else {
             String sql = """
                     UPDATE patient
-                    SET id= ?, 
+                    SET 
                     firstname = ?,
                     lastname = ?,
                     dateofbirth = ?,
                     healthinsurancecompany = ?,
                     insurancenumber = ?
+                    WHERE id = ?
                     """;
             preparedStatementPatientUpdate = connection.prepareStatement(sql);
-
-            if (preparedStatementPatientUpdate == null) {
-                preparedStatementPatientUpdate = getPreparedStatementPatientUpdate();
-            }
-            preparedStatementPatientUpdate.setLong(1, this.getObjectID());
-            preparedStatementPatientUpdate.setString(2, this.getFirstname());
-            preparedStatementPatientUpdate.setString(3, this.getLastname());
+            preparedStatementPatientUpdate.setString(1, this.getFirstname());
+            preparedStatementPatientUpdate.setString(2, this.getLastname());
             if (this.getDateOfBirth() != null) {
-                preparedStatementPatientUpdate.setDate(4, new java.sql.Date(this.getDateOfBirth().getTime()));
+                preparedStatementPatientUpdate.setDate(3, new java.sql.Date(this.getDateOfBirth().getTime()));
             } else {
-                preparedStatementPatientUpdate.setDate(4, null);
+                preparedStatementPatientUpdate.setDate(3, null);
             }
-            preparedStatementPatientUpdate.setString(5, this.getHealthInsurance());
-            preparedStatementPatientUpdate.setString(6, this.getInsuranceNumber());
+            preparedStatementPatientUpdate.setString(4, this.getHealthInsurance());
+            preparedStatementPatientUpdate.setString(5, this.getInsuranceNumber());
+            preparedStatementPatientInsert.setLong(6, this.getObjectID());
 
             preparedStatementPatientUpdate.execute();
         }
