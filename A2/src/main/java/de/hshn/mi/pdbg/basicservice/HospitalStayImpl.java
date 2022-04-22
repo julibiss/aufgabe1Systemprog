@@ -64,7 +64,7 @@ public class HospitalStayImpl extends PersistentJDBCObject implements HospitalSt
 
     @Override
     public void setWard(Ward ward) {
-        assert ward !=null;
+        assert ward != null;
         this.ward = ward;
     }
 
