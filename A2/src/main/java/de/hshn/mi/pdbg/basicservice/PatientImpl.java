@@ -46,13 +46,15 @@ public class PatientImpl extends PersistentJDBCObject implements Patient {
      * @ param healthInsuranceNumber h
      * @ param id i
      */
-    public PatientImpl(String lastname,
-                       String firstname,
-                       BasicDBService service,
-                       Date birthdate,
-                       String healthInsurance,
-                       String healthInsuranceNumber,
-                       long id) {
+    public PatientImpl(
+            BasicDBService service,
+            long id,
+            String firstname,
+            String lastname,
+            Date birthdate,
+            String healthInsurance,
+            String healthInsuranceNumber
+    ) {
         this(lastname, firstname, service, id);
         this.setHealthInsurance(healthInsurance);
         this.setInsuranceNumber(healthInsuranceNumber);
@@ -94,6 +96,8 @@ public class PatientImpl extends PersistentJDBCObject implements Patient {
 
     @Override
     public void setLastname(String lastname) {
+        assert lastname != null;
+        assert !lastname.isBlank();
         this.lastname = lastname;
     }
 
@@ -104,6 +108,8 @@ public class PatientImpl extends PersistentJDBCObject implements Patient {
 
     @Override
     public void setFirstname(String firstname) {
+        assert firstname != null;
+        assert !firstname.isBlank();
         this.firstname = firstname;
     }
 

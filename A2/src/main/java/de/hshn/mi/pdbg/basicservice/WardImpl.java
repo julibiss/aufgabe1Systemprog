@@ -28,21 +28,25 @@ public class WardImpl extends PersistentJDBCObject implements Ward {
 
     @Override
     public int getNumberOfBeds() {
-        return 0;
+        return numberOfBeds;
     }
 
     @Override
     public void setNumberOfBeds(int number) {
-
+        assert number > 0;
+        this.numberOfBeds = number;
     }
 
     @Override
     public String getName() {
-        return null;
+        return name;
     }
 
     @Override
     public void setName(String name) {
+        assert name != null;
+        assert !name.isBlank();
+        this.name = name;
 
     }
 
