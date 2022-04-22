@@ -28,6 +28,13 @@ public class HospitalStayImpl extends PersistentJDBCObject implements HospitalSt
         super(service, id);
     }
 
+    public HospitalStayImpl(BasicDBService service, long id, Date dateOfAdmission, Ward ward, Patient patient) {
+        super(service, id);
+        this.dateOfAdmission = dateOfAdmission;
+        this.ward = ward;
+        this.patient = patient;
+    }
+
     @Override
     public Date getAdmissionDate() {
         return dateOfAdmission;
@@ -35,7 +42,7 @@ public class HospitalStayImpl extends PersistentJDBCObject implements HospitalSt
 
     @Override
     public void setAdmissionDate(Date dateOfAdmission) {
-        assert dateOfAdmission.before(dateOfDischarge);
+        assert dateOfAdmission != null && dateOfAdmission.before(dateOfDischarge);
         this.dateOfAdmission = dateOfAdmission;
     }
 
@@ -46,7 +53,7 @@ public class HospitalStayImpl extends PersistentJDBCObject implements HospitalSt
 
     @Override
     public void setDischargeDate(Date dateOfDischarge) {
-        assert dateOfDischarge.after(dateOfAdmission);
+        assert dateOfDischarge == null || dateOfDischarge.after(dateOfAdmission);
         this.dateOfDischarge = dateOfDischarge;
     }
 

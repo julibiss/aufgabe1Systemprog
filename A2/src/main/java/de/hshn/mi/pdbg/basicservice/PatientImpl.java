@@ -120,6 +120,7 @@ public class PatientImpl extends PersistentJDBCObject implements Patient {
 
     @Override
     public void setDateOfBirth(Date birthdate) {
+        assert birthdate == null || birthdate.before(new Date(System.currentTimeMillis()));
         this.birthdate = birthdate;
     }
 

@@ -34,20 +34,27 @@ public class BasicDBServiceImpl implements BasicDBService {
     }
 
     @Override
-    public Patient createPatient(String s, String s1) {
+    public Patient createPatient(String lastname, String firstname) {
+        assert lastname != null && !lastname.isBlank();
+        assert firstname != null && !firstname.isBlank();
 
-        return new PatientImpl(s, s1, this, PersistentObject.INVALID_OBJECT_ID);
+        return new PatientImpl(lastname, firstname, this, PersistentObject.INVALID_OBJECT_ID);
 
     }
 
     @Override
-    public Ward createWard(String s, int i) {
-        return new WardImpl(this, PersistentObject.INVALID_OBJECT_ID, s, i);
+    public Ward createWard(String name, int numberOfBeds) {
+        assert name != null && !name.isBlank();
+        assert numberOfBeds > 0;
+        return new WardImpl(this, PersistentObject.INVALID_OBJECT_ID, name, numberOfBeds);
     }
 
     @Override
-    public HospitalStay createHospitalStay(Patient patient, Ward ward, Date date) {
-        return null;
+    public HospitalStay createHospitalStay(Patient patient, Ward ward, Date admissionDate) {
+        assert patient != null;
+        assert ward != null;
+        assert admissionDate != null;
+        return new HospitalStayImpl(this,PersistentObject.INVALID_OBJECT_ID,admissionDate,ward,patient);
     }
 
     @Override
