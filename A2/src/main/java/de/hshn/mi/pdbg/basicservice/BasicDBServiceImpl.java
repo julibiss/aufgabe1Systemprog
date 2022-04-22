@@ -13,6 +13,14 @@ import java.util.List;
  */
 public class BasicDBServiceImpl implements BasicDBService {
     private Connection connection;
+
+    /**
+     * Test.
+     *
+     * @ param jdbcUrl j
+     * @ param sqlUser s
+     * @ param sqlPassword s
+     */
     public BasicDBServiceImpl(String jdbcUrl, String sqlUser, String sqlPassword) {
         try {
             connection = getConnection(jdbcUrl, sqlUser, sqlPassword);
@@ -34,7 +42,7 @@ public class BasicDBServiceImpl implements BasicDBService {
 
     @Override
     public Ward createWard(String s, int i) {
-        return new WardImpl(null,0);
+        return new WardImpl(this, PersistentObject.INVALID_OBJECT_ID, s, i);
     }
 
     @Override
