@@ -33,7 +33,7 @@ public class DBCreator implements SchemaGenerator {
                     CREATE TABLE Patient(
                      ID int PRIMARY KEY ,
                      firstname varchar (50) NOT NULL,
-                     lastname varchar (30) NOT NULL,
+                     lastname varchar (50) NOT NULL,
                      dateOfBirth Date ,
                      healthInsuranceCompany varchar (50),
                      insuranceNumber varchar (50)
@@ -41,7 +41,7 @@ public class DBCreator implements SchemaGenerator {
                                         
                     CREATE TABLE Ward(
                      ID int PRIMARY KEY ,
-                     name varchar (15) NOT NULL,
+                     name varchar (50) NOT NULL,
                      numberOfBeds int NOT NULL CHECK (numberOfBeds > 0)
                     );
                                         
@@ -57,6 +57,11 @@ public class DBCreator implements SchemaGenerator {
                                         
                     create sequence if not exists sequence
                     as bigint increment by 1 minvalue 1 no maxvalue start 1 cache 1;
+                    CREATE INDEX patient_dateOfBirth_index ON patient(dateOfBirth);
+                    CREATE INDEX patient_lastname_index ON patient(lastname);
+                    CREATE INDEX patient_firstname_index ON patient(firstname);
+                    CREATE INDEX hospitalstay_P_ID_index ON patient(id);
+
                     """;
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.execute();

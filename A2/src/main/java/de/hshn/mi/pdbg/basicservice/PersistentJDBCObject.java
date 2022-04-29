@@ -21,7 +21,7 @@ public abstract class PersistentJDBCObject extends AbstractPersistentJDBCObject 
     protected long generateID(Connection connection) throws SQLException {
         long i;
         Statement statement = connection.createStatement();
-        ResultSet rs = statement.executeQuery("SELECT nextval('sequence_1');");
+        ResultSet rs = statement.executeQuery("SELECT nextval('sequence');");
         rs.next();
         i = rs.getLong("nextval");
         statement.close();

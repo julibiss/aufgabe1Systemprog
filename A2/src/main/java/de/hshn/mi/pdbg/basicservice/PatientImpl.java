@@ -3,7 +3,6 @@ package de.hshn.mi.pdbg.basicservice;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Date;
 import java.util.Set;
 
@@ -129,16 +128,13 @@ public class PatientImpl extends PersistentJDBCObject implements Patient {
         return null;
     }
 
-    @Override
-    public void setCluster(PreparedStatement cluster) {
 
-    }
 
     @Override
     public long store(Connection connection) throws SQLException {
 
         if (!this.isPersistent()) {
-            this.setObjectID(this.generateID(connection));
+            this.setObjectID(this.generateLongID(connection));
             String sql = """
                     insert into "patient" (
                     id,

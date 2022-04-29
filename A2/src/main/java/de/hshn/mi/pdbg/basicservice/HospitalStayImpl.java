@@ -70,7 +70,6 @@ public class HospitalStayImpl extends PersistentJDBCObject implements HospitalSt
 
     @Override
     public Patient getPatient() {
-        assert this.patient.isPersistent();
         return patient;
     }
 
@@ -82,7 +81,7 @@ public class HospitalStayImpl extends PersistentJDBCObject implements HospitalSt
     @Override
     public long store(Connection connection) throws SQLException {
         if (!this.isPersistent()) {
-            this.setObjectID(this.generateID(connection));
+            this.setObjectID(this.generateLongID(connection));
             String sql = """
                     insert into "hospitalstay" (
                     id,

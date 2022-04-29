@@ -1,13 +1,19 @@
 package de.hshn.mi.pdbg.basicservice;
 
 import de.hshn.mi.pdbg.PersistentObject;
+import org.checkerframework.checker.units.qual.A;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Klasse.
@@ -15,10 +21,12 @@ import java.util.List;
 public class BasicDBServiceImpl implements BasicDBService {
     private Connection connection;
     private List<Patient> patients = new ArrayList();
-
+    private List<Ward> wards = new ArrayList();
+    private List<HospitalStay> hospitalStays = new ArrayList();
 
     /**
      * Test.
+     *
      * @ param jdbcUrl j
      * @ param sqlUser s
      * @ param sqlPassword s
@@ -39,16 +47,18 @@ public class BasicDBServiceImpl implements BasicDBService {
     public Patient createPatient(String lastname, String firstname) {
         assert lastname != null && !lastname.isBlank();
         assert firstname != null && !firstname.isBlank();
-
-        return new PatientImpl(lastname, firstname, this, PersistentObject.INVALID_OBJECT_ID);
-
+        Patient patient = new PatientImpl(lastname, firstname, this, PersistentObject.INVALID_OBJECT_ID);
+        patients.add(patient);
+        return patient;
     }
 
     @Override
     public Ward createWard(String name, int numberOfBeds) {
         assert name != null && !name.isBlank();
         assert numberOfBeds > 0;
-        return new WardImpl(this, PersistentObject.INVALID_OBJECT_ID, name, numberOfBeds);
+        Ward ward = new WardImpl(this, PersistentObject.INVALID_OBJECT_ID, name, numberOfBeds);
+        wards.add(ward);
+        return ward;
     }
 
     @Override
@@ -61,6 +71,13 @@ public class BasicDBServiceImpl implements BasicDBService {
 
     @Override
     public void removeHospitalStay(long l) {
+        assert l > 0 && l != PersistentObject.INVALID_OBJECT_ID;
+
+        for (int i = 0; i < hospitalStays.size(); i++) {
+            if (hospitalStays.get(i).getObjectID() == l) {
+                hospitalStays.remove(i);
+            }
+        }
 
     }
 
@@ -71,98 +88,68 @@ public class BasicDBServiceImpl implements BasicDBService {
 
             if (firstname == null && lastname == null && date == null && date1 == null) {
                 patients.get(i).getDateOfBirth();
-            }
-            else if(firstname != null && lastname == null && date == null && date1 == null)
-            {
-                if(patients.get(i).getFirstname() == firstname)
-                {
+                patients2.add(patients.get(i));
+            } else if (firstname != null && lastname == null && date == null && date1 == null) {
+                if (patients.get(i).getFirstname() == firstname) {
                     patients2.add(patients.get(i));
                 }
-            }else if(firstname == null && lastname != null && date == null && date1 == null)
-            {
-                if(patients.get(i).getLastname() == lastname)
-                {
+            } else if (firstname == null && lastname != null && date == null && date1 == null) {
+                if (patients.get(i).getLastname() == lastname) {
                     patients2.add(patients.get(i));
                 }
-            }else if(firstname == null && lastname == null && date != null && date1 == null)
-            {
-                if(patients.get(i).getDateOfBirth().after(date))
-                {
+            } else if (firstname == null && lastname == null && date != null && date1 == null) {
+                if (patients.get(i).getDateOfBirth().after(date)) {
                     patients2.add(patients.get(i));
                 }
-            }else if(firstname == null && lastname == null && date == null && date1 != null)
-            {
-                if(patients.get(i).getDateOfBirth().before(date1))
-                {
+            } else if (firstname == null && lastname == null && date == null && date1 != null) {
+                if (patients.get(i).getDateOfBirth().before(date1)) {
                     patients2.add(patients.get(i));
                 }
-            }else if(firstname != null && lastname != null && date == null && date1 == null)
-            {
-                if(patients.get(i).getFirstname() == firstname && patients.get(i).getLastname() == lastname )
-                {
+            } else if (firstname != null && lastname != null && date == null && date1 == null) {
+                if (patients.get(i).getFirstname() == firstname && patients.get(i).getLastname() == lastname) {
                     patients2.add(patients.get(i));
                 }
-            }else if(firstname == null && lastname != null && date != null && date1 == null)
-            {
-                if(patients.get(i).getLastname() == lastname && patients.get(i).getDateOfBirth().after(date))
-                {
+            } else if (firstname == null && lastname != null && date != null && date1 == null) {
+                if (patients.get(i).getLastname() == lastname && patients.get(i).getDateOfBirth().after(date)) {
                     patients2.add(patients.get(i));
                 }
-            }else if(firstname == null && lastname == null && date != null && date1 != null)
-            {
-                if(patients.get(i).getDateOfBirth().after(date) && patients.get(i).getDateOfBirth().before(date1))
-                {
+            } else if (firstname == null && lastname == null && date != null && date1 != null) {
+                if (patients.get(i).getDateOfBirth().after(date) && patients.get(i).getDateOfBirth().before(date1)) {
                     patients2.add(patients.get(i));
                 }
-            }else if(firstname != null && lastname == null && date != null && date1 == null)
-            {
-                if(patients.get(i).getFirstname() == firstname && patients.get(i).getDateOfBirth().before(date1))
-                {
+            } else if (firstname != null && lastname == null && date != null && date1 == null) {
+                if (patients.get(i).getFirstname() == firstname && patients.get(i).getDateOfBirth().before(date1)) {
                     patients2.add(patients.get(i));
                 }
-            }else if(firstname != null && lastname == null && date == null && date1 != null)
-            {
-                if(patients.get(i).getFirstname() == firstname && patients.get(i).getDateOfBirth().after(date))
-                {
+            } else if (firstname != null && lastname == null && date == null && date1 != null) {
+                if (patients.get(i).getFirstname() == firstname && patients.get(i).getDateOfBirth().after(date)) {
                     patients2.add(patients.get(i));
                 }
-            }else if(firstname == null && lastname != null && date == null && date1 != null)
-            {
-                if(patients.get(i).getLastname() == lastname && patients.get(i).getDateOfBirth().before(date))
-                {
+            } else if (firstname == null && lastname != null && date == null && date1 != null) {
+                if (patients.get(i).getLastname() == lastname && patients.get(i).getDateOfBirth().before(date)) {
                     patients2.add(patients.get(i));
                 }
-            }else if(firstname != null && lastname != null && date == null && date1 != null)
-            {
-                if( patients.get(i).getFirstname() == firstname && patients.get(i).getLastname() == lastname
-                    && patients.get(i).getDateOfBirth().before(date1))
-                {
+            } else if (firstname != null && lastname != null && date == null && date1 != null) {
+                if (patients.get(i).getFirstname() == firstname && patients.get(i).getLastname() == lastname
+                    && patients.get(i).getDateOfBirth().before(date1)) {
                     patients2.add(patients.get(i));
                 }
-            }else if(firstname != null && lastname != null && date != null && date1 == null)
-            {
-                if( patients.get(i).getFirstname() == firstname && patients.get(i).getLastname() == lastname
-                    && patients.get(i).getDateOfBirth().after(date))
-                {
+            } else if (firstname != null && lastname != null && date != null && date1 == null) {
+                if (patients.get(i).getFirstname() == firstname && patients.get(i).getLastname() == lastname
+                    && patients.get(i).getDateOfBirth().after(date)) {
                     patients2.add(patients.get(i));
                 }
-            }else if(firstname != null && lastname == null && date != null && date1 != null)
-            {
-                if( patients.get(i).getFirstname() == firstname && patients.get(i).getDateOfBirth().after(date)
-                    && patients.get(i).getDateOfBirth().before(date1))
-                {
+            } else if (firstname != null && lastname == null && date != null && date1 != null) {
+                if (patients.get(i).getFirstname() == firstname && patients.get(i).getDateOfBirth().after(date)
+                    && patients.get(i).getDateOfBirth().before(date1)) {
                     patients2.add(patients.get(i));
                 }
-            }else if(firstname == null && lastname != null && date != null && date1 != null)
-            {
-                if( patients.get(i).getLastname() == lastname && patients.get(i).getDateOfBirth().after(date)
-                    && patients.get(i).getDateOfBirth().before(date1))
-                {
+            } else if (firstname == null && lastname != null && date != null && date1 != null) {
+                if (patients.get(i).getLastname() == lastname && patients.get(i).getDateOfBirth().after(date)
+                    && patients.get(i).getDateOfBirth().before(date1)) {
                     patients2.add(patients.get(i));
                 }
-            }
-
-            else if (firstname != null && lastname != null && date != null && date1 != null) {
+            } else if (firstname != null && lastname != null && date != null && date1 != null) {
                 if (patients.get(i).getFirstname() == firstname && patients.get(i).getLastname() == lastname
                     && patients.get(i).getDateOfBirth().before(date1) && patients.get(i).getDateOfBirth().after(date)) {
                     patients2.add(patients.get(i));
@@ -174,27 +161,55 @@ public class BasicDBServiceImpl implements BasicDBService {
 
     @Override
     public Patient getPatient(long l) {
+        assert l > 0 && l != PersistentObject.INVALID_OBJECT_ID;
+        for (int i = 0; i < patients.size(); i++) {
+            if (patients.get(i).getObjectID() == l) {
+                return patients.get(i);
+            }
+        }
         return null;
     }
 
     @Override
     public List<Ward> getWards() {
-        return null;
+        return wards;
     }
 
     @Override
     public Ward getWard(long l) {
+        assert l > 0 && l != PersistentObject.INVALID_OBJECT_ID;
+        for (int i = 0; i < wards.size(); i++) {
+            if (wards.get(i).getObjectID() == l) {
+                return wards.get(i);
+            }
+        }
         return null;
     }
 
     @Override
     public List<HospitalStay> getHospitalStays(long l) {
-        return null;
+        List<HospitalStay> hospitalStays2 = new ArrayList();
+        assert l > 0 && l != PersistentObject.INVALID_OBJECT_ID;
+        for (int i = 0; i < hospitalStays.size(); i++) {
+            if (hospitalStays.get(i).getObjectID() == l) {
+                hospitalStays2.add(hospitalStays.get(i));
+            }
+        }
+        return hospitalStays2;
     }
 
     @Override
     public List<HospitalStay> getHospitalStays(long l, Date date, Date date1) {
-        return null;
+        List<HospitalStay> hospitalStays2 = new ArrayList();
+        assert l > 0 && l != PersistentObject.INVALID_OBJECT_ID;
+        for (int i = 0; i < hospitalStays.size(); i++) {
+            if (hospitalStays.get(i).getObjectID() == l && hospitalStays.get(i).getAdmissionDate().after(date)
+                && hospitalStays.get(i).getDischargeDate().before(date)) ;
+            {
+                hospitalStays2.add(hospitalStays.get(i));
+            }
+        }
+        return hospitalStays2;
     }
 
     @Override
@@ -204,7 +219,21 @@ public class BasicDBServiceImpl implements BasicDBService {
 
     @Override
     public int getAllocatedBeds(Ward ward) {
-        return 0;
+        int numberOfBeds = 0;
+
+        if (ward == null) {
+            for (int i = 0; i < wards.size(); i++) {
+                numberOfBeds += wards.get(i).getNumberOfBeds();
+            }
+        } else {
+            for (int i = 0; i < wards.size(); i++) {
+                if(wards.get(i) == ward)
+                {
+                    numberOfBeds += wards.get(i).getNumberOfBeds();
+                }
+            }
+        }
+        return numberOfBeds;
     }
 
     @Override

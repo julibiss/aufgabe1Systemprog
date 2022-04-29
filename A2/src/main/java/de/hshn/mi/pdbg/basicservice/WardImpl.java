@@ -3,7 +3,6 @@ package de.hshn.mi.pdbg.basicservice;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 /**
  * Klasse.
@@ -21,10 +20,6 @@ public class WardImpl extends PersistentJDBCObject implements Ward {
         this.numberOfBeds = numberOfBeds;
     }
 
-    @Override
-    public void setCluster(PreparedStatement cluster) {
-
-    }
 
     @Override
     public int getNumberOfBeds() {
@@ -53,7 +48,7 @@ public class WardImpl extends PersistentJDBCObject implements Ward {
     @Override
     public long store(Connection connection) throws SQLException {
         if (!this.isPersistent()) {
-            this.setObjectID(this.generateID(connection));
+            this.setObjectID(this.generateLongID(connection));
             String sql = """
                    INSERT INTO ward(id, name, numberofbeds) 
                    VALUES (?, ?, ?)
