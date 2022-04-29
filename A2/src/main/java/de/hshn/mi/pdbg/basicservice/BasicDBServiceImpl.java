@@ -5,6 +5,7 @@ import de.hshn.mi.pdbg.PersistentObject;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -13,10 +14,11 @@ import java.util.List;
  */
 public class BasicDBServiceImpl implements BasicDBService {
     private Connection connection;
+    private List<Patient> patients = new ArrayList();
+
 
     /**
      * Test.
-     *
      * @ param jdbcUrl j
      * @ param sqlUser s
      * @ param sqlPassword s
@@ -54,7 +56,7 @@ public class BasicDBServiceImpl implements BasicDBService {
         assert patient != null;
         assert ward != null;
         assert admissionDate != null;
-        return new HospitalStayImpl(this,PersistentObject.INVALID_OBJECT_ID,admissionDate,ward,patient);
+        return new HospitalStayImpl(this, PersistentObject.INVALID_OBJECT_ID, admissionDate, ward, patient);
     }
 
     @Override
@@ -63,8 +65,111 @@ public class BasicDBServiceImpl implements BasicDBService {
     }
 
     @Override
-    public List<Patient> getPatients(String s, String s1, Date date, Date date1) {
-        return null;
+    public List<Patient> getPatients(String firstname, String lastname, Date date, Date date1) {
+        List<Patient> patients2 = new ArrayList();
+        for (int i = 0; i < patients.size(); i++) {
+
+            if (firstname == null && lastname == null && date == null && date1 == null) {
+                patients.get(i).getDateOfBirth();
+            }
+            else if(firstname != null && lastname == null && date == null && date1 == null)
+            {
+                if(patients.get(i).getFirstname() == firstname)
+                {
+                    patients2.add(patients.get(i));
+                }
+            }else if(firstname == null && lastname != null && date == null && date1 == null)
+            {
+                if(patients.get(i).getLastname() == lastname)
+                {
+                    patients2.add(patients.get(i));
+                }
+            }else if(firstname == null && lastname == null && date != null && date1 == null)
+            {
+                if(patients.get(i).getDateOfBirth().after(date))
+                {
+                    patients2.add(patients.get(i));
+                }
+            }else if(firstname == null && lastname == null && date == null && date1 != null)
+            {
+                if(patients.get(i).getDateOfBirth().before(date1))
+                {
+                    patients2.add(patients.get(i));
+                }
+            }else if(firstname != null && lastname != null && date == null && date1 == null)
+            {
+                if(patients.get(i).getFirstname() == firstname && patients.get(i).getLastname() == lastname )
+                {
+                    patients2.add(patients.get(i));
+                }
+            }else if(firstname == null && lastname != null && date != null && date1 == null)
+            {
+                if(patients.get(i).getLastname() == lastname && patients.get(i).getDateOfBirth().after(date))
+                {
+                    patients2.add(patients.get(i));
+                }
+            }else if(firstname == null && lastname == null && date != null && date1 != null)
+            {
+                if(patients.get(i).getDateOfBirth().after(date) && patients.get(i).getDateOfBirth().before(date1))
+                {
+                    patients2.add(patients.get(i));
+                }
+            }else if(firstname != null && lastname == null && date != null && date1 == null)
+            {
+                if(patients.get(i).getFirstname() == firstname && patients.get(i).getDateOfBirth().before(date1))
+                {
+                    patients2.add(patients.get(i));
+                }
+            }else if(firstname != null && lastname == null && date == null && date1 != null)
+            {
+                if(patients.get(i).getFirstname() == firstname && patients.get(i).getDateOfBirth().after(date))
+                {
+                    patients2.add(patients.get(i));
+                }
+            }else if(firstname == null && lastname != null && date == null && date1 != null)
+            {
+                if(patients.get(i).getLastname() == lastname && patients.get(i).getDateOfBirth().before(date))
+                {
+                    patients2.add(patients.get(i));
+                }
+            }else if(firstname != null && lastname != null && date == null && date1 != null)
+            {
+                if( patients.get(i).getFirstname() == firstname && patients.get(i).getLastname() == lastname
+                    && patients.get(i).getDateOfBirth().before(date1))
+                {
+                    patients2.add(patients.get(i));
+                }
+            }else if(firstname != null && lastname != null && date != null && date1 == null)
+            {
+                if( patients.get(i).getFirstname() == firstname && patients.get(i).getLastname() == lastname
+                    && patients.get(i).getDateOfBirth().after(date))
+                {
+                    patients2.add(patients.get(i));
+                }
+            }else if(firstname != null && lastname == null && date != null && date1 != null)
+            {
+                if( patients.get(i).getFirstname() == firstname && patients.get(i).getDateOfBirth().after(date)
+                    && patients.get(i).getDateOfBirth().before(date1))
+                {
+                    patients2.add(patients.get(i));
+                }
+            }else if(firstname == null && lastname != null && date != null && date1 != null)
+            {
+                if( patients.get(i).getLastname() == lastname && patients.get(i).getDateOfBirth().after(date)
+                    && patients.get(i).getDateOfBirth().before(date1))
+                {
+                    patients2.add(patients.get(i));
+                }
+            }
+
+            else if (firstname != null && lastname != null && date != null && date1 != null) {
+                if (patients.get(i).getFirstname() == firstname && patients.get(i).getLastname() == lastname
+                    && patients.get(i).getDateOfBirth().before(date1) && patients.get(i).getDateOfBirth().after(date)) {
+                    patients2.add(patients.get(i));
+                }
+            }
+        }
+        return patients2;
     }
 
     @Override
