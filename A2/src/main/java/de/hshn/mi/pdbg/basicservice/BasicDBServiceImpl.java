@@ -185,7 +185,7 @@ public class BasicDBServiceImpl implements BasicDBService {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        return null;
+        return patient;
     }
 
     @Override
