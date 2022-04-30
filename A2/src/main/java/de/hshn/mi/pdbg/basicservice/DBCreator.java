@@ -20,6 +20,7 @@ public class DBCreator implements SchemaGenerator {
 
     /**
      * Creates our local database.
+     *
      * @ param jdbcUrl
      * @ param user
      * @ param password
@@ -54,12 +55,13 @@ public class DBCreator implements SchemaGenerator {
                      dateOfDischarge date CHECK (dateOfDischarge > dateOfAdmission)
                     );
                                         
-                    create sequence if not exists sequence
-                    as bigint increment by 1 minvalue 1 no maxvalue start 1 cache 1;
-                    CREATE INDEX patient_dateOfBirth_index ON patient(dateOfBirth);
-                    CREATE INDEX patient_lastname_index ON patient(lastname);
-                    CREATE INDEX patient_firstname_index ON patient(firstname);
-                    CREATE INDEX hospitalstay_P_ID_index ON patient(id);
+                    create sequence sequence1 
+                    as bigint increment by 1 minvalue 1 no maxvalue start 1 owned by patient.ID;
+                    create sequence sequence2 
+                    as bigint increment by 1 minvalue 1 no maxvalue start 1 owned by ward.ID; 
+                    create sequence sequence3
+                    as bigint increment by 1 minvalue 1 no maxvalue start 1 owned by hospitalstay.ID;
+                  
 
                     """;
             PreparedStatement preparedStatement = connection.prepareStatement(sql);

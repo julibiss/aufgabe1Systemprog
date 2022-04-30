@@ -27,9 +27,11 @@ public class HospitalStayImpl extends PersistentJDBCObject implements HospitalSt
      * @ param ward
      * @ param patient
      */
-    public HospitalStayImpl(BasicDBService service, long id, Date dateOfAdmission, Ward ward, Patient patient) {
+    public HospitalStayImpl(BasicDBService service, long id, Date dateOfAdmission,
+                            Date dateOfDischarge, Ward ward, Patient patient) {
         super(service, id);
         this.dateOfAdmission = dateOfAdmission;
+        this.dateOfDischarge = dateOfDischarge;
         this.ward = ward;
         this.patient = patient;
     }
@@ -41,7 +43,7 @@ public class HospitalStayImpl extends PersistentJDBCObject implements HospitalSt
 
     @Override
     public void setAdmissionDate(Date dateOfAdmission) {
-        assert dateOfAdmission != null && dateOfAdmission.before(dateOfDischarge);
+        assert (dateOfDischarge == null) || (dateOfAdmission != null && dateOfAdmission.before(dateOfDischarge));
         this.dateOfAdmission = dateOfAdmission;
     }
 
@@ -75,8 +77,10 @@ public class HospitalStayImpl extends PersistentJDBCObject implements HospitalSt
     @Override
     public long store(Connection connection) throws SQLException {
         assert connection != null;
+        getBasicDBService().store(patient);
+        getBasicDBService().store(ward);
         if (!this.isPersistent()) {
-            this.setObjectID(this.generateLongID(connection));
+            this.setObjectID(this.generateLongID(connection,"sequence1"));
             String sql = """
                     insert into "hospitalstay" (
                     id,

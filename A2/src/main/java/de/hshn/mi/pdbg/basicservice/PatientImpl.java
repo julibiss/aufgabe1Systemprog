@@ -26,7 +26,7 @@ public class PatientImpl extends PersistentJDBCObject implements Patient {
      * @ param service
      * @ param id
      */
-    public PatientImpl(String lastname, String firstname, BasicDBService service, long id) {
+    public PatientImpl(long id, String lastname, String firstname, BasicDBService service ) {
         super(service, id);
         this.setLastname(lastname);
         this.setFirstname(firstname);
@@ -52,7 +52,7 @@ public class PatientImpl extends PersistentJDBCObject implements Patient {
             String healthInsurance,
             String healthInsuranceNumber
     ) {
-        this(lastname, firstname, service, id);
+        this(id,lastname, firstname, service );
         this.setHealthInsurance(healthInsurance);
         this.setInsuranceNumber(healthInsuranceNumber);
         this.setDateOfBirth(birthdate);
@@ -132,7 +132,7 @@ public class PatientImpl extends PersistentJDBCObject implements Patient {
     public long store(Connection connection) throws SQLException {
         assert connection != null;
         if (!this.isPersistent()) {
-            this.setObjectID(this.generateLongID(connection));
+            this.setObjectID(this.generateLongID(connection,"sequence2"));
             String sql = """
                     insert into "patient" (
                     id,

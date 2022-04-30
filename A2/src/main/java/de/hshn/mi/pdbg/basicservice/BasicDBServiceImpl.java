@@ -4,23 +4,22 @@ import de.hshn.mi.pdbg.PersistentObject;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Klasse.
  */
 public class BasicDBServiceImpl implements BasicDBService {
     private Connection connection;
-    private List<Patient> patients = new ArrayList();
-    private List<Ward> wards = new ArrayList();
-    private List<HospitalStay> hospitalStays = new ArrayList();
 
     /**
      * Default constructor which creates a connection to the database.
+     *
      * @ param jdbcUrl link to our local database
      * @ param sqlUser
      * @ param sqlPassword
@@ -35,6 +34,7 @@ public class BasicDBServiceImpl implements BasicDBService {
 
     /**
      * Returns the connection.
+     *
      * @ param jdbcUrl link to our local database
      * @ param user
      * @ param password
@@ -48,8 +48,7 @@ public class BasicDBServiceImpl implements BasicDBService {
     public Patient createPatient(String lastname, String firstname) {
         assert lastname != null && !lastname.isBlank();
         assert firstname != null && !firstname.isBlank();
-        Patient patient = new PatientImpl(lastname, firstname, this, PersistentObject.INVALID_OBJECT_ID);
-        patients.add(patient);
+        Patient patient = new PatientImpl(PersistentObject.INVALID_OBJECT_ID, lastname, firstname, this);
         return patient;
     }
 
@@ -58,7 +57,6 @@ public class BasicDBServiceImpl implements BasicDBService {
         assert name != null && !name.isBlank();
         assert numberOfBeds > 0;
         Ward ward = new WardImpl(this, PersistentObject.INVALID_OBJECT_ID, name, numberOfBeds);
-        wards.add(ward);
         return ward;
     }
 
@@ -68,8 +66,8 @@ public class BasicDBServiceImpl implements BasicDBService {
         assert ward != null;
         assert admissionDate != null;
         HospitalStay hospitalStay =
-                new HospitalStayImpl(this, PersistentObject.INVALID_OBJECT_ID, admissionDate, ward, patient);
-        hospitalStays.add(hospitalStay);
+                new HospitalStayImpl(this, PersistentObject.INVALID_OBJECT_ID, admissionDate,
+                        null, ward, patient);
         return hospitalStay;
     }
 
@@ -77,115 +75,148 @@ public class BasicDBServiceImpl implements BasicDBService {
     public void removeHospitalStay(long l) {
         assert l > 0 && l != PersistentObject.INVALID_OBJECT_ID;
 
-        for (int i = 0; i < hospitalStays.size(); i++) {
-            if (hospitalStays.get(i).getObjectID() == l) {
-                hospitalStays.remove(i);
-            }
-        }
-
     }
 
     @Override
     public List<Patient> getPatients(String firstname, String lastname, Date date, Date date1) {
-        List<Patient> patients2 = new ArrayList();
+        List<Patient> patients = new ArrayList();
         for (Patient patient : patients) {
 
             if (firstname == null && lastname == null && date == null && date1 == null) {
-                patient.getDateOfBirth();
-                patients2.add(patient);
+               sqlthing(patients,"SELECT * FROM patient");
             } else if (firstname != null && lastname == null && date == null && date1 == null) {
-                if (patient.getFirstname().equals(firstname)) {
-                    patients2.add(patient);
-                }
+                sqlthing(patients,"SELECT * FROM patient WHERE name LIKE '" + firstname + "'");
             } else if (firstname == null && lastname != null && date == null && date1 == null) {
-                if (patient.getLastname().equals(lastname)) {
-                    patients2.add(patient);
-                }
+                sqlthing(patients,"SELECT * FROM patient  WHERE lastname LIKE '" + lastname + "'");
             } else if (firstname == null && lastname == null && date != null && date1 == null) {
-                if (patient.getDateOfBirth().after(date)) {
-                    patients2.add(patient);
-                }
+                sqlthing(patients,"SELECT * FROM patient  WHERE dateofbirth >= '" + date + "'");
             } else if (firstname == null && lastname == null && date == null && date1 != null) {
-                if (patient.getDateOfBirth().before(date1)) {
-                    patients2.add(patient);
-                }
+                sqlthing(patients,"SELECT * FROM patient  WHERE dateofbirth <= '" + date1 +  "'");
             } else if (firstname != null && lastname != null && date == null && date1 == null) {
                 if (patient.getFirstname().equals(firstname) && patient.getLastname().equals(lastname)) {
-                    patients2.add(patient);
+                    patients.add(patient);
+                    sqlthing(patients,"SELECT * FROM patient  WHERE lastname LIKE '" + lastname + "' AND" +
+                                      "firstname LIKE '" + firstname + "'");
                 }
             } else if (firstname == null && lastname != null && date != null && date1 == null) {
                 if (patient.getLastname().equals(lastname) && patient.getDateOfBirth().after(date)) {
-                    patients2.add(patient);
+                    patients.add(patient);
+                    sqlthing(patients,"SELECT * FROM patient  WHERE lastname LIKE '" + lastname + "' AND" +
+                                      "Date = '" + date + "'");
                 }
             } else if (firstname == null && lastname == null && date != null && date1 != null) {
                 if (patient.getDateOfBirth().after(date) && patient.getDateOfBirth().before(date1)) {
-                    patients2.add(patient);
+                    patients.add(patient);
+                    sqlthing(patients,"SELECT * FROM patient  WHERE lastname LIKE '" + lastname + "' AND" +
+                                      "Date = '" + date + "'");
                 }
             } else if (firstname != null && lastname == null && date != null && date1 == null) {
                 if (patient.getFirstname().equals(firstname) && patient.getDateOfBirth().before(date1)) {
-                    patients2.add(patient);
+                    patients.add(patient);
                 }
             } else if (firstname != null && lastname == null && date == null && date1 != null) {
                 if (patient.getFirstname().equals(firstname) && patient.getDateOfBirth().after(date)) {
-                    patients2.add(patient);
+                    patients.add(patient);
                 }
             } else if (firstname == null && lastname != null && date == null && date1 != null) {
                 if (patient.getLastname().equals(lastname) && patient.getDateOfBirth().before(date1)) {
-                    patients2.add(patient);
+                    patients.add(patient);
                 }
             } else if (firstname != null && lastname != null && date == null && date1 != null) {
                 if (patient.getFirstname().equals(firstname) && patient.getLastname().equals(lastname)
                     && patient.getDateOfBirth().before(date1)) {
-                    patients2.add(patient);
+                    patients.add(patient);
                 }
             } else if (firstname != null && lastname != null && date != null && date1 == null) {
                 if (patient.getFirstname().equals(firstname) && patient.getLastname().equals(lastname)
                     && patient.getDateOfBirth().after(date)) {
-                    patients2.add(patient);
+                    patients.add(patient);
                 }
             } else if (firstname != null && lastname == null && date != null && date1 != null) {
                 if (patient.getFirstname().equals(firstname) && patient.getDateOfBirth().after(date)
                     && patient.getDateOfBirth().before(date1)) {
-                    patients2.add(patient);
+                    patients.add(patient);
                 }
             } else if (firstname == null && lastname != null && date != null && date1 != null) {
                 if (patient.getLastname().equals(lastname) && patient.getDateOfBirth().after(date)
                     && patient.getDateOfBirth().before(date1)) {
-                    patients2.add(patient);
+                    patients.add(patient);
                 }
             } else if (firstname != null && lastname != null && date != null && date1 != null) {
                 if (patient.getFirstname().equals(firstname) && patient.getLastname().equals(lastname)
                     && patient.getDateOfBirth().before(date1) && patient.getDateOfBirth().after(date)) {
-                    patients2.add(patient);
+                    sqlthing(patients,"SELECT * FROM patient WHERE name LIKE '" + firstname + "' AND lastname " +
+                                      "LIKE '" + lastname + "' AND dateofbirth >= " );
                 }
             }
         }
-        return patients2;
+        return patients;
     }
 
+    private List sqlthing(List arrayList, String sql)
+    {
+        try {
+            PreparedStatement pS = connection.prepareStatement(sql);
+            ResultSet rs = pS.executeQuery();
+            while(rs.next())
+            {
+                arrayList.add(new PatientImpl(this,rs.getLong(1),rs.getString(2),
+                        rs.getString(3),rs.getDate(4),rs.getString(5),
+                        rs.getString(6)));
+            }
+            return arrayList;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return null;
+    }
     @Override
     public Patient getPatient(long l) {
         assert l > 0;
-        for (int i = 0; i < patients.size(); i++) {
-            if (patients.get(i).getObjectID() == l) {
-                return patients.get(i);
-            }
+        Patient patient = null;
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM patient WHERE ID = ?");
+            preparedStatement.setLong(1, l);
+            ResultSet rs = preparedStatement.executeQuery();
+            rs.next();
+            patient = new PatientImpl(this, rs.getLong(1), rs.getString(2), rs.getString(3),
+                    rs.getDate(4), rs.getString(5), rs.getString(6));
+            rs.close();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
         return null;
     }
 
     @Override
     public List<Ward> getWards() {
-        return wards;
+        List<Ward> wards = new ArrayList();
+        try {
+            PreparedStatement pS = connection.prepareStatement("SELECT * FROM ward");
+            ResultSet rs = pS.executeQuery();
+            while(rs.next())
+            {
+                wards.add(new WardImpl(this, rs.getLong(1), rs.getString(2),
+                        rs.getInt(3)));
+            }
+            return wards;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return null;
     }
 
     @Override
     public Ward getWard(long l) {
         assert l > 0;
-        for (int i = 0; i < wards.size(); i++) {
-            if (wards.get(i).getObjectID() == l) {
-                return wards.get(i);
-            }
+        try {
+            PreparedStatement pS = connection.prepareStatement("SELECT * FROM ward WHERE ID = ?");
+            pS.setLong(1, l);
+            ResultSet rs = pS.executeQuery();
+            rs.next();
+            return new WardImpl(this,rs.getLong(1),rs.getString(2),rs.getInt(3));
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
         return null;
     }
@@ -195,11 +226,7 @@ public class BasicDBServiceImpl implements BasicDBService {
     public List<HospitalStay> getHospitalStays(long l) {
         List<HospitalStay> hospitalStays2 = new ArrayList();
         assert l > 0;
-        for (int i = 0; i < hospitalStays.size(); i++) {
-            if (hospitalStays.get(i).getObjectID() == l) {
-                hospitalStays2.add(hospitalStays.get(i));
-            }
-        }
+
         return hospitalStays2;
     }
 
@@ -207,12 +234,7 @@ public class BasicDBServiceImpl implements BasicDBService {
     public List<HospitalStay> getHospitalStays(long l, Date date, Date date1) {
         List<HospitalStay> hospitalStays2 = new ArrayList();
         assert l > 0;
-        for (int i = 0; i < hospitalStays.size(); i++) {
-            if (hospitalStays.get(i).getObjectID() == l && hospitalStays.get(i).getAdmissionDate().after(date)
-                && hospitalStays.get(i).getDischargeDate().before(date)) {
-                hospitalStays2.add(hospitalStays.get(i));
-            }
-        }
+
         return hospitalStays2;
     }
 
@@ -220,13 +242,7 @@ public class BasicDBServiceImpl implements BasicDBService {
     public double getAverageHospitalStayDuration(long l) {
         double average = 0;
         assert l > 0;
-        for (int i = 0; i < hospitalStays.size(); i++) {
-            if (hospitalStays.get(i).getObjectID() == l && hospitalStays.get(i).getDischargeDate() != null) {
-                long diff = hospitalStays.get(i).getAdmissionDate().getTime()
-                            - hospitalStays.get(i).getDischargeDate().getTime();
-                average = average + TimeUnit.DAYS.convert(diff, TimeUnit.DAYS);
-            }
-        }
+
         return average;
     }
 
@@ -234,14 +250,14 @@ public class BasicDBServiceImpl implements BasicDBService {
 
     public int getAllocatedBeds(Ward ward) {
         int numberOfBeds = 0;
-        assert ward == null || ward.isPersistent();
-        if (ward == null) {
-            for (Ward value : wards) {
-                numberOfBeds += value.getNumberOfBeds();
-            }
-        } else {
-            numberOfBeds += ward.getNumberOfBeds();
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT COUNT(numberofbeds) " +
+                                                                              "FROM ward");
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
+
         return numberOfBeds;
     }
 
@@ -249,18 +265,7 @@ public class BasicDBServiceImpl implements BasicDBService {
     public int getFreeBeds(Ward ward) {
         int freeBeds = 0;
         assert ward == null || ward.isPersistent();
-        if (ward == null) {
-            for (Ward value : wards) {
-                freeBeds += value.getNumberOfBeds();
-            }
-            freeBeds = freeBeds - hospitalStays.size();
-        } else {
-            for (HospitalStay hp : hospitalStays) {
-                if (hp.getWard() == ward) {
-                    freeBeds += ward.getNumberOfBeds() - 1;
-                }
-            }
-        }
+
         return freeBeds;
 
     }

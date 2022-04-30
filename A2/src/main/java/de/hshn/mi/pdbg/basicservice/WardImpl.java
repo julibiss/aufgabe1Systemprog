@@ -3,6 +3,7 @@ package de.hshn.mi.pdbg.basicservice;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  * Klasse.
@@ -16,6 +17,7 @@ public class WardImpl extends PersistentJDBCObject implements Ward {
 
     /**
      * Default constructor initializes the following values.
+     *
      * @ param service
      * @ param id
      * @ param name
@@ -57,16 +59,12 @@ public class WardImpl extends PersistentJDBCObject implements Ward {
         assert connection != null;
 
         if (!this.isPersistent()) {
-            this.setObjectID(this.generateLongID(connection));
-            String sql = """
-                   INSERT INTO ward(id, name, numberofbeds) 
-                   VALUES (?, ?, ?)
-                    """;
-            preparedStatementWardInsert = connection.prepareStatement(sql);
+            this.setObjectID(this.generateLongID(connection,"sequence3"));
+            preparedStatementWardInsert = connection.prepareStatement("INSERT INTO ward(id, name, numberofbeds)" + " VALUES (?,?,?)");
             preparedStatementWardInsert.setLong(1, this.getObjectID());
             preparedStatementWardInsert.setString(2, this.getName());
             preparedStatementWardInsert.setInt(3, this.getNumberOfBeds());
-            preparedStatementWardInsert.execute();
+            preparedStatementWardInsert.executeUpdate();
         } else {
             String sql = """
                     UPDATE ward
