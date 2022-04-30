@@ -38,6 +38,13 @@ public class BasicDBServiceImpl implements BasicDBService {
         }
     }
 
+    /**
+     * Returns the connection.
+     * @ param jdbcUrl link to our local database
+     * @ param user
+     * @ param password
+     * @ return connection current connection
+     */
     private Connection getConnection(String jdbcUrl, String user, String password) throws SQLException {
         return DriverManager.getConnection(jdbcUrl, user, password);
     }
@@ -188,6 +195,7 @@ public class BasicDBServiceImpl implements BasicDBService {
         return null;
     }
 
+
     @Override
     public List<HospitalStay> getHospitalStays(long l) {
         List<HospitalStay> hospitalStays2 = new ArrayList();
@@ -228,6 +236,7 @@ public class BasicDBServiceImpl implements BasicDBService {
     }
 
     @Override
+
     public int getAllocatedBeds(Ward ward) {
         int numberOfBeds = 0;
         assert ward == null || ward.isPersistent();
