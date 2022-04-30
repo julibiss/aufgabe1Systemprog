@@ -300,6 +300,6 @@ public class BasicDBServiceImpl implements BasicDBService {
 
     @Override
     public void close() {
-
+        int i = 0;
     }
 }
