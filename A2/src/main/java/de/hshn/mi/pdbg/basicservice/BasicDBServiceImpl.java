@@ -66,7 +66,10 @@ public class BasicDBServiceImpl implements BasicDBService {
         assert patient != null;
         assert ward != null;
         assert admissionDate != null;
-        return new HospitalStayImpl(this, PersistentObject.INVALID_OBJECT_ID, admissionDate, ward, patient);
+        HospitalStay hospitalStay =
+                new HospitalStayImpl(this, PersistentObject.INVALID_OBJECT_ID, admissionDate, ward, patient);
+        hospitalStays.add(hospitalStay);
+        return hospitalStay;
     }
 
     @Override
@@ -214,7 +217,15 @@ public class BasicDBServiceImpl implements BasicDBService {
 
     @Override
     public double getAverageHospitalStayDuration(long l) {
-        return 0;
+        double average = 0;
+        assert l > 0 && l != PersistentObject.INVALID_OBJECT_ID;
+        for (int i = 0; i < hospitalStays.size(); i++) {
+            if (hospitalStays.get(i).getObjectID() == l && hospitalStays.get(i).getDischargeDate() != null) {
+                long diff = hospitalStays.get(i).getAdmissionDate().getTime() - hospitalStays.get(i).getDischargeDate().getTime();
+                average = average + TimeUnit.DAYS.convert(diff, TimeUnit.DAYS);
+            }
+        }
+        return average;
     }
 
     @Override

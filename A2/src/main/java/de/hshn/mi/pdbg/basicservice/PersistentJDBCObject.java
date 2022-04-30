@@ -18,7 +18,9 @@ public abstract class PersistentJDBCObject extends AbstractPersistentJDBCObject 
         super(service, id);
     }
 
-    protected long generateID(Connection connection) throws SQLException {
+    public abstract long store(Connection connection) throws SQLException;
+
+    protected long generateLongID(Connection connection) throws SQLException {
         long i;
         Statement statement = connection.createStatement();
         ResultSet rs = statement.executeQuery("SELECT nextval('sequence');");
@@ -29,7 +31,6 @@ public abstract class PersistentJDBCObject extends AbstractPersistentJDBCObject 
         return i;
     }
 
-    public abstract void setCluster(PreparedStatement cluster);
 
-    public abstract long store(Connection connection) throws SQLException;
+
 }

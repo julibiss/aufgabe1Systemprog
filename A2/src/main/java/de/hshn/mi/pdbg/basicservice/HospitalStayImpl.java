@@ -74,11 +74,6 @@ public class HospitalStayImpl extends PersistentJDBCObject implements HospitalSt
     }
 
     @Override
-    public void setCluster(PreparedStatement cluster) {
-
-    }
-
-    @Override
     public long store(Connection connection) throws SQLException {
         if (!this.isPersistent()) {
             this.setObjectID(this.generateLongID(connection));
