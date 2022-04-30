@@ -179,7 +179,7 @@ public class PatientImpl extends PersistentJDBCObject implements Patient {
             }
             preparedStatementPatientUpdate.setString(4, this.getHealthInsurance());
             preparedStatementPatientUpdate.setString(5, this.getInsuranceNumber());
-            preparedStatementPatientInsert.setLong(6, this.getObjectID());
+            preparedStatementPatientUpdate.setLong(6, this.getObjectID());
 
             preparedStatementPatientUpdate.execute();
         }
