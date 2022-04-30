@@ -1,5 +1,7 @@
 package de.hshn.mi.pdbg.basicservice;
 
+import de.hshn.mi.pdbg.exception.FetchException;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -16,18 +18,15 @@ public class HospitalStayImpl extends PersistentJDBCObject implements HospitalSt
     private Ward ward;
     private Patient patient;
 
-    public PreparedStatement getPreparedStatementHospitalStayInsert() {
-        return preparedStatementHospitalStayInsert;
-    }
 
-    public PreparedStatement getPreparedStatementHospitalStayUpdate() {
-        return preparedStatementHospitalStayUpdate;
-    }
-
-    protected HospitalStayImpl(BasicDBService service, long id) {
-        super(service, id);
-    }
-
+    /**
+     * Default constructor initializes the following values.
+     * @ param service DBService which contains our connection
+     * @ param id
+     * @ param dateOfAdmission
+     * @ param ward
+     * @ param patient
+     */
     public HospitalStayImpl(BasicDBService service, long id, Date dateOfAdmission, Ward ward, Patient patient) {
         super(service, id);
         this.dateOfAdmission = dateOfAdmission;
@@ -58,7 +57,7 @@ public class HospitalStayImpl extends PersistentJDBCObject implements HospitalSt
     }
 
     @Override
-    public Ward getWard() {
+    public Ward getWard() throws FetchException {
         return ward;
     }
 
@@ -75,6 +74,7 @@ public class HospitalStayImpl extends PersistentJDBCObject implements HospitalSt
 
     @Override
     public long store(Connection connection) throws SQLException {
+        assert connection != null;
         if (!this.isPersistent()) {
             this.setObjectID(this.generateLongID(connection));
             String sql = """

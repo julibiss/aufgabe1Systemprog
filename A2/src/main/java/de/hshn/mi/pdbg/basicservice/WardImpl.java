@@ -14,6 +14,13 @@ public class WardImpl extends PersistentJDBCObject implements Ward {
     private PreparedStatement preparedStatementWardUpdate;
     private PreparedStatement preparedStatementWardInsert;
 
+    /**
+     * Default constructor initializes the following values.
+     * @ param service
+     * @ param id
+     * @ param name
+     * @ param numberOfBeds
+     */
     public WardImpl(BasicDBService service, long id, String name, int numberOfBeds) {
         super(service, id);
         this.name = name;
@@ -47,6 +54,8 @@ public class WardImpl extends PersistentJDBCObject implements Ward {
 
     @Override
     public long store(Connection connection) throws SQLException {
+        assert connection != null;
+
         if (!this.isPersistent()) {
             this.setObjectID(this.generateLongID(connection));
             String sql = """

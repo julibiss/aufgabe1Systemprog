@@ -20,12 +20,11 @@ public class PatientImpl extends PersistentJDBCObject implements Patient {
     private PreparedStatement preparedStatementPatientUpdate;
 
     /**
-     * Konstruktor.
-     *
-     * @ param lastname l
-     * @ param firstname f
-     * @ param service s
-     * @ param id i
+     * Default constructor initializes the following values.
+     * @ param lastname
+     * @ param firstname
+     * @ param service
+     * @ param id
      */
     public PatientImpl(String lastname, String firstname, BasicDBService service, long id) {
         super(service, id);
@@ -35,8 +34,7 @@ public class PatientImpl extends PersistentJDBCObject implements Patient {
     }
 
     /**
-     * Konstruktor.
-     *
+     * Default constructor initializes the following values.
      * @ param lastname l
      * @ param firstname f
      * @ param service s
@@ -132,7 +130,7 @@ public class PatientImpl extends PersistentJDBCObject implements Patient {
 
     @Override
     public long store(Connection connection) throws SQLException {
-
+        assert connection != null;
         if (!this.isPersistent()) {
             this.setObjectID(this.generateLongID(connection));
             String sql = """

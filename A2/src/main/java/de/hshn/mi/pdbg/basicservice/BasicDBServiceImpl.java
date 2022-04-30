@@ -25,11 +25,10 @@ public class BasicDBServiceImpl implements BasicDBService {
     private List<HospitalStay> hospitalStays = new ArrayList();
 
     /**
-     * Test.
-     *
-     * @ param jdbcUrl j
-     * @ param sqlUser s
-     * @ param sqlPassword s
+     * Default constructor which creates a connection to the database.
+     * @ param jdbcUrl link to our local database
+     * @ param sqlUser
+     * @ param sqlPassword
      */
     public BasicDBServiceImpl(String jdbcUrl, String sqlUser, String sqlPassword) {
         try {
@@ -87,75 +86,75 @@ public class BasicDBServiceImpl implements BasicDBService {
     @Override
     public List<Patient> getPatients(String firstname, String lastname, Date date, Date date1) {
         List<Patient> patients2 = new ArrayList();
-        for (int i = 0; i < patients.size(); i++) {
+        for (Patient patient : patients) {
 
             if (firstname == null && lastname == null && date == null && date1 == null) {
-                patients.get(i).getDateOfBirth();
-                patients2.add(patients.get(i));
+                patient.getDateOfBirth();
+                patients2.add(patient);
             } else if (firstname != null && lastname == null && date == null && date1 == null) {
-                if (patients.get(i).getFirstname() == firstname) {
-                    patients2.add(patients.get(i));
+                if (patient.getFirstname().equals(firstname)) {
+                    patients2.add(patient);
                 }
             } else if (firstname == null && lastname != null && date == null && date1 == null) {
-                if (patients.get(i).getLastname() == lastname) {
-                    patients2.add(patients.get(i));
+                if (patient.getLastname().equals(lastname)) {
+                    patients2.add(patient);
                 }
             } else if (firstname == null && lastname == null && date != null && date1 == null) {
-                if (patients.get(i).getDateOfBirth().after(date)) {
-                    patients2.add(patients.get(i));
+                if (patient.getDateOfBirth().after(date)) {
+                    patients2.add(patient);
                 }
             } else if (firstname == null && lastname == null && date == null && date1 != null) {
-                if (patients.get(i).getDateOfBirth().before(date1)) {
-                    patients2.add(patients.get(i));
+                if (patient.getDateOfBirth().before(date1)) {
+                    patients2.add(patient);
                 }
             } else if (firstname != null && lastname != null && date == null && date1 == null) {
-                if (patients.get(i).getFirstname() == firstname && patients.get(i).getLastname() == lastname) {
-                    patients2.add(patients.get(i));
+                if (patient.getFirstname().equals(firstname) && patient.getLastname().equals(lastname)) {
+                    patients2.add(patient);
                 }
             } else if (firstname == null && lastname != null && date != null && date1 == null) {
-                if (patients.get(i).getLastname() == lastname && patients.get(i).getDateOfBirth().after(date)) {
-                    patients2.add(patients.get(i));
+                if (patient.getLastname().equals(lastname) && patient.getDateOfBirth().after(date)) {
+                    patients2.add(patient);
                 }
             } else if (firstname == null && lastname == null && date != null && date1 != null) {
-                if (patients.get(i).getDateOfBirth().after(date) && patients.get(i).getDateOfBirth().before(date1)) {
-                    patients2.add(patients.get(i));
+                if (patient.getDateOfBirth().after(date) && patient.getDateOfBirth().before(date1)) {
+                    patients2.add(patient);
                 }
             } else if (firstname != null && lastname == null && date != null && date1 == null) {
-                if (patients.get(i).getFirstname() == firstname && patients.get(i).getDateOfBirth().before(date1)) {
-                    patients2.add(patients.get(i));
+                if (patient.getFirstname().equals(firstname) && patient.getDateOfBirth().before(date1)) {
+                    patients2.add(patient);
                 }
             } else if (firstname != null && lastname == null && date == null && date1 != null) {
-                if (patients.get(i).getFirstname() == firstname && patients.get(i).getDateOfBirth().after(date)) {
-                    patients2.add(patients.get(i));
+                if (patient.getFirstname().equals(firstname) && patient.getDateOfBirth().after(date)) {
+                    patients2.add(patient);
                 }
             } else if (firstname == null && lastname != null && date == null && date1 != null) {
-                if (patients.get(i).getLastname() == lastname && patients.get(i).getDateOfBirth().before(date)) {
-                    patients2.add(patients.get(i));
+                if (patient.getLastname().equals(lastname) && patient.getDateOfBirth().before(date1)) {
+                    patients2.add(patient);
                 }
             } else if (firstname != null && lastname != null && date == null && date1 != null) {
-                if (patients.get(i).getFirstname() == firstname && patients.get(i).getLastname() == lastname
-                    && patients.get(i).getDateOfBirth().before(date1)) {
-                    patients2.add(patients.get(i));
+                if (patient.getFirstname().equals(firstname) && patient.getLastname().equals(lastname)
+                    && patient.getDateOfBirth().before(date1)) {
+                    patients2.add(patient);
                 }
             } else if (firstname != null && lastname != null && date != null && date1 == null) {
-                if (patients.get(i).getFirstname() == firstname && patients.get(i).getLastname() == lastname
-                    && patients.get(i).getDateOfBirth().after(date)) {
-                    patients2.add(patients.get(i));
+                if (patient.getFirstname().equals(firstname) && patient.getLastname().equals(lastname)
+                    && patient.getDateOfBirth().after(date)) {
+                    patients2.add(patient);
                 }
             } else if (firstname != null && lastname == null && date != null && date1 != null) {
-                if (patients.get(i).getFirstname() == firstname && patients.get(i).getDateOfBirth().after(date)
-                    && patients.get(i).getDateOfBirth().before(date1)) {
-                    patients2.add(patients.get(i));
+                if (patient.getFirstname().equals(firstname) && patient.getDateOfBirth().after(date)
+                    && patient.getDateOfBirth().before(date1)) {
+                    patients2.add(patient);
                 }
             } else if (firstname == null && lastname != null && date != null && date1 != null) {
-                if (patients.get(i).getLastname() == lastname && patients.get(i).getDateOfBirth().after(date)
-                    && patients.get(i).getDateOfBirth().before(date1)) {
-                    patients2.add(patients.get(i));
+                if (patient.getLastname().equals(lastname) && patient.getDateOfBirth().after(date)
+                    && patient.getDateOfBirth().before(date1)) {
+                    patients2.add(patient);
                 }
             } else if (firstname != null && lastname != null && date != null && date1 != null) {
-                if (patients.get(i).getFirstname() == firstname && patients.get(i).getLastname() == lastname
-                    && patients.get(i).getDateOfBirth().before(date1) && patients.get(i).getDateOfBirth().after(date)) {
-                    patients2.add(patients.get(i));
+                if (patient.getFirstname().equals(firstname) && patient.getLastname().equals(lastname)
+                    && patient.getDateOfBirth().before(date1) && patient.getDateOfBirth().after(date)) {
+                    patients2.add(patient);
                 }
             }
         }
@@ -164,7 +163,7 @@ public class BasicDBServiceImpl implements BasicDBService {
 
     @Override
     public Patient getPatient(long l) {
-        assert l > 0 && l != PersistentObject.INVALID_OBJECT_ID;
+        assert l > 0;
         for (int i = 0; i < patients.size(); i++) {
             if (patients.get(i).getObjectID() == l) {
                 return patients.get(i);
@@ -180,7 +179,7 @@ public class BasicDBServiceImpl implements BasicDBService {
 
     @Override
     public Ward getWard(long l) {
-        assert l > 0 && l != PersistentObject.INVALID_OBJECT_ID;
+        assert l > 0;
         for (int i = 0; i < wards.size(); i++) {
             if (wards.get(i).getObjectID() == l) {
                 return wards.get(i);
@@ -192,7 +191,7 @@ public class BasicDBServiceImpl implements BasicDBService {
     @Override
     public List<HospitalStay> getHospitalStays(long l) {
         List<HospitalStay> hospitalStays2 = new ArrayList();
-        assert l > 0 && l != PersistentObject.INVALID_OBJECT_ID;
+        assert l > 0;
         for (int i = 0; i < hospitalStays.size(); i++) {
             if (hospitalStays.get(i).getObjectID() == l) {
                 hospitalStays2.add(hospitalStays.get(i));
@@ -204,11 +203,10 @@ public class BasicDBServiceImpl implements BasicDBService {
     @Override
     public List<HospitalStay> getHospitalStays(long l, Date date, Date date1) {
         List<HospitalStay> hospitalStays2 = new ArrayList();
-        assert l > 0 && l != PersistentObject.INVALID_OBJECT_ID;
+        assert l > 0;
         for (int i = 0; i < hospitalStays.size(); i++) {
             if (hospitalStays.get(i).getObjectID() == l && hospitalStays.get(i).getAdmissionDate().after(date)
-                && hospitalStays.get(i).getDischargeDate().before(date)) ;
-            {
+                && hospitalStays.get(i).getDischargeDate().before(date)) {
                 hospitalStays2.add(hospitalStays.get(i));
             }
         }
@@ -218,10 +216,11 @@ public class BasicDBServiceImpl implements BasicDBService {
     @Override
     public double getAverageHospitalStayDuration(long l) {
         double average = 0;
-        assert l > 0 && l != PersistentObject.INVALID_OBJECT_ID;
+        assert l > 0;
         for (int i = 0; i < hospitalStays.size(); i++) {
             if (hospitalStays.get(i).getObjectID() == l && hospitalStays.get(i).getDischargeDate() != null) {
-                long diff = hospitalStays.get(i).getAdmissionDate().getTime() - hospitalStays.get(i).getDischargeDate().getTime();
+                long diff = hospitalStays.get(i).getAdmissionDate().getTime()
+                            - hospitalStays.get(i).getDischargeDate().getTime();
                 average = average + TimeUnit.DAYS.convert(diff, TimeUnit.DAYS);
             }
         }
@@ -231,29 +230,40 @@ public class BasicDBServiceImpl implements BasicDBService {
     @Override
     public int getAllocatedBeds(Ward ward) {
         int numberOfBeds = 0;
-
+        assert ward == null || ward.isPersistent();
         if (ward == null) {
-            for (int i = 0; i < wards.size(); i++) {
-                numberOfBeds += wards.get(i).getNumberOfBeds();
+            for (Ward value : wards) {
+                numberOfBeds += value.getNumberOfBeds();
             }
         } else {
-            for (int i = 0; i < wards.size(); i++) {
-                if(wards.get(i) == ward)
-                {
-                    numberOfBeds += wards.get(i).getNumberOfBeds();
-                }
-            }
+            numberOfBeds += ward.getNumberOfBeds();
         }
         return numberOfBeds;
     }
 
     @Override
     public int getFreeBeds(Ward ward) {
-        return 0;
+        int freeBeds = 0;
+        assert ward == null || ward.isPersistent();
+        if (ward == null) {
+            for (Ward value : wards) {
+                freeBeds += value.getNumberOfBeds();
+            }
+            freeBeds = freeBeds - hospitalStays.size();
+        } else {
+            for (HospitalStay hp : hospitalStays) {
+                if (hp.getWard() == ward) {
+                    freeBeds += ward.getNumberOfBeds() - 1;
+                }
+            }
+        }
+        return freeBeds;
+
     }
 
     @Override
     public long store(PersistentObject persistentObject) {
+        assert persistentObject != null;
         if (persistentObject instanceof PatientImpl) {
             try {
                 return ((PatientImpl) persistentObject).store(connection);

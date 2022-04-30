@@ -19,12 +19,11 @@ public class DBCreator implements SchemaGenerator {
     }
 
     /**
-     * TestMethode.
-     *
-     * @ param jdbcUrl j
-     * @ param user u
-     * @ param password p
-     * @ return r
+     * Creates our local database.
+     * @ param jdbcUrl
+     * @ param user
+     * @ param password
+     * @ return true/false signals if the database was created successfully
      */
     public boolean createDatabase(String jdbcUrl, String user, String password) {
         try {
