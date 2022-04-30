@@ -1,15 +1,10 @@
 package de.hshn.mi.pdbg.basicservice;
 
 import de.hshn.mi.pdbg.PersistentObject;
-import org.checkerframework.checker.units.qual.A;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
