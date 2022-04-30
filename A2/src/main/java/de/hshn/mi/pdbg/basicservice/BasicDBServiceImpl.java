@@ -1,7 +1,9 @@
 package de.hshn.mi.pdbg.basicservice;
 
 import de.hshn.mi.pdbg.PersistentObject;
+import de.hshn.mi.pdbg.util.DateHelper;
 
+import de.hshn.mi.pdbg.exception.StoreException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -78,7 +80,7 @@ public class BasicDBServiceImpl implements BasicDBService {
     }
 
     @Override
-    public List<Patient> getPatients(String firstname, String lastname, Date date, Date date1) {
+    public List<Patient> getPatients(String lastname, String firstname, Date date, Date date1) {
         List<Patient> patients = new ArrayList();
         if (firstname == null && lastname == null && date == null && date1 == null) {
             return sqlthing(patients, "SELECT * FROM patient");
@@ -144,7 +146,7 @@ public class BasicDBServiceImpl implements BasicDBService {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        return null;
+        return arrayList;
     }
 
     @Override
@@ -256,19 +258,22 @@ public class BasicDBServiceImpl implements BasicDBService {
                 System.err.println(e.getMessage());
             }
         }
-        if (persistentObject instanceof WardImpl) {
+        else if (persistentObject instanceof WardImpl) {
             try {
                 return ((WardImpl) persistentObject).store(connection);
             } catch (SQLException e) {
                 System.err.println(e.getMessage());
             }
         }
-        if (persistentObject instanceof HospitalStayImpl) {
+        else if (persistentObject instanceof HospitalStayImpl) {
             try {
                 return ((HospitalStayImpl) persistentObject).store(connection);
             } catch (SQLException e) {
                 System.err.println(e.getMessage());
             }
+        }
+        else{
+            throw new StoreException();
         }
         return persistentObject.getObjectID();
 

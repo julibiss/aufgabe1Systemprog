@@ -43,6 +43,7 @@ public class HospitalStayImpl extends PersistentJDBCObject implements HospitalSt
 
     @Override
     public void setAdmissionDate(Date dateOfAdmission) {
+        assert dateOfAdmission != null: "dateOfAdmission is invalid";
         assert (dateOfDischarge == null) || (dateOfAdmission != null && dateOfAdmission.before(dateOfDischarge));
         this.dateOfAdmission = dateOfAdmission;
     }
