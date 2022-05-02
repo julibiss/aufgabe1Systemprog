@@ -8,6 +8,8 @@ stages:
   - a1-checks
   - a2-checks
   - a2-tests
+  - a3a-checks
+  - a3a-tests
 
 variables:
   SIMPLE_LOG_PROPERTY: "-Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn"
@@ -74,5 +76,35 @@ compile-a2:
   stage: a2-checks
   script:
     - cd A2;
+    - mvn initialize -B $SIMPLE_LOG_PROPERTY
+    - mvn compile -B $SIMPLE_LOG_PROPERTY
+
+#
+# EXERCISE A3A
+#
+checkstyle-a3a:
+  stage: a3a-checks
+  script:
+    - cd A3A;
+    - mvn checkstyle:check -Ptool-checkstyle -B $SIMPLE_LOG_PROPERTY
+  needs: ["checkstyle-report-a3a"]
+
+checkstyle-report-a3a:
+  stage: a3a-checks
+  script:
+    - cd A3A;
+    - mvn initialize -B $SIMPLE_LOG_PROPERTY
+    - mvn checkstyle:checkstyle -Ptool-checkstyle-reporting -B $SIMPLE_LOG_PROPERTY
+    - mvn site -Ptool-checkstyle-reporting -B $SIMPLE_LOG_PROPERTY
+  artifacts:
+    paths:
+      - A3A/target/site
+    expire_in: 10 minutes
+  needs: ["compile-a3a"]
+
+compile-a3a:
+  stage: a3a-checks
+  script:
+    - cd A3A;
     - mvn initialize -B $SIMPLE_LOG_PROPERTY
     - mvn compile -B $SIMPLE_LOG_PROPERTY
