@@ -63,6 +63,12 @@ public class BasicDBServiceImpl implements BasicDBService {
         return ward;
     }
 
+    /**
+     * @param patient
+     * @param ward
+     * @param admissionDate
+     * @return
+     */
     @Override
     public HospitalStay createHospitalStay(Patient patient, Ward ward, Date admissionDate) {
         assert patient != null;
@@ -74,6 +80,9 @@ public class BasicDBServiceImpl implements BasicDBService {
         return hospitalStay;
     }
 
+    /**
+     * @param l
+     */
     @Override
     public void removeHospitalStay(long l) {
         assert l > 0 && l != PersistentObject.INVALID_OBJECT_ID;
@@ -134,6 +143,11 @@ public class BasicDBServiceImpl implements BasicDBService {
         return patients;
     }
 
+    /**
+     * @param arrayList
+     * @param sql
+     * @return
+     */
     private List<Patient> sqlthing(List<Patient> arrayList, String sql) {
         try {
             PreparedStatement pS = connection.prepareStatement(sql);
@@ -175,6 +189,7 @@ public class BasicDBServiceImpl implements BasicDBService {
         try {
             PreparedStatement pS = connection.prepareStatement("SELECT * FROM ward");
             ResultSet rs = pS.executeQuery();
+            rs.next();
             while (rs.next()) {
                 wards.add(new WardImpl(this, rs.getLong(1), rs.getString(2),
                         rs.getInt(3)));
@@ -204,11 +219,33 @@ public class BasicDBServiceImpl implements BasicDBService {
         return null;
     }
 
-
+    /**
+     * @param l
+     * @return
+     */
     @Override
     public List<HospitalStay> getHospitalStays(long l) {
-        List<HospitalStay> hospitalStays2 = new ArrayList();
         assert l > 0;
+        List<HospitalStay> hospitalStays = new ArrayList();
+        try {
+            PreparedStatement pS = connection.prepareStatement("SELECT * FROM hospitalstay AS hs, ward AS wa, patient " +
+                                                               "AS p " +
+                                                               "WHERE hs.w_id = wa.id AND hs.p_id = p.id AND p.id = ?");
+            pS.setLong(1, l);
+            ResultSet rs = pS.executeQuery();
+            while (rs.next()) {
+                hospitalStays.add(new HospitalStayImpl(this, rs.getLong(1),
+                        rs.getDate(4), rs.getDate(5),
+                        new WardImpl(this, rs.getLong(3), rs.getString("name"),
+                                rs.getInt("numberofbeds")),
+                        new PatientImpl(rs.getLong(2), rs.getString("firstname"),
+                                rs.getString("lastname"), this)));
+            }
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+
+        }
 
         return hospitalStays;
     }
