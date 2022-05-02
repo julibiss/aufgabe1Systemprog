@@ -119,8 +119,10 @@ public class HospitalStayImpl extends PersistentJDBCObject implements HospitalSt
             preparedStatementHospitalStayUpdate = connection.prepareStatement(sql);
             preparedStatementHospitalStayUpdate.setLong(1, patient.getObjectID());
             preparedStatementHospitalStayUpdate.setLong(2, ward.getObjectID());
-            preparedStatementHospitalStayUpdate.setDate(3, (java.sql.Date) this.getAdmissionDate());
-            preparedStatementHospitalStayUpdate.setDate(4, (java.sql.Date) this.getDischargeDate());
+            preparedStatementHospitalStayUpdate.setDate(3,
+                    new java.sql.Date( this.getAdmissionDate().getTime()));
+            preparedStatementHospitalStayUpdate.setDate(4,
+                    new java.sql.Date( this.getDischargeDate().getTime()));
             preparedStatementHospitalStayUpdate.setLong(5, this.getObjectID());
 
 
