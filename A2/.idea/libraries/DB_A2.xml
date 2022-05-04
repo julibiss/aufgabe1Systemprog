@@ -12,6 +12,7 @@
     </JAVADOC>
     <SOURCES>
       <root url="jar://$PROJECT_DIR$/lib/DB2_A2-src.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/DB2_A2-gui.jar!/" />
     </SOURCES>
   </library>
 </component>

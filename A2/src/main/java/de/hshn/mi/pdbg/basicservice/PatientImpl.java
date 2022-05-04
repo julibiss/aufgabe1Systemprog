@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -18,6 +19,7 @@ public class PatientImpl extends PersistentJDBCObject implements Patient {
     private String healtInsuranceNumber = null;
     private PreparedStatement preparedStatementPatientInsert;
     private PreparedStatement preparedStatementPatientUpdate;
+    private Set<HospitalStay> hospitalStays =new HashSet<>();
 
     /**
      * Default constructor initializes the following values.
@@ -123,7 +125,7 @@ public class PatientImpl extends PersistentJDBCObject implements Patient {
 
     @Override
     public Set<HospitalStay> getHospitalStays() {
-        return null;
+        return hospitalStays;
     }
 
 

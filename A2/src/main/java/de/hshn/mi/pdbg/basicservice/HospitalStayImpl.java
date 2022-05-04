@@ -1,6 +1,7 @@
 
 package de.hshn.mi.pdbg.basicservice;
 
+import de.hshn.mi.pdbg.PersistentObject;
 import de.hshn.mi.pdbg.exception.FetchException;
 
 import java.sql.Connection;
@@ -22,6 +23,7 @@ public class HospitalStayImpl extends PersistentJDBCObject implements HospitalSt
 
     /**
      * Default constructor initializes the following values.
+     *
      * @ param service DBService which contains our connection
      * @ param id
      * @ param dateOfAdmission
@@ -44,7 +46,7 @@ public class HospitalStayImpl extends PersistentJDBCObject implements HospitalSt
 
     @Override
     public void setAdmissionDate(Date dateOfAdmission) {
-        assert dateOfAdmission != null: "dateOfAdmission is invalid";
+        assert dateOfAdmission != null : "dateOfAdmission is invalid";
         assert (dateOfDischarge == null) || (dateOfAdmission != null && dateOfAdmission.before(dateOfDischarge));
         this.dateOfAdmission = dateOfAdmission;
     }
@@ -79,10 +81,14 @@ public class HospitalStayImpl extends PersistentJDBCObject implements HospitalSt
     @Override
     public long store(Connection connection) throws SQLException {
         assert connection != null;
-        getBasicDBService().store(patient);
-        getBasicDBService().store(ward);
         if (!this.isPersistent()) {
-            this.setObjectID(this.generateLongID(connection,"sequence1"));
+            if (patient.getObjectID() == PersistentObject.INVALID_OBJECT_ID) {
+                getBasicDBService().store(patient);
+            }
+            if (ward.getObjectID() == PersistentObject.INVALID_OBJECT_ID) {
+                getBasicDBService().store(ward);
+            }
+            this.setObjectID(this.generateLongID(connection, "sequence1"));
             String sql = """
                     insert into "hospitalstay" (
                     id,
@@ -120,9 +126,9 @@ public class HospitalStayImpl extends PersistentJDBCObject implements HospitalSt
             preparedStatementHospitalStayUpdate.setLong(1, patient.getObjectID());
             preparedStatementHospitalStayUpdate.setLong(2, ward.getObjectID());
             preparedStatementHospitalStayUpdate.setDate(3,
-                    new java.sql.Date( this.getAdmissionDate().getTime()));
+                    new java.sql.Date(this.getAdmissionDate().getTime()));
             preparedStatementHospitalStayUpdate.setDate(4,
-                    new java.sql.Date( this.getDischargeDate().getTime()));
+                    new java.sql.Date(this.getDischargeDate().getTime()));
             preparedStatementHospitalStayUpdate.setLong(5, this.getObjectID());
 
 
