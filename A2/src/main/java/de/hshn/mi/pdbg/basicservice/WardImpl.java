@@ -17,7 +17,6 @@ public class WardImpl extends PersistentJDBCObject implements Ward {
 
     /**
      * Default constructor initializes the following values.
-     *
      * @ param service
      * @ param id
      * @ param name
@@ -59,8 +58,9 @@ public class WardImpl extends PersistentJDBCObject implements Ward {
         assert connection != null;
 
         if (!this.isPersistent()) {
-            this.setObjectID(this.generateLongID(connection,"sequence3"));
-            preparedStatementWardInsert = connection.prepareStatement("INSERT INTO ward(id, name, numberofbeds)" + " VALUES (?,?,?)");
+            this.setObjectID(this.generateLongID(connection, "sequence3"));
+            preparedStatementWardInsert = connection.prepareStatement("INSERT INTO ward(id, name, numberofbeds)"
+                                                                      + " VALUES (?,?,?)");
             preparedStatementWardInsert.setLong(1, this.getObjectID());
             preparedStatementWardInsert.setString(2, this.getName());
             preparedStatementWardInsert.setInt(3, this.getNumberOfBeds());

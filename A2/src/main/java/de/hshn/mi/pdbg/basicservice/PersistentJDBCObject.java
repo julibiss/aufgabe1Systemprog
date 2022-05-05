@@ -2,7 +2,10 @@ package de.hshn.mi.pdbg.basicservice;
 
 import de.hshn.mi.pdbg.basicservice.jdbc.AbstractPersistentJDBCObject;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 
 /**

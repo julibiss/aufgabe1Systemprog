@@ -23,7 +23,6 @@ public class BasicDBServiceImpl implements BasicDBService {
 
     /**
      * Default constructor which creates a connection to the database.
-     *
      * @ param jdbcUrl link to our local database
      * @ param sqlUser
      * @ param sqlPassword
@@ -38,7 +37,6 @@ public class BasicDBServiceImpl implements BasicDBService {
 
     /**
      * Returns the connection.
-     *
      * @ param jdbcUrl link to our local database
      * @ param user
      * @ param password
@@ -64,12 +62,7 @@ public class BasicDBServiceImpl implements BasicDBService {
         return ward;
     }
 
-    /**
-     * @param patient
-     * @param ward
-     * @param admissionDate
-     * @return
-     */
+
     @Override
     public HospitalStay createHospitalStay(Patient patient, Ward ward, Date admissionDate) {
         assert patient != null;
@@ -81,9 +74,7 @@ public class BasicDBServiceImpl implements BasicDBService {
         return hospitalStay;
     }
 
-    /**
-     * @param l
-     */
+
     @Override
     public void removeHospitalStay(long l) {
         assert l > 0 && l != PersistentObject.INVALID_OBJECT_ID;
@@ -108,9 +99,11 @@ public class BasicDBServiceImpl implements BasicDBService {
         } else if (firstname == null && lastname != null && date == null && date1 == null) {
             return sqlthing(patients, "SELECT * FROM patient WHERE lastname LIKE '" + lastname + "'");
         } else if (firstname == null && lastname == null && date != null && date1 == null) {
-            return sqlthing(patients, "SELECT * FROM patient WHERE dateofbirth >= '" + DateHelper.convertDate(date).toString() + "'");
+            return sqlthing(patients, "SELECT * FROM patient WHERE dateofbirth >= '" +
+                                      DateHelper.convertDate(date).toString() + "'");
         } else if (firstname == null && lastname == null && date == null && date1 != null) {
-            return sqlthing(patients, "SELECT * FROM patient WHERE dateofbirth <= '" + DateHelper.convertDate(date1).toString() + "'");
+            return sqlthing(patients, "SELECT * FROM patient WHERE dateofbirth <= '" +
+                                      DateHelper.convertDate(date1).toString() + "'");
         } else if (firstname != null && lastname != null && date == null && date1 == null) {
             return sqlthing(patients, "SELECT * FROM patient WHERE lastname LIKE '" + lastname + "' AND " +
                                       "firstname LIKE '" + firstname + "'");
@@ -131,10 +124,12 @@ public class BasicDBServiceImpl implements BasicDBService {
             return sqlthing(patients, "SELECT * FROM patient  WHERE lastname LIKE '" + lastname + "' AND " +
                                       "dateofbirth <= '" + DateHelper.convertDate(date1).toString() + "'");
         } else if (firstname != null && lastname != null && date == null && date1 != null) {
-            return sqlthing(patients, "SELECT * FROM patient  WHERE firstname LIKE '" + firstname + "' AND lastname LIKE '" + lastname + "' AND " +
+            return sqlthing(patients, "SELECT * FROM patient  WHERE firstname LIKE '" + firstname
+                                      + "' AND lastname LIKE '" + lastname + "' AND " +
                                       "dateofbirth <= '" + DateHelper.convertDate(date1).toString() + "'");
         } else if (firstname != null && lastname != null && date != null && date1 == null) {
-            return sqlthing(patients, "SELECT * FROM patient  WHERE firstname LIKE '" + firstname + "' AND lastname LIKE '" + lastname + "' AND " +
+            return sqlthing(patients, "SELECT * FROM patient  WHERE firstname LIKE '" + firstname
+                                      + "' AND lastname LIKE '" + lastname + "' AND " +
                                       "dateofbirth >= '" + DateHelper.convertDate(date).toString() + "'");
         } else if (firstname != null && lastname == null && date != null && date1 != null) {
             return sqlthing(patients, "SELECT * FROM patient  WHERE firstname LIKE '" + firstname + "' AND " +
@@ -145,7 +140,8 @@ public class BasicDBServiceImpl implements BasicDBService {
                                       "dateofbirth <= '" + DateHelper.convertDate(date1).toString() + "' AND " +
                                       "dateofbirth >= '" + DateHelper.convertDate(date).toString() + "'");
         } else if (firstname != null && lastname != null && date != null && date1 != null) {
-            return sqlthing(patients, "SELECT * FROM patient WHERE name LIKE '" + firstname + "' AND lastname LIKE '"
+            return sqlthing(patients, "SELECT * FROM patient WHERE name LIKE '" + firstname
+                                      + "' AND lastname LIKE '"
                                       + lastname + "' AND dateofbirth >= '" + DateHelper.convertDate(date).toString() +
                                       "' AND dateofbirth <=  '" + DateHelper.convertDate(date1).toString() + "'");
         }
@@ -153,14 +149,15 @@ public class BasicDBServiceImpl implements BasicDBService {
     }
 
     /**
-     * @param arrayList
-     * @param sql
-     * @return
+     * Makes sql yes.
+     * @ param arrayList
+     * @ param sql
+     * @ return
      */
     private List<Patient> sqlthing(List<Patient> arrayList, String sql) {
         try {
-            PreparedStatement pS = connection.prepareStatement(sql);
-            ResultSet rs = pS.executeQuery();
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
                 arrayList.add(new PatientImpl(this, rs.getLong(1), rs.getString(2),
                         rs.getString(3), rs.getDate(4), rs.getString(5),
@@ -196,8 +193,8 @@ public class BasicDBServiceImpl implements BasicDBService {
     public List<Ward> getWards() {
         List<Ward> wards = new ArrayList();
         try {
-            PreparedStatement pS = connection.prepareStatement("SELECT * FROM ward");
-            ResultSet rs = pS.executeQuery();
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM ward");
+            ResultSet rs = preparedStatement.executeQuery();
             rs.next();
             while (rs.next()) {
                 wards.add(new WardImpl(this, rs.getLong(1), rs.getString(2),
@@ -214,13 +211,13 @@ public class BasicDBServiceImpl implements BasicDBService {
     public Ward getWard(long l) {
         assert l > 0;
         try {
-            PreparedStatement pS = connection.prepareStatement("SELECT * FROM ward WHERE ID = ?");
-            pS.setLong(1, l);
-            ResultSet rs = pS.executeQuery();
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM ward WHERE ID = ?");
+            preparedStatement.setLong(1, l);
+            ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
-                WardImpl wI = new WardImpl(this, rs.getLong(1),
+                WardImpl ward = new WardImpl(this, rs.getLong(1),
                         rs.getString(2), rs.getInt(3));
-                return wI;
+                return ward;
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -228,35 +225,35 @@ public class BasicDBServiceImpl implements BasicDBService {
         return null;
     }
 
-    /**
-     * @param l
-     * @return
-     */
     @Override
     public List<HospitalStay> getHospitalStays(long l) {
         assert l > 0;
         assert getPatient(l).getObjectID() != PersistentObject.INVALID_OBJECT_ID;
         List<HospitalStay> hospitalStays = new ArrayList();
 
-            try {
-                PreparedStatement pS = connection.prepareStatement("SELECT * FROM hospitalstay AS hs, ward AS wa, patient " +
-                                                                   "AS p " +
-                                                                   "WHERE hs.w_id = wa.id AND hs.p_id = p.id AND p.id = ?");
-                pS.setLong(1, l);
-                ResultSet rs = pS.executeQuery();
-                while (rs.next()) {
-                    hospitalStays.add(new HospitalStayImpl(this, rs.getLong(1),
-                            rs.getDate(4), rs.getDate(5),
-                            new WardImpl(this, rs.getLong(3), rs.getString("name"),
-                                    rs.getInt("numberofbeds")),
-                            new PatientImpl(rs.getLong(2), rs.getString("firstname"),
-                                    rs.getString("lastname"), this)));
-                }
-
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM hospitalstay " +
+                                                                              "AS hs, ward " +
+                                                                              "AS wa, patient " +
+                                                                              "AS p " +
+                                                                              "WHERE hs.w_id = wa.id " +
+                                                                              "AND hs.p_id = p.id " +
+                                                                              "AND p.id = ?");
+            preparedStatement.setLong(1, l);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                hospitalStays.add(new HospitalStayImpl(this, rs.getLong(1),
+                        rs.getDate(4), rs.getDate(5),
+                        new WardImpl(this, rs.getLong(3), rs.getString("name"),
+                                rs.getInt("numberofbeds")),
+                        new PatientImpl(rs.getLong(2), rs.getString("firstname"),
+                                rs.getString("lastname"), this)));
             }
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+
+        }
 
         return hospitalStays;
     }
@@ -265,18 +262,22 @@ public class BasicDBServiceImpl implements BasicDBService {
     public List<HospitalStay> getHospitalStays(long l, Date date, Date date1) {
 
         assert l > 0;
-        assert date == null && date1 == null || date != null && date1 == null || date == null && date1 != null || date != null && date1 != null && date.before(date1);
+        assert date == null && date1 == null || date != null && date1 == null || date == null && date1 != null
+               || date != null && date1 != null && date.before(date1);
 
         List<HospitalStay> hospitalStays = new ArrayList();
 
         try {
             if (date == null && date1 == null) {
-                PreparedStatement pS = connection.prepareStatement("SELECT * FROM hospitalstay AS hs, ward AS wa, patient " +
-                                                                   "AS p " +
-                                                                   "WHERE hs.w_id = wa.id AND  hs.p_id = p.id " +
-                                                                   "AND p.id  = ?");
-                pS.setLong(1, l);
-                ResultSet rs = pS.executeQuery();
+                PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM hospitalstay " +
+                                                                                  "AS hs, ward " +
+                                                                                  "AS wa, patient " +
+                                                                                  "AS p " +
+                                                                                  "WHERE hs.w_id = wa.id " +
+                                                                                  "AND  hs.p_id = p.id " +
+                                                                                  "AND p.id  = ?");
+                preparedStatement.setLong(1, l);
+                ResultSet rs = preparedStatement.executeQuery();
                 while (rs.next()) {
                     hospitalStays.add(new HospitalStayImpl(this, rs.getLong(1),
                             rs.getDate(4), rs.getDate(5),
@@ -286,14 +287,16 @@ public class BasicDBServiceImpl implements BasicDBService {
                                     rs.getString("lastname"), this)));
                 }
             } else if (date == null && date1 != null) {
-                PreparedStatement pS = connection.prepareStatement("SELECT * FROM hospitalstay AS hs, ward AS wa, patient " +
+                PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM hospitalstay " +
+                                                                                  "AS hs, ward " +
+                                                                   "AS wa, patient " +
                                                                    "AS p " +
                                                                    "WHERE hs.w_id = wa.id AND  hs.p_id = p.id " +
                                                                    "AND p.id  = ?" +
                                                                    "AND dateofdischarge <= ?");
-                pS.setLong(1, l);
-                pS.setDate(2, DateHelper.convertDate(date1));
-                ResultSet rs = pS.executeQuery();
+                preparedStatement.setLong(1, l);
+                preparedStatement.setDate(2, DateHelper.convertDate(date1));
+                ResultSet rs = preparedStatement.executeQuery();
                 while (rs.next()) {
                     hospitalStays.add(new HospitalStayImpl(this, rs.getLong(1),
                             rs.getDate(4), rs.getDate(5),
@@ -304,14 +307,16 @@ public class BasicDBServiceImpl implements BasicDBService {
                 }
 
             } else if (date != null && date1 == null) {
-                PreparedStatement pS = connection.prepareStatement("SELECT * FROM hospitalstay AS hs, ward AS wa, patient " +
+                PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM hospitalstay " +
+                                                                                  "AS hs, ward " +
+                                                                   "AS wa, patient " +
                                                                    "AS p " +
                                                                    "WHERE hs.w_id = wa.id AND  hs.p_id = p.id " +
                                                                    "AND p.id  = ?" +
                                                                    "AND dateofadmission >= ?");
-                pS.setLong(1, l);
-                pS.setDate(2, DateHelper.convertDate(date));
-                ResultSet rs = pS.executeQuery();
+                preparedStatement.setLong(1, l);
+                preparedStatement.setDate(2, DateHelper.convertDate(date));
+                ResultSet rs = preparedStatement.executeQuery();
                 while (rs.next()) {
                     hospitalStays.add(new HospitalStayImpl(this, rs.getLong(1),
                             rs.getDate(4), rs.getDate(5),
@@ -321,16 +326,18 @@ public class BasicDBServiceImpl implements BasicDBService {
                                     rs.getString("lastname"), this)));
                 }
             } else if (date != null && date1 != null) {
-                PreparedStatement pS = connection.prepareStatement("SELECT * FROM hospitalstay AS hs, ward AS wa, patient " +
+                PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM hospitalstay " +
+                                                                                  "AS hs, ward " +
+                                                                   "AS wa, patient " +
                                                                    "AS p " +
                                                                    "WHERE hs.w_id = wa.id AND  hs.p_id = p.id " +
                                                                    "AND p.id  = ?" +
                                                                    "AND dateofadmission >= ? AND dateofdischarge <= ?");
-                pS.setLong(1, l);
-                pS.setDate(2, DateHelper.convertDate(date));
-                pS.setDate(3, DateHelper.convertDate(date1));
+                preparedStatement.setLong(1, l);
+                preparedStatement.setDate(2, DateHelper.convertDate(date));
+                preparedStatement.setDate(3, DateHelper.convertDate(date1));
 
-                ResultSet rs = pS.executeQuery();
+                ResultSet rs = preparedStatement.executeQuery();
                 while (rs.next()) {
                     hospitalStays.add(new HospitalStayImpl(this, rs.getLong(1),
                             rs.getDate(4), rs.getDate(5),
@@ -353,11 +360,12 @@ public class BasicDBServiceImpl implements BasicDBService {
         double average = 0;
         assert l > 0;
         try {
-            PreparedStatement pS = connection.prepareStatement("SELECT AVG(dateofdischarge-dateofadmission)  AS test " +
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT AVG" +
+                                                                      "(dateofdischarge-dateofadmission)  AS test " +
                                                                "FROM hospitalstay AS hs " +
                                                                "WHERE hs.w_id = ? AND dateofdischarge IS NOT NULL");
-            pS.setLong(1, l);
-            ResultSet rs = pS.executeQuery();
+            preparedStatement.setLong(1, l);
+            ResultSet rs = preparedStatement.executeQuery();
             rs.next();
             average += rs.getDouble(1);
 
@@ -375,13 +383,15 @@ public class BasicDBServiceImpl implements BasicDBService {
         try {
             if (ward == null) {
                 PreparedStatement preparedStatement = connection.prepareStatement("SELECT COUNT(*) " +
-                                                                                  "FROM hospitalstay WHERE dateofdischarge IS NULL");
+                                                                                  "FROM hospitalstay " +
+                                                                                  "WHERE dateofdischarge IS NULL");
                 ResultSet rs = preparedStatement.executeQuery();
                 rs.next();
                 numberOfBeds += rs.getInt(1);
             } else {
                 PreparedStatement preparedStatement = connection.prepareStatement("SELECT COUNT(*) " +
-                                                                                  "FROM hospitalstay WHERE dateofdischarge IS NULL" +
+                                                                                  "FROM hospitalstay " +
+                                                                                  "WHERE dateofdischarge IS NULL" +
                                                                                   " AND hospitalstay.w_id = ?");
                 preparedStatement.setLong(1, ward.getObjectID());
                 ResultSet rs = preparedStatement.executeQuery();

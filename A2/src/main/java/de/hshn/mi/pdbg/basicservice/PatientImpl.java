@@ -19,7 +19,7 @@ public class PatientImpl extends PersistentJDBCObject implements Patient {
     private String healtInsuranceNumber = null;
     private PreparedStatement preparedStatementPatientInsert;
     private PreparedStatement preparedStatementPatientUpdate;
-    private Set<HospitalStay> hospitalStays =new HashSet<>();
+    private Set<HospitalStay> hospitalStays = new HashSet<>();
 
     /**
      * Default constructor initializes the following values.
@@ -28,7 +28,7 @@ public class PatientImpl extends PersistentJDBCObject implements Patient {
      * @ param service
      * @ param id
      */
-    public PatientImpl(long id, String lastname, String firstname, BasicDBService service ) {
+    public PatientImpl(long id, String lastname, String firstname, BasicDBService service) {
         super(service, id);
         this.setLastname(lastname);
         this.setFirstname(firstname);
@@ -54,7 +54,7 @@ public class PatientImpl extends PersistentJDBCObject implements Patient {
             String healthInsurance,
             String healthInsuranceNumber
     ) {
-        this(id,lastname, firstname, service );
+        this(id, lastname, firstname, service);
         this.setHealthInsurance(healthInsurance);
         this.setInsuranceNumber(healthInsuranceNumber);
         this.setDateOfBirth(birthdate);
@@ -126,11 +126,10 @@ public class PatientImpl extends PersistentJDBCObject implements Patient {
     @Override
     public Set<HospitalStay> getHospitalStays() {
         HashSet<HospitalStay> hs = new HashSet<>();
-        if(this.getObjectID() != PersistentJDBCObject.INVALID_OBJECT_ID) {
-           hs = new HashSet(getBasicDBService().getHospitalStays(getObjectID()));
+        if (this.getObjectID() != PersistentJDBCObject.INVALID_OBJECT_ID) {
+            hs = new HashSet(getBasicDBService().getHospitalStays(getObjectID()));
             return hs;
-        }
-        else {
+        } else {
             return hs;
         }
     }
@@ -140,7 +139,7 @@ public class PatientImpl extends PersistentJDBCObject implements Patient {
     public long store(Connection connection) throws SQLException {
         assert connection != null;
         if (!this.isPersistent()) {
-            this.setObjectID(this.generateLongID(connection,"sequence2"));
+            this.setObjectID(this.generateLongID(connection, "sequence2"));
             String sql = """
                     insert into "patient" (
                     id,

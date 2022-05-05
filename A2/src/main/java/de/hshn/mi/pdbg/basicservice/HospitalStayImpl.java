@@ -23,7 +23,6 @@ public class HospitalStayImpl extends PersistentJDBCObject implements HospitalSt
 
     /**
      * Default constructor initializes the following values.
-     *
      * @ param service DBService which contains our connection
      * @ param id
      * @ param dateOfAdmission

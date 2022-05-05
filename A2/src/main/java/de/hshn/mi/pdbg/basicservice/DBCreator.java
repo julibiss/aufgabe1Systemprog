@@ -20,7 +20,6 @@ public class DBCreator implements SchemaGenerator {
 
     /**
      * Creates our local database.
-     *
      * @ param jdbcUrl
      * @ param user
      * @ param password
