@@ -14,7 +14,7 @@ public class BasicDBServiceFactory {
      * @return instance of a {@link BasicDBService} object
      */
     public static BasicDBService createBasicDBService() {
-        return new BasicDBServiceImpl("jdbc:postgresql://localhost:5432/postgres",
-                "postgres", "password");
+        return new BasicDBServiceImpl(" jdbc:postgresql://postgres/pdbg−a2",
+                "postgres", "postgres");
     }
 }
