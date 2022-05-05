@@ -125,9 +125,15 @@ public class PatientImpl extends PersistentJDBCObject implements Patient {
 
     @Override
     public Set<HospitalStay> getHospitalStays() {
-        return hospitalStays;
+        HashSet<HospitalStay> hs = new HashSet<>();
+        if(this.getObjectID() != PersistentJDBCObject.INVALID_OBJECT_ID) {
+           hs = new HashSet(getBasicDBService().getHospitalStays(getObjectID()));
+            return hs;
+        }
+        else {
+            return hs;
+        }
     }
-
 
 
     @Override
