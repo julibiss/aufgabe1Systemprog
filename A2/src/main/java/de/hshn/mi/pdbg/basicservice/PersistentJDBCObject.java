@@ -19,7 +19,7 @@ public abstract class PersistentJDBCObject extends AbstractPersistentJDBCObject 
 
     public abstract long store(Connection connection) throws SQLException;
 
-    protected long generateLongID(Connection connection, String sequence) throws SQLException {
+    protected long generateID(Connection connection, String sequence) throws SQLException {
         long i;
         PreparedStatement statement = connection.prepareStatement("SELECT  nextval(?);");
         statement.setString(1, sequence);
