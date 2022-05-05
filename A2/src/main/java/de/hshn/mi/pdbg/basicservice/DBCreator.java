@@ -15,7 +15,7 @@ public class DBCreator implements SchemaGenerator {
 
     public static void main(String[] args) throws Exception {
         String url = "jdbc:postgresql://postgres/pdbg−a2";
-        new DBCreator().createDatabase(url, "postgres", "postgres");
+        new DBCreator().createDatabase(url, "user", "password");
     }
 
     /**

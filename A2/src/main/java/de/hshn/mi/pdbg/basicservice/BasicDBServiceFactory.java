@@ -15,6 +15,6 @@ public class BasicDBServiceFactory {
      */
     public static BasicDBService createBasicDBService() {
         return new BasicDBServiceImpl("jdbc:postgresql://postgres/pdbg−a2",
-                "postgres", "postgres");
+                "user", "password");
     }
 }
