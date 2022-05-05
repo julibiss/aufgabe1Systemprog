@@ -3,7 +3,6 @@ package de.hshn.mi.pdbg.basicservice;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 /**
  * Klasse.
@@ -58,7 +57,7 @@ public class WardImpl extends PersistentJDBCObject implements Ward {
         assert connection != null;
 
         if (!this.isPersistent()) {
-            this.setObjectID(this.generateLongID(connection, "sequence3"));
+            this.setObjectID(this.generateID(connection, "sequence3"));
             preparedStatementWardInsert = connection.prepareStatement("INSERT INTO ward(id, name, numberofbeds)"
                                                                       + " VALUES (?,?,?)");
             preparedStatementWardInsert.setLong(1, this.getObjectID());
