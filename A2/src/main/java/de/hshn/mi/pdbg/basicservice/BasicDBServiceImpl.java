@@ -195,7 +195,6 @@ public class BasicDBServiceImpl implements BasicDBService {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM ward");
             ResultSet rs = preparedStatement.executeQuery();
-            rs.next();
             while (rs.next()) {
                 wards.add(new WardImpl(this, rs.getLong(1), rs.getString(2),
                         rs.getInt(3)));
