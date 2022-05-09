@@ -357,8 +357,9 @@ public class BasicDBServiceImpl implements BasicDBService {
 
     @Override
     public double getAverageHospitalStayDuration(long l) {
-        double average = 0;
         assert l > 0;
+
+        double average = 0;
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT AVG" +
                                                                       "(dateofdischarge-dateofadmission)  AS test " +
