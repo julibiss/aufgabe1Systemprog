@@ -452,6 +452,5 @@ public class BasicDBServiceImpl implements BasicDBService {
 
     @Override
     public void close() {
-        this.close();
     }
 }
