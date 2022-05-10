@@ -424,7 +424,7 @@ public class BasicDBServiceImpl implements BasicDBService {
     }
 
     @Override
-    public long store(PersistentObject persistentObject) throws StoreException {
+    public long store(PersistentObject persistentObject) {
         assert persistentObject != null;
         if (persistentObject instanceof PatientImpl) {
             try {
@@ -445,7 +445,9 @@ public class BasicDBServiceImpl implements BasicDBService {
                 throw new StoreException("Error occurred while trying to store a hospital stay object!");
             }
         }
-        return persistentObject.getObjectID();
+        else {
+            throw new StoreException("Error occurred while trying to strore the object!");
+        }
     }
 
     @Override
