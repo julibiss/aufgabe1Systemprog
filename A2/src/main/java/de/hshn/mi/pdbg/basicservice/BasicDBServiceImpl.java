@@ -424,7 +424,7 @@ public class BasicDBServiceImpl implements BasicDBService {
     }
 
     @Override
-    public long store(PersistentObject persistentObject) {
+    public long store(PersistentObject persistentObject) throws StoreException {
         assert persistentObject != null;
         if (persistentObject instanceof PatientImpl) {
             try {
