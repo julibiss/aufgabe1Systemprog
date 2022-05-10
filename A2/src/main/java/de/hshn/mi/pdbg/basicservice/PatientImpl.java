@@ -60,14 +60,6 @@ public class PatientImpl extends PersistentJDBCObject implements Patient {
         this.setDateOfBirth(birthdate);
     }
 
-    public PreparedStatement getPreparedStatementPatientInsert() {
-        return preparedStatementPatientInsert;
-    }
-
-    public PreparedStatement getPreparedStatementPatientUpdate() {
-        return preparedStatementPatientUpdate;
-    }
-
     @Override
     public void setHealthInsurance(String name) {
         this.healthInsurance = name;

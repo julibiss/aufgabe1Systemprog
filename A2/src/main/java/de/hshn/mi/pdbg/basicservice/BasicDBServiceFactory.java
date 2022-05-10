@@ -1,6 +1,8 @@
 package de.hshn.mi.pdbg.basicservice;
 
 
+import java.sql.SQLException;
+
 /**
  * {@link BasicDBServiceFactory} define a static factory method in order to create an instance of a
  * {@link BasicDBService} object.
@@ -13,7 +15,7 @@ public class BasicDBServiceFactory {
      *
      * @return instance of a {@link BasicDBService} object
      */
-    public static BasicDBService createBasicDBService() {
+    public static BasicDBService createBasicDBService() throws SQLException {
         return new BasicDBServiceImpl("jdbc:postgresql://postgres/pdbg-a2",
                 "postgres", "postgres");
     }

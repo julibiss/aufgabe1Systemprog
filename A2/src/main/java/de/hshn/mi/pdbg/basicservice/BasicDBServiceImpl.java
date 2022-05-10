@@ -27,12 +27,8 @@ public class BasicDBServiceImpl implements BasicDBService {
      * @ param sqlUser
      * @ param sqlPassword
      */
-    public BasicDBServiceImpl(String jdbcUrl, String sqlUser, String sqlPassword) {
-        try {
-            connection = getConnection(jdbcUrl, sqlUser, sqlPassword);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
+    public BasicDBServiceImpl(String jdbcUrl, String sqlUser, String sqlPassword) throws SQLException {
+        connection = getConnection(jdbcUrl, sqlUser, sqlPassword);
     }
 
     /**
@@ -83,67 +79,66 @@ public class BasicDBServiceImpl implements BasicDBService {
             preparedStatement.setLong(1, l);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new StoreException("Error occurred while trying to delete a hospital stay!");
         }
-
-
     }
 
     @Override
     public List<Patient> getPatients(String lastname, String firstname, Date date, Date date1) {
         List<Patient> patients = new ArrayList();
         if (firstname == null && lastname == null && date == null && date1 == null) {
-            return sqlthing(patients, "SELECT * FROM patient");
+            return getPatientList(patients, "SELECT * FROM patient");
         } else if (firstname != null && lastname == null && date == null && date1 == null) {
-            return sqlthing(patients, "SELECT * FROM patient WHERE firstname LIKE '" + firstname + "'");
+            return getPatientList(patients, "SELECT * FROM patient WHERE firstname LIKE '" + firstname + "'");
         } else if (firstname == null && lastname != null && date == null && date1 == null) {
-            return sqlthing(patients, "SELECT * FROM patient WHERE lastname LIKE '" + lastname + "'");
+            return getPatientList(patients, "SELECT * FROM patient WHERE lastname LIKE '" + lastname + "'");
         } else if (firstname == null && lastname == null && date != null && date1 == null) {
-            return sqlthing(patients, "SELECT * FROM patient WHERE dateofbirth >= '" +
-                                      DateHelper.convertDate(date).toString() + "'");
+            return getPatientList(patients, "SELECT * FROM patient WHERE dateofbirth >= '" +
+                                            DateHelper.convertDate(date).toString() + "'");
         } else if (firstname == null && lastname == null && date == null && date1 != null) {
-            return sqlthing(patients, "SELECT * FROM patient WHERE dateofbirth <= '" +
-                                      DateHelper.convertDate(date1).toString() + "'");
+            return getPatientList(patients, "SELECT * FROM patient WHERE dateofbirth <= '" +
+                                            DateHelper.convertDate(date1).toString() + "'");
         } else if (firstname != null && lastname != null && date == null && date1 == null) {
-            return sqlthing(patients, "SELECT * FROM patient WHERE lastname LIKE '" + lastname + "' AND " +
-                                      "firstname LIKE '" + firstname + "'");
+            return getPatientList(patients, "SELECT * FROM patient WHERE lastname LIKE '" + lastname + "' AND " +
+                                            "firstname LIKE '" + firstname + "'");
         } else if (firstname == null && lastname != null && date != null && date1 == null) {
-            return sqlthing(patients, "SELECT * FROM patient WHERE lastname LIKE '" + lastname + "' AND " +
-                                      "dateofbirth >= '" + DateHelper.convertDate(date).toString() + "'");
+            return getPatientList(patients, "SELECT * FROM patient WHERE lastname LIKE '" + lastname + "' AND " +
+                                            "dateofbirth >= '" + DateHelper.convertDate(date).toString() + "'");
         } else if (firstname == null && lastname == null && date != null && date1 != null) {
-            return sqlthing(patients, "SELECT * FROM patient WHERE dateofbirth <='" +
-                                      DateHelper.convertDate(date1).toString() + "' AND " +
-                                      "dateofbirth >= '" + DateHelper.convertDate(date).toString() + "'");
+            return getPatientList(patients, "SELECT * FROM patient WHERE dateofbirth <='" +
+                                            DateHelper.convertDate(date1).toString() + "' AND " +
+                                            "dateofbirth >= '" + DateHelper.convertDate(date).toString() + "'");
         } else if (firstname != null && lastname == null && date != null && date1 == null) {
-            return sqlthing(patients, "SELECT * FROM patient  WHERE firstname LIKE '" + firstname + "' AND " +
-                                      "dateofbirth >= '" + DateHelper.convertDate(date).toString() + "'");
+            return getPatientList(patients, "SELECT * FROM patient  WHERE firstname LIKE '" + firstname + "' AND " +
+                                            "dateofbirth >= '" + DateHelper.convertDate(date).toString() + "'");
         } else if (firstname != null && lastname == null && date == null && date1 != null) {
-            return sqlthing(patients, "SELECT * FROM patient  WHERE firstname LIKE '" + firstname + "' AND " +
-                                      "dateofbirth <= '" + DateHelper.convertDate(date1).toString() + "'");
+            return getPatientList(patients, "SELECT * FROM patient  WHERE firstname LIKE '" + firstname + "' AND " +
+                                            "dateofbirth <= '" + DateHelper.convertDate(date1).toString() + "'");
         } else if (firstname == null && lastname != null && date == null && date1 != null) {
-            return sqlthing(patients, "SELECT * FROM patient  WHERE lastname LIKE '" + lastname + "' AND " +
-                                      "dateofbirth <= '" + DateHelper.convertDate(date1).toString() + "'");
+            return getPatientList(patients, "SELECT * FROM patient  WHERE lastname LIKE '" + lastname + "' AND " +
+                                            "dateofbirth <= '" + DateHelper.convertDate(date1).toString() + "'");
         } else if (firstname != null && lastname != null && date == null && date1 != null) {
-            return sqlthing(patients, "SELECT * FROM patient  WHERE firstname LIKE '" + firstname
-                                      + "' AND lastname LIKE '" + lastname + "' AND " +
-                                      "dateofbirth <= '" + DateHelper.convertDate(date1).toString() + "'");
+            return getPatientList(patients, "SELECT * FROM patient  WHERE firstname LIKE '" + firstname
+                                            + "' AND lastname LIKE '" + lastname + "' AND " +
+                                            "dateofbirth <= '" + DateHelper.convertDate(date1).toString() + "'");
         } else if (firstname != null && lastname != null && date != null && date1 == null) {
-            return sqlthing(patients, "SELECT * FROM patient  WHERE firstname LIKE '" + firstname
-                                      + "' AND lastname LIKE '" + lastname + "' AND " +
-                                      "dateofbirth >= '" + DateHelper.convertDate(date).toString() + "'");
+            return getPatientList(patients, "SELECT * FROM patient  WHERE firstname LIKE '" + firstname
+                                            + "' AND lastname LIKE '" + lastname + "' AND " +
+                                            "dateofbirth >= '" + DateHelper.convertDate(date).toString() + "'");
         } else if (firstname != null && lastname == null && date != null && date1 != null) {
-            return sqlthing(patients, "SELECT * FROM patient  WHERE firstname LIKE '" + firstname + "' AND " +
-                                      "dateofbirth >= '" + DateHelper.convertDate(date).toString() + "' AND " +
-                                      "dateofbirth <= '" + DateHelper.convertDate(date1).toString() + "'");
+            return getPatientList(patients, "SELECT * FROM patient  WHERE firstname LIKE '" + firstname + "' AND " +
+                                            "dateofbirth >= '" + DateHelper.convertDate(date).toString() + "' AND " +
+                                            "dateofbirth <= '" + DateHelper.convertDate(date1).toString() + "'");
         } else if (firstname == null && lastname != null && date != null && date1 != null) {
-            return sqlthing(patients, "SELECT * FROM patient  WHERE lastname LIKE '" + lastname + "' AND '" +
-                                      "dateofbirth <= '" + DateHelper.convertDate(date1).toString() + "' AND " +
-                                      "dateofbirth >= '" + DateHelper.convertDate(date).toString() + "'");
+            return getPatientList(patients, "SELECT * FROM patient  WHERE lastname LIKE '" + lastname + "' AND '" +
+                                            "dateofbirth <= '" + DateHelper.convertDate(date1).toString() + "' AND " +
+                                            "dateofbirth >= '" + DateHelper.convertDate(date).toString() + "'");
         } else if (firstname != null && lastname != null && date != null && date1 != null) {
-            return sqlthing(patients, "SELECT * FROM patient WHERE name LIKE '" + firstname
-                                      + "' AND lastname LIKE '"
-                                      + lastname + "' AND dateofbirth >= '" + DateHelper.convertDate(date).toString() +
-                                      "' AND dateofbirth <=  '" + DateHelper.convertDate(date1).toString() + "'");
+            return getPatientList(patients, "SELECT * FROM patient WHERE name LIKE '" + firstname
+                                            + "' AND lastname LIKE '"
+                                            + lastname + "' AND dateofbirth >= '" +
+                                            DateHelper.convertDate(date).toString() +
+                                            "' AND dateofbirth <=  '" + DateHelper.convertDate(date1).toString() + "'");
         }
         return patients;
     }
@@ -154,20 +149,19 @@ public class BasicDBServiceImpl implements BasicDBService {
      * @ param sql
      * @ return
      */
-    private List<Patient> sqlthing(List<Patient> arrayList, String sql) {
+    private List<Patient> getPatientList(List<Patient> patients, String sql) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
-                arrayList.add(new PatientImpl(this, rs.getLong(1), rs.getString(2),
+                patients.add(new PatientImpl(this, rs.getLong(1), rs.getString(2),
                         rs.getString(3), rs.getDate(4), rs.getString(5),
                         rs.getString(6)));
             }
-            return arrayList;
+            return patients;
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            throw new FetchException("Error occurred while fetching a patient object!");
         }
-        return arrayList;
     }
 
     @Override
@@ -203,7 +197,6 @@ public class BasicDBServiceImpl implements BasicDBService {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        return null;
     }
 
     @Override
@@ -219,7 +212,7 @@ public class BasicDBServiceImpl implements BasicDBService {
                 return ward;
             }
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            throw new FetchException("Error occurred while fetching a ward object!");
         }
         return null;
     }
@@ -229,7 +222,6 @@ public class BasicDBServiceImpl implements BasicDBService {
         assert l > 0;
         assert getPatient(l).getObjectID() != PersistentObject.INVALID_OBJECT_ID;
         List<HospitalStay> hospitalStays = new ArrayList();
-
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM hospitalstay " +
                                                                               "AS hs, ward " +
@@ -250,10 +242,8 @@ public class BasicDBServiceImpl implements BasicDBService {
             }
 
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
-
+            throw new FetchException("Error occurred while fetching a hospital stay object!");
         }
-
         return hospitalStays;
     }
 
@@ -327,11 +317,13 @@ public class BasicDBServiceImpl implements BasicDBService {
             } else if (date != null && date1 != null) {
                 PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM hospitalstay " +
                                                                                   "AS hs, ward " +
-                                                                   "AS wa, patient " +
-                                                                   "AS p " +
-                                                                   "WHERE hs.w_id = wa.id AND  hs.p_id = p.id " +
-                                                                   "AND p.id  = ?" +
-                                                                   "AND dateofadmission >= ? AND dateofdischarge <= ?");
+                                                                                  "AS wa, patient " +
+                                                                                  "AS p " +
+                                                                                  "WHERE hs.w_id = wa.id AND  " +
+                                                                                  "hs.p_id = p.id " +
+                                                                                  "AND p.id  = ?" +
+                                                                                  "AND dateofadmission >= ? " +
+                                                                                  "AND dateofdischarge <= ?");
                 preparedStatement.setLong(1, l);
                 preparedStatement.setDate(2, DateHelper.convertDate(date));
                 preparedStatement.setDate(3, DateHelper.convertDate(date1));
@@ -345,11 +337,9 @@ public class BasicDBServiceImpl implements BasicDBService {
                             new PatientImpl(rs.getLong(2), rs.getString("firstname"),
                                     rs.getString("lastname"), this)));
                 }
-            } else {
-                throw new FetchException();
             }
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            throw new FetchException("Error occurred while fetching a hospital stay object!");
         }
         return hospitalStays;
     }
@@ -359,16 +349,17 @@ public class BasicDBServiceImpl implements BasicDBService {
         assert l > 0;
 
         double average = 0;
+        PreparedStatement preparedStatement = null;
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT AVG" +
-                                                                      "(dateofdischarge-dateofadmission)  AS test " +
-                                                               "FROM hospitalstay AS hs " +
-                                                               "WHERE hs.w_id = ? AND dateofdischarge IS NOT NULL");
+            preparedStatement = connection.prepareStatement("SELECT AVG" +
+                                                                              "(dateofdischarge-dateofadmission)  " +
+                                                                              "AS test " +
+                                                                   "FROM hospitalstay AS hs " +
+                                                                   "WHERE hs.w_id = ? AND dateofdischarge IS NOT NULL");
             preparedStatement.setLong(1, l);
             ResultSet rs = preparedStatement.executeQuery();
             rs.next();
             average += rs.getDouble(1);
-
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -439,29 +430,26 @@ public class BasicDBServiceImpl implements BasicDBService {
             try {
                 return ((PatientImpl) persistentObject).store(connection);
             } catch (SQLException e) {
-                System.err.println(e.getMessage());
+                throw new StoreException("Error occurred while trying to store a patient object!");
             }
         } else if (persistentObject instanceof WardImpl) {
             try {
                 return ((WardImpl) persistentObject).store(connection);
             } catch (SQLException e) {
-                System.err.println(e.getMessage());
+                throw new StoreException("Error occurred while trying to store a ward object!");
             }
         } else if (persistentObject instanceof HospitalStayImpl) {
             try {
                 return ((HospitalStayImpl) persistentObject).store(connection);
             } catch (SQLException e) {
-                System.err.println(e.getMessage());
+                throw new StoreException("Error occurred while trying to store a hospital stay object!");
             }
-        } else {
-            throw new StoreException();
         }
         return persistentObject.getObjectID();
-
     }
 
     @Override
     public void close() {
-        int i = 0;
+        this.close();
     }
 }

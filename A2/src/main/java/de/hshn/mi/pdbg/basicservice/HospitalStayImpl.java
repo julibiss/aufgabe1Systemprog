@@ -73,7 +73,7 @@ public class HospitalStayImpl extends PersistentJDBCObject implements HospitalSt
     }
 
     @Override
-    public Patient getPatient() {
+    public Patient getPatient() throws FetchException {
         return patient;
     }
 
