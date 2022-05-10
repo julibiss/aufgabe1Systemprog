@@ -5,7 +5,7 @@
       <map />
     </option>
   </component>
-  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_17">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_15">
     <output url="file://$MODULE_DIR$/target/classes" />
     <output-test url="file://$MODULE_DIR$/target/test-classes" />
     <content url="file://$MODULE_DIR$">
@@ -16,6 +16,8 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="library" name="DB_A2_3rdParty" level="project" />
     <orderEntry type="library" name="DB_A2" level="project" />
+    <orderEntry type="library" name="DB2_A2-test-javadoc" level="project" />
+    <orderEntry type="library" name="DB2_A2-javadoc" level="project" />
     <orderEntry type="library" name="Maven: de.hshn.it:db2-a2:1.0" level="project" />
     <orderEntry type="library" name="Maven: de.hshn.it:db2-a2-tests:1.0" level="project" />
     <orderEntry type="library" name="Maven: io.github.classgraph:classgraph:4.8.141" level="project" />
@@ -36,7 +38,5 @@
     <orderEntry type="library" scope="TEST" name="Maven: org.junit.jupiter:junit-jupiter-engine:5.8.2" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.junit.platform:junit-platform-engine:1.8.2" level="project" />
     <orderEntry type="library" name="Maven: commons-io:commons-io:2.11.0" level="project" />
-    <orderEntry type="library" name="DB2_A2-test-javadoc" level="project" />
-    <orderEntry type="library" name="DB2_A2-javadoc" level="project" />
   </component>
 </module>
