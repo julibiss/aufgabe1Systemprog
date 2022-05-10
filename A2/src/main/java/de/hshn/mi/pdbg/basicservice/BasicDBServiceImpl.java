@@ -144,10 +144,10 @@ public class BasicDBServiceImpl implements BasicDBService {
     }
 
     /**
-     * Makes sql yes.
-     * @ param arrayList
+     * Returns an array filled with patient objects bases on the sql query.
+     * @ param patients
      * @ param sql
-     * @ return
+     * @ returns an arraylist
      */
     private List<Patient> getPatientList(List<Patient> patients, String sql) {
         try {
@@ -178,7 +178,7 @@ public class BasicDBServiceImpl implements BasicDBService {
             }
             rs.close();
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            throw new FetchException("Error occurred while fetching a patient object!");
         }
         return patient;
     }
@@ -195,7 +195,7 @@ public class BasicDBServiceImpl implements BasicDBService {
             }
             return wards;
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            throw new FetchException("Error occurred while fetching a ward object!");
         }
     }
 

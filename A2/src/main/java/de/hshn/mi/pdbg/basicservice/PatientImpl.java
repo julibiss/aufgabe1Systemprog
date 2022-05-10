@@ -1,5 +1,7 @@
 package de.hshn.mi.pdbg.basicservice;
 
+import de.hshn.mi.pdbg.exception.FetchException;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -116,7 +118,7 @@ public class PatientImpl extends PersistentJDBCObject implements Patient {
     }
 
     @Override
-    public Set<HospitalStay> getHospitalStays() {
+    public Set<HospitalStay> getHospitalStays() throws FetchException {
         HashSet<HospitalStay> hs = new HashSet<>();
         if (this.getObjectID() != PersistentJDBCObject.INVALID_OBJECT_ID) {
             hs = new HashSet(getBasicDBService().getHospitalStays(getObjectID()));
