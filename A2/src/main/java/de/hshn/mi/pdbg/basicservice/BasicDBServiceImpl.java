@@ -444,8 +444,7 @@ public class BasicDBServiceImpl implements BasicDBService {
             } catch (SQLException e) {
                 throw new StoreException("Error occurred while trying to store a hospital stay object!");
             }
-        }
-        else {
+        } else {
             throw new StoreException("Error occurred while trying to strore the object!");
         }
     }
