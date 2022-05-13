@@ -10,7 +10,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Klasse.
+ * Implements {@link Patient}.
  */
 public class PatientImpl extends PersistentJDBCObject implements Patient {
 

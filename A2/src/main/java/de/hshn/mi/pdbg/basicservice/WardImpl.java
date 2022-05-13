@@ -5,7 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 /**
- * Klasse.
+ * Implements {@link Ward}.
  */
 public class WardImpl extends PersistentJDBCObject implements Ward {
 

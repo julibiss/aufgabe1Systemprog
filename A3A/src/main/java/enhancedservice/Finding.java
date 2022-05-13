@@ -1,4 +1,4 @@
-package de.hshn.mi.pdbg.enhancedservice;
+package enhancedservice;
 
 import java.util.Date;
 
