@@ -6,7 +6,15 @@ package enhancedservice;
  */
 public interface Examination {
 
-    public void setType();
+    /**
+     * @ param type must not be {@code null}, must not be {@code ""}.
+     * @ throws AssertionError
+     *             Thrown if a given parameter value is invalid.
+     */
+    public void setType(String type);
 
+    /**
+     * @ return type of examination.
+     */
     public void getType();
 }

@@ -8,7 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 /**
- * Klasse.
+ * Implements {@link SchemaGenerator}.
  */
 public class DBCreator implements SchemaGenerator {
 

@@ -24,5 +24,8 @@ public interface LaboratoryTest {
      */
     public String getTestType();
 
+    /**
+     * @ return A the standard value of a laboratory test.
+     */
     public double getStandardValue();
 }

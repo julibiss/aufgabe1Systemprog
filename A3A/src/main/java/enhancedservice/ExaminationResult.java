@@ -2,6 +2,9 @@ package enhancedservice;
 
 import java.util.Date;
 
+/**
+ * {@link ExaminationResult} describes the results obtained through the examination of the health status of a patient.
+ */
 public interface ExaminationResult {
 
     /**
@@ -31,8 +34,14 @@ public interface ExaminationResult {
      */
     public String getResultSummary();
 
+    /**
+     * @ return the request date.
+     */
     public Date getRequestDate();
 
+    /**
+     * @ return The result date or {@code null} if it has not been set.
+     */
     public Date getResultDate();
 
 }

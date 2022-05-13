@@ -10,8 +10,8 @@ import java.sql.SQLException;
 import java.util.Date;
 
 /**
- * Klasse.
- */
+** Implements {@link HospitalStay}.
+*/
 public class HospitalStayImpl extends PersistentJDBCObject implements HospitalStay {
     private PreparedStatement preparedStatementHospitalStayInsert;
     private PreparedStatement preparedStatementHospitalStayUpdate;

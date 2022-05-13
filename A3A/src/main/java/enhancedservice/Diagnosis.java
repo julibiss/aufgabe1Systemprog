@@ -24,6 +24,9 @@ public interface Diagnosis {
      */
     public void getICDCode();
 
+    /**
+     * @ return A diagnosis text.
+     */
     public void getDiagnosisText();
 
 

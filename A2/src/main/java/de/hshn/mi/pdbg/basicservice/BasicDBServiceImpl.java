@@ -16,7 +16,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Klasse.
+ * Implements {@link BasicDBService}.
  */
 public class BasicDBServiceImpl implements BasicDBService {
     private Connection connection;

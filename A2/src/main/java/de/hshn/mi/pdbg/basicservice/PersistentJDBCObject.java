@@ -9,7 +9,8 @@ import java.sql.SQLException;
 
 
 /**
- * Klasse.
+ * Extends {@link AbstractPersistentJDBCObject}.
+ * Class that is used to make Objects persistent.
  */
 public abstract class PersistentJDBCObject extends AbstractPersistentJDBCObject {
 

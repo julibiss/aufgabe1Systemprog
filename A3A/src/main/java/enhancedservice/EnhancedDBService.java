@@ -20,7 +20,16 @@ import java.util.List;
  */
 public interface EnhancedDBService extends BasicDBService {
 
-    public void createClinicalExamination(String type, String bodyPart);
+    /**
+     * @ param type
+     *            must not be {@code null} and must not be {@code ""}
+     * @ param bodyPart
+     *            must not be negative
+     * @ return A {@link ClinicalExamination} object.
+     * @ throws AssertionError
+     *             Thrown if a given parameter value is invalid.
+     */
+    ClinicalExamination createClinicalExamination(String type, String bodyPart);
 
 
     /**
