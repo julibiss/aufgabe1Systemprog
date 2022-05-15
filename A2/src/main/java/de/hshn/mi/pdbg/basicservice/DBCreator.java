@@ -65,7 +65,6 @@ public class DBCreator implements SchemaGenerator {
                     """;
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.execute();
-
             return true;
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();

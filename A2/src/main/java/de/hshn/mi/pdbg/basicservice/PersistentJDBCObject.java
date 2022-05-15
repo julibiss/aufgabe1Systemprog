@@ -20,6 +20,13 @@ public abstract class PersistentJDBCObject extends AbstractPersistentJDBCObject 
 
     public abstract long store(Connection connection) throws SQLException;
 
+    /**
+     * Returns a generated ID based on the current sequence.
+     * @ param connection
+     * @ param sequence
+     * @ return
+     * @ throws SQLException
+     */
     protected long generateID(Connection connection, String sequence) throws SQLException {
         long i;
         PreparedStatement statement = connection.prepareStatement("SELECT  nextval(?);");
@@ -31,7 +38,5 @@ public abstract class PersistentJDBCObject extends AbstractPersistentJDBCObject 
         rs.close();
         return i;
     }
-
-
 
 }
