@@ -24,7 +24,7 @@ public abstract class PersistentJDBCObject extends AbstractPersistentJDBCObject 
      * Returns a generated ID based on the current sequence.
      * @ param connection
      * @ param sequence
-     * @ return
+     * @ return new ID that was generated.
      * @ throws SQLException
      */
     protected long generateID(Connection connection, String sequence) throws SQLException {

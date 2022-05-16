@@ -6,7 +6,7 @@ package enhancedservice;
 public interface ClinicalExamination {
 
     /**
-     * @ param type must not be {@code null}, must not be {@code ""}.
+     * @ param bodyPart must not be {@code null}, must not be {@code ""}.
      * @ throws AssertionError
      * Thrown if a given parameter value is invalid.
      */

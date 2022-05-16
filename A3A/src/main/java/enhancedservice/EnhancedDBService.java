@@ -126,7 +126,6 @@ public interface EnhancedDBService extends BasicDBService {
      */
     public List<Examination> getExaminations(long patientID);
 
-    public Examination getExamination(String examinationName);
 
     /**
      * Returns a list of {@link Diagnosis} objects that match a set of search

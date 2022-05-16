@@ -67,9 +67,8 @@ public class DBCreator implements SchemaGenerator {
             preparedStatement.execute();
             return true;
         } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException(e.getMessage());
         }
-        return false;
     }
 
 

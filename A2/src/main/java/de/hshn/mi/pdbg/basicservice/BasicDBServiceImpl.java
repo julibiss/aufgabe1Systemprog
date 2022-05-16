@@ -366,8 +366,8 @@ public class BasicDBServiceImpl implements BasicDBService {
             ResultSet rs = preparedStatement.executeQuery();
             rs.next();
             average += rs.getDouble(1);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            throw new IllegalArgumentException(e.getMessage());
         }
         return average;
     }
@@ -395,8 +395,8 @@ public class BasicDBServiceImpl implements BasicDBService {
                 rs.next();
                 numberOfBeds += rs.getInt(1);
             }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            throw new IllegalArgumentException(e.getMessage());
         }
 
         return numberOfBeds;
@@ -422,8 +422,8 @@ public class BasicDBServiceImpl implements BasicDBService {
             freeBeds += rs.getLong(1) - getAllocatedBeds(ward);
 
 
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            throw new IllegalArgumentException(e.getMessage());
         }
         return freeBeds;
 

@@ -22,7 +22,7 @@ public interface ExaminationResult {
     public void setRequestDate(Date requestDate);
 
     /**
-     * @ param requestDate
+     * @ param resultDate
      *              only valid if it's a date after the request date
      * @ throws AssertionError
      *             Thrown if a given parameter value is invalid.
