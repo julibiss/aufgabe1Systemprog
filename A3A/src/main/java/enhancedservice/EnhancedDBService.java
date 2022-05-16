@@ -115,41 +115,23 @@ public interface EnhancedDBService extends BasicDBService {
 
 
     /**
-     * Returns a list of {@link Examination} objects that match a set of search
+     * Returns an {@link Examination} object that matches a set of search
      * criteria. When searching via first name and last name, one may use the
      * SQL wildcards ("%", "*", "_") in the search string.
      * @ param patientID
      *            Must not be {@code null} and must be greater than 0
-     * @ return A list of matching {@link Examination} objects is returned. It may be empty.
+     * @ return a {@link Examination} object is returned.
      * @ throws FetchException
      *             Thrown if an error occurred while fetching objects.
      */
-    public List<Examination> getExaminations(long patientID);
+    public Examination getExaminations(String examinationName);
 
 
     /**
-     * Returns a list of {@link Diagnosis} objects that match a set of search
-     * criteria. When searching via first name and last name, one may use the
-     * SQL wildcards ("%", "*", "_") in the search string.
-     * @ param patientID
-     *            The identifier (objectID) of the object to be fetched. It must
-     *            be greater than zero ({@code 0}). It must not be
-     *            {@link PersistentObject#INVALID_OBJECT_ID}
-     * @ return A list of matching {@link Diagnosis} objects is returned. It may be empty.
-     * @ throws FetchException
-     *             Thrown if an error occurred while fetching an object.
-     * @ throws AssertionError
-     *             Thrown if a given parameter value is invalid.
-     */
-    public List<Diagnosis> getDiagnosis(long patientID);
-
-    /**
-     * @ param icdCode
-     *            The identifier (objectID) of the object to be fetched. It must
-     *            be greater than zero ({@code 0}). It must not be
-     *            {@link PersistentObject#INVALID_OBJECT_ID}
+     * @ param icdCode must not be {@code null}.
+     *         Used to find a diagnosis based on the given code.
      * @ return The {@link Diagnosis} object or {@code null}, if none was
-     *         found with the given {@code patientID}.
+     *         found with the given {@code icdCode}.
      * @ throws FetchException
      *             Thrown if an error occurred while fetching an object.
      * @ throws AssertionError
@@ -162,9 +144,7 @@ public interface EnhancedDBService extends BasicDBService {
      * criteria. When searching via first name and last name, one may use the
      * SQL wildcards ("%", "*", "_") in the search string.
      * @ param patientID
-     *            The identifier (objectID) of the object to be fetched. It must
-     *            be greater than zero ({@code 0}). It must not be
-     *            {@link PersistentObject#INVALID_OBJECT_ID}
+     *            Must not be {@code null} and must be greater than 0
      * @ return A list of matching {@link ExaminationResult} objects is returned. It may be empty.
      * @ throws FetchException
      *             Thrown if an error occurred while fetching an object.
