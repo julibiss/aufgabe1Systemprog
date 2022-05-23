@@ -163,9 +163,7 @@ public class BasicDBServiceImpl implements BasicDBService {
             } else if (firstname == null && lastname == null && startDate != null && endDate != null) {
                 try (PreparedStatement preparedStatement = connection.prepareStatement(""" 
                                                                                        SELECT * FROM patient 
-                                                                                       WHERE firstname LIKE ? 
-                                                                                       AND lastname LIKE ? 
-                                                                                       AND dateofbirth >= ?
+                                                                                       WHERE  dateofbirth >= ?
                                                                                        AND dateofbirth <= ?
                                                                                        """)) {
                     preparedStatement.setDate(1, DateHelper.convertDate(startDate));
@@ -191,7 +189,7 @@ public class BasicDBServiceImpl implements BasicDBService {
             } else if (firstname != null && lastname == null && startDate == null && endDate != null) {
                 try (PreparedStatement preparedStatement = connection.prepareStatement(""" 
                                                                                       SELECT * FROM patient WHERE 
-                                                                                      name LIKE  ?
+                                                                                      firstname LIKE  ?
                                                                                       AND dateofbirth <= ?
                                                                                        """)) {
                     preparedStatement.setString(1, firstname);
