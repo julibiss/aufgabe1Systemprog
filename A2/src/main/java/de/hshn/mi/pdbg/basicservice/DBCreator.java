@@ -54,11 +54,11 @@ public class DBCreator implements SchemaGenerator {
                      dateOfDischarge date CHECK (dateOfDischarge > dateOfAdmission)
                     );
                                         
-                    create sequence sequence1 
+                    create sequence patientIDSequence 
                     as bigint increment by 1 minvalue 1 no maxvalue start 1 owned by patient.ID;
-                    create sequence sequence2 
+                    create sequence wardIDSequence 
                     as bigint increment by 1 minvalue 1 no maxvalue start 1 owned by ward.ID; 
-                    create sequence sequence3
+                    create sequence hospitalStayIDSequence
                     as bigint increment by 1 minvalue 1 no maxvalue start 1 owned by hospitalstay.ID;
                   
 

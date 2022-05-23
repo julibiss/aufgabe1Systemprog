@@ -57,7 +57,7 @@ public class WardImpl extends PersistentJDBCObject implements Ward {
         assert connection != null;
 
         if (!this.isPersistent()) {
-            this.setObjectID(this.generateID(connection, "sequence3"));
+            this.setObjectID(this.generateID(connection, "wardIDSequence"));
             preparedStatementWardInsert = connection.prepareStatement("INSERT INTO ward(id, name, numberofbeds)"
                                                                       + " VALUES (?,?,?)");
             preparedStatementWardInsert.setLong(1, this.getObjectID());
