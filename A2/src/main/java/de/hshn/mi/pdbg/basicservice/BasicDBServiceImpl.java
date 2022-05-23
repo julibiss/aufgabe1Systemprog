@@ -189,7 +189,7 @@ public class BasicDBServiceImpl implements BasicDBService {
                                                                                            SELECT * FROM patient WHERE
                                                                                            lastname LIKE ?
                                                                                            AND dateofbirth >= ?
-                                                                                           AND dateofbirth <= ?                 
+                                                                                           AND dateofbirth <= ?
                                                                                             """)) {
                     preparedStatement.setString(1, lastname);
                     preparedStatement.setDate(2, DateHelper.convertDate(startDate));
