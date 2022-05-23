@@ -114,15 +114,38 @@ public class BasicDBServiceImpl implements BasicDBService {
                     }
                 }
             } else if (firstname == null && lastname == null && startDate != null && endDate == null) {
-                return getPatientList(patients, "SELECT * FROM patient WHERE dateofbirth >= '" +
-                                                DateHelper.convertDate(startDate).toString() + "'");
+                try (PreparedStatement preparedStatement = connection.prepareStatement(""" 
+                                                                                       SELECT * FROM patient 
+                                                                                       WHERE dateofbirth >= ? 
+                                                                                       """)) {
+                    preparedStatement.setDate(1, DateHelper.convertDate(startDate));
+                    try (ResultSet rs = preparedStatement.executeQuery()) {
+                        return test(patients, rs);
+                    }
+                }
             } else if (firstname == null && lastname == null && startDate == null && endDate != null) {
-                return getPatientList(patients, "SELECT * FROM patient WHERE dateofbirth <= '" +
-                                                DateHelper.convertDate(endDate).toString() + "'");
+                try (PreparedStatement preparedStatement = connection.prepareStatement(""" 
+                                                                                       SELECT * FROM patient 
+                                                                                       WHERE dateofbirth <= ? 
+                                                                                       """)) {
+                    preparedStatement.setDate(1, DateHelper.convertDate(endDate));
+                    try (ResultSet rs = preparedStatement.executeQuery()) {
+                        return test(patients, rs);
+                    }
+                }
             } else if (firstname != null && lastname != null && startDate == null && endDate == null) {
-                return getPatientList(patients, "SELECT * FROM patient WHERE lastname LIKE '" + lastname + "' " +
-                                                "AND " +
-                                                "firstname LIKE '" + firstname + "'");
+                try (PreparedStatement preparedStatement = connection.prepareStatement(""" 
+                                                                                       SELECT * FROM patient 
+                                                                                       WHERE firstname LIKE ? 
+                                                                                       AND lastname LIKE ? 
+                                                                                       """)) {
+                    preparedStatement.setString(1, firstname);
+                    preparedStatement.setString(2, lastname);
+                    try (ResultSet rs = preparedStatement.executeQuery()) {
+                        return test(patients, rs);
+                    }
+                }
+
             } else if (firstname == null && lastname != null && startDate != null && endDate == null) {
                 return getPatientList(patients, "SELECT * FROM patient WHERE lastname LIKE '" + lastname + "' " +
                                                 "AND " +
