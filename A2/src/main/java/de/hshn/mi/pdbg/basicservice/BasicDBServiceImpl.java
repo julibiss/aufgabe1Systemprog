@@ -147,20 +147,49 @@ public class BasicDBServiceImpl implements BasicDBService {
                 }
 
             } else if (firstname == null && lastname != null && startDate != null && endDate == null) {
-                return getPatientList(patients, "SELECT * FROM patient WHERE lastname LIKE '" + lastname + "' " +
-                                                "AND " +
-                                                "dateofbirth >= '" + DateHelper.convertDate(startDate).toString() +
-                                                "'");
+                try (PreparedStatement preparedStatement = connection.prepareStatement(""" 
+                                                                                       SELECT * FROM patient 
+                                                                                       WHERE firstname LIKE ? 
+                                                                                       AND lastname LIKE ? 
+                                                                                       AND dateofbirth >= ?
+                                                                                       """)) {
+                    preparedStatement.setString(1, firstname);
+                    preparedStatement.setString(2, lastname);
+                    preparedStatement.setDate(3, DateHelper.convertDate(startDate));
+                    try (ResultSet rs = preparedStatement.executeQuery()) {
+                        return test(patients, rs);
+                    }
+                }
             } else if (firstname == null && lastname == null && startDate != null && endDate != null) {
-                return getPatientList(patients, "SELECT * FROM patient WHERE dateofbirth <='" +
-                                                DateHelper.convertDate(endDate).toString() + "' AND " +
-                                                "dateofbirth >= '" + DateHelper.convertDate(startDate).toString() +
-                                                "'");
+                try (PreparedStatement preparedStatement = connection.prepareStatement(""" 
+                                                                                       SELECT * FROM patient 
+                                                                                       WHERE firstname LIKE ? 
+                                                                                       AND lastname LIKE ? 
+                                                                                       AND dateofbirth >= ?
+                                                                                       AND dateofbirth <= ?
+                                                                                       """)) {
+                    preparedStatement.setString(1, firstname);
+                    preparedStatement.setString(2, lastname);
+                    preparedStatement.setDate(3, DateHelper.convertDate(startDate));
+                    preparedStatement.setDate(4, DateHelper.convertDate(endDate));
+                    try (ResultSet rs = preparedStatement.executeQuery()) {
+                        return test(patients, rs);
+                    }
+                }
+
             } else if (firstname != null && lastname == null && startDate != null && endDate == null) {
-                return getPatientList(patients, "SELECT * FROM patient  WHERE firstname LIKE '" + firstname + "' " +
-                                                "AND " +
-                                                "dateofbirth >= '" + DateHelper.convertDate(startDate).toString() +
-                                                "'");
+                try (PreparedStatement preparedStatement = connection.prepareStatement(""" 
+                                                                                       SELECT * FROM patient 
+                                                                                       WHERE firstname LIKE ?
+                                                                                       AND dateofbirth >= ?
+                                                                                       """)) {
+                    preparedStatement.setString(1, firstname);
+                    preparedStatement.setDate(2, DateHelper.convertDate(startDate));
+                    try (ResultSet rs = preparedStatement.executeQuery()) {
+                        return test(patients, rs);
+                    }
+                }
+
             } else if (firstname != null && lastname == null && startDate == null && endDate != null) {
                 try (PreparedStatement preparedStatement = connection.prepareStatement(""" 
                                                                                       SELECT * FROM patient WHERE 
