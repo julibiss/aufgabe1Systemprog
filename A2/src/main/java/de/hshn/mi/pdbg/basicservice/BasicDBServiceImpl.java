@@ -90,15 +90,19 @@ public class BasicDBServiceImpl implements BasicDBService {
             if (firstname == null && lastname == null && startDate == null && endDate == null) {
                 try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM patient");
                              ResultSet rs = preparedStatement.executeQuery()) {
+
                     return test(patients, rs);
                 }
             } else if (firstname != null && lastname == null && startDate == null && endDate == null) {
                 try (PreparedStatement preparedStatement = connection.prepareStatement(""" 
                                                                                        SELECT * FROM patient
                                                                                        WHERE firstname LIKE ?
-                                                                                       """);
-                    ResultSet rs = preparedStatement.executeQuery()) {
-                    return test(patients, rs);
+                                                                                       """)) {
+                    preparedStatement.setString(1,firstname);
+                    try (ResultSet rs = preparedStatement.executeQuery())
+                    {
+                        return test(patients, rs);
+                    }
                 }
             } else if (firstname == null && lastname != null && startDate == null && endDate == null) {
                 return getPatientList(patients, "SELECT * FROM patient WHERE lastname LIKE '" + lastname + "'");
