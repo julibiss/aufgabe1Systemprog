@@ -1,9 +1,11 @@
 package enhancedservice;
 
+import de.hshn.mi.pdbg.PersistentObject;
+
 /**
  * A special type of examination.
  */
-public interface ClinicalExamination {
+public interface ClinicalExamination extends PersistentObject {
 
     /**
      * @ param bodyPart must not be {@code null}, must not be {@code ""}.

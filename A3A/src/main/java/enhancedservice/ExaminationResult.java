@@ -1,11 +1,18 @@
 package enhancedservice;
 
+import de.hshn.mi.pdbg.PersistentObject;
+
 import java.util.Date;
 
 /**
  * {@link ExaminationResult} describes the results obtained through the examination of the health status of a patient.
  */
-public interface ExaminationResult {
+public interface ExaminationResult extends PersistentObject {
+    /**
+     * Creates and returns a {@link ExaminationResult} object.
+     * @ param type
+     */
+    public ExaminationResult createExaminationResult(String type);
 
     /**
      * @ param resultSummary must not be {@code null}, must not be {@code ""}.

@@ -2,6 +2,7 @@ package enhancedservice;
 
 import de.hshn.mi.pdbg.PersistentObject;
 import de.hshn.mi.pdbg.basicservice.BasicDBService;
+import de.hshn.mi.pdbg.basicservice.Patient;
 import de.hshn.mi.pdbg.exception.StoreException;
 
 import java.util.Date;
@@ -63,7 +64,8 @@ public interface EnhancedDBService extends BasicDBService {
      * @ throws AssertionError
      *             Thrown if a given parameter value is invalid.
      */
-    ExaminationResult createExaminationResult(String resultSummary, Date requestDate, Date resultDate);
+    ExaminationResult createExaminationResult(String resultSummary, Date requestDate, Date resultDate,
+                                              Examination examination);
 
     /**
      * @ param date
@@ -74,7 +76,8 @@ public interface EnhancedDBService extends BasicDBService {
      * @ throws AssertionError
      *             Thrown if a given parameter value is invalid.
      */
-    Finding createFinding(Date date, String summary);
+    Finding createFinding(Date date, String summary, Patient patient, List<Diagnosis> diagnosisList,
+                          List<ExaminationResult> examinationResults);
 
     /**
      * @ param type
@@ -115,29 +118,30 @@ public interface EnhancedDBService extends BasicDBService {
 
 
     /**
-     * Returns an {@link Examination} object that matches a set of search
+     * Returns a List of {@link Examination} objects that matche a set of search
      * criteria. When searching via first name and last name, one may use the
      * SQL wildcards ("%", "*", "_") in the search string.
      * @ param patientID
      *            Must not be {@code null} and must be greater than 0
-     * @ return a {@link Examination} object is returned.
+     * @ return A list of {@link Examination} objects is returned.
      * @ throws FetchException
      *             Thrown if an error occurred while fetching objects.
      */
-    public Examination getExaminations(String examinationName);
+    public List<Examination> getExaminations(String examinationName);
 
 
     /**
      * @ param icdCode must not be {@code null}.
      *         Used to find a diagnosis based on the given code.
-     * @ return The {@link Diagnosis} object or {@code null}, if none was
+     * @ return A list of {@link Diagnosis} objects or {@code null}, if none was
      *         found with the given {@code icdCode}.
      * @ throws FetchException
      *             Thrown if an error occurred while fetching an object.
      * @ throws AssertionError
      *             Thrown if a given parameter value is invalid.
      */
-    public Diagnosis getDiagnose(String icdCode);
+    public List<Diagnosis> getDiagnose(String icdCode);
+
 
     /**
      * Returns a list of {@link ExaminationResult} objects that match a set of search

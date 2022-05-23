@@ -1,9 +1,11 @@
 package enhancedservice;
 
+import de.hshn.mi.pdbg.PersistentObject;
+
 /**
  * A special type of examination.
  */
-public interface LaboratoryTest {
+public interface LaboratoryTest extends PersistentObject {
 
     /**
      * @ param testType must not be {@code null}, must not be {@code ""}.

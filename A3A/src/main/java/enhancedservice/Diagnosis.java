@@ -1,9 +1,11 @@
 package enhancedservice;
 
+import de.hshn.mi.pdbg.PersistentObject;
+
 /**
  * The diagnosis describes the detection of an illness.
  */
-public interface Diagnosis {
+public interface Diagnosis extends PersistentObject {
 
     /**
      * @ param icdCode must not be {@code null}, must not be {@code ""}.
