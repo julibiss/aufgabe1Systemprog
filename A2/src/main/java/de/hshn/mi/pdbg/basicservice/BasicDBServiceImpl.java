@@ -86,64 +86,103 @@ public class BasicDBServiceImpl implements BasicDBService {
     @Override
     public List<Patient> getPatients(String lastname, String firstname, Date startDate, Date endDate) {
         List<Patient> patients = new ArrayList();
-        if (firstname == null && lastname == null && startDate == null && endDate == null) {
-            return getPatientList(patients, "SELECT * FROM patient");
-        } else if (firstname != null && lastname == null && startDate == null && endDate == null) {
-            return getPatientList(patients, "SELECT * FROM patient WHERE firstname LIKE '" + firstname + "'");
-        } else if (firstname == null && lastname != null && startDate == null && endDate == null) {
-            return getPatientList(patients, "SELECT * FROM patient WHERE lastname LIKE '" + lastname + "'");
-        } else if (firstname == null && lastname == null && startDate != null && endDate == null) {
-            return getPatientList(patients, "SELECT * FROM patient WHERE dateofbirth >= '" +
-                                            DateHelper.convertDate(startDate).toString() + "'");
-        } else if (firstname == null && lastname == null && startDate == null && endDate != null) {
-            return getPatientList(patients, "SELECT * FROM patient WHERE dateofbirth <= '" +
-                                            DateHelper.convertDate(endDate).toString() + "'");
-        } else if (firstname != null && lastname != null && startDate == null && endDate == null) {
-            return getPatientList(patients, "SELECT * FROM patient WHERE lastname LIKE '" + lastname + "' AND " +
-                                            "firstname LIKE '" + firstname + "'");
-        } else if (firstname == null && lastname != null && startDate != null && endDate == null) {
-            return getPatientList(patients, "SELECT * FROM patient WHERE lastname LIKE '" + lastname + "' AND " +
-                                            "dateofbirth >= '" + DateHelper.convertDate(startDate).toString() + "'");
-        } else if (firstname == null && lastname == null && startDate != null && endDate != null) {
-            return getPatientList(patients, "SELECT * FROM patient WHERE dateofbirth <='" +
-                                            DateHelper.convertDate(endDate).toString() + "' AND " +
-                                            "dateofbirth >= '" + DateHelper.convertDate(startDate).toString() + "'");
-        } else if (firstname != null && lastname == null && startDate != null && endDate == null) {
-            return getPatientList(patients, "SELECT * FROM patient  WHERE firstname LIKE '" + firstname + "' AND " +
-                                            "dateofbirth >= '" + DateHelper.convertDate(startDate).toString() + "'");
-        } else if (firstname != null && lastname == null && startDate == null && endDate != null) {
-            return getPatientList(patients, "SELECT * FROM patient  WHERE firstname LIKE '" + firstname + "' AND " +
-                                            "dateofbirth <= '" + DateHelper.convertDate(endDate).toString() + "'");
-        } else if (firstname == null && lastname != null && startDate == null && endDate != null) {
-            return getPatientList(patients, "SELECT * FROM patient  WHERE lastname LIKE '" + lastname + "' AND " +
-                                            "dateofbirth <= '" + DateHelper.convertDate(endDate).toString() + "'");
-        } else if (firstname != null && lastname != null && startDate == null && endDate != null) {
-            return getPatientList(patients, "SELECT * FROM patient  WHERE firstname LIKE '" + firstname
-                                            + "' AND lastname LIKE '" + lastname + "' AND " +
-                                            "dateofbirth <= '" + DateHelper.convertDate(endDate).toString() + "'");
-        } else if (firstname != null && lastname != null && startDate != null && endDate == null) {
-            return getPatientList(patients, "SELECT * FROM patient  WHERE firstname LIKE '" + firstname
-                                            + "' AND lastname LIKE '" + lastname + "' AND " +
-                                            "dateofbirth >= '" + DateHelper.convertDate(startDate).toString() + "'");
-        } else if (firstname != null && lastname == null && startDate != null && endDate != null) {
-            return getPatientList(patients, "SELECT * FROM patient  WHERE firstname LIKE '" + firstname
-                                            + "' AND " +
-                                            "dateofbirth >= '" + DateHelper.convertDate(startDate).toString()
-                                            + "' AND " +
-                                            "dateofbirth <= '" + DateHelper.convertDate(endDate).toString() + "'");
-        } else if (firstname == null && lastname != null && startDate != null && endDate != null) {
-            return getPatientList(patients, "SELECT * FROM patient  WHERE lastname LIKE '" + lastname
-                                            + "' AND '" +
-                                            "dateofbirth <= '" + DateHelper.convertDate(endDate).toString()
-                                            + "' AND " +
-                                            "dateofbirth >= '" + DateHelper.convertDate(startDate).toString() + "'");
-        } else if (firstname != null && lastname != null && startDate != null && endDate != null) {
-            return getPatientList(patients, "SELECT * FROM patient WHERE name LIKE '" + firstname
-                                            + "' AND lastname LIKE '"
-                                            + lastname + "' AND dateofbirth >= '" +
-                                            DateHelper.convertDate(startDate).toString() +
-                                            "' AND dateofbirth <=  '" + DateHelper.convertDate(endDate).toString()
-                                            + "'");
+        try {
+            if (firstname == null && lastname == null && startDate == null && endDate == null) {
+                try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM patient");
+                             ResultSet rs = preparedStatement.executeQuery()) {
+                    return test(patients, rs);
+                }
+            } else if (firstname != null && lastname == null && startDate == null && endDate == null) {
+                try (PreparedStatement preparedStatement = connection.prepareStatement(""" 
+                                                                                       SELECT * FROM patient
+                                                                                       WHERE firstname LIKE ?
+                                                                                       """);
+                    ResultSet rs = preparedStatement.executeQuery()) {
+                    return test(patients, rs);
+                }
+            } else if (firstname == null && lastname != null && startDate == null && endDate == null) {
+                return getPatientList(patients, "SELECT * FROM patient WHERE lastname LIKE '" + lastname + "'");
+            } else if (firstname == null && lastname == null && startDate != null && endDate == null) {
+                return getPatientList(patients, "SELECT * FROM patient WHERE dateofbirth >= '" +
+                                                DateHelper.convertDate(startDate).toString() + "'");
+            } else if (firstname == null && lastname == null && startDate == null && endDate != null) {
+                return getPatientList(patients, "SELECT * FROM patient WHERE dateofbirth <= '" +
+                                                DateHelper.convertDate(endDate).toString() + "'");
+            } else if (firstname != null && lastname != null && startDate == null && endDate == null) {
+                return getPatientList(patients, "SELECT * FROM patient WHERE lastname LIKE '" + lastname + "' " +
+                                                "AND " +
+                                                "firstname LIKE '" + firstname + "'");
+            } else if (firstname == null && lastname != null && startDate != null && endDate == null) {
+                return getPatientList(patients, "SELECT * FROM patient WHERE lastname LIKE '" + lastname + "' " +
+                                                "AND " +
+                                                "dateofbirth >= '" + DateHelper.convertDate(startDate).toString() +
+                                                "'");
+            } else if (firstname == null && lastname == null && startDate != null && endDate != null) {
+                return getPatientList(patients, "SELECT * FROM patient WHERE dateofbirth <='" +
+                                                DateHelper.convertDate(endDate).toString() + "' AND " +
+                                                "dateofbirth >= '" + DateHelper.convertDate(startDate).toString() +
+                                                "'");
+            } else if (firstname != null && lastname == null && startDate != null && endDate == null) {
+                return getPatientList(patients, "SELECT * FROM patient  WHERE firstname LIKE '" + firstname + "' " +
+                                                "AND " +
+                                                "dateofbirth >= '" + DateHelper.convertDate(startDate).toString() +
+                                                "'");
+            } else if (firstname != null && lastname == null && startDate == null && endDate != null) {
+                return getPatientList(patients, "SELECT * FROM patient  WHERE firstname LIKE '" + firstname + "' " +
+                                                "AND " +
+                                                "dateofbirth <= '" + DateHelper.convertDate(endDate).toString() + "'");
+            } else if (firstname == null && lastname != null && startDate == null && endDate != null) {
+                return getPatientList(patients, "SELECT * FROM patient  WHERE lastname LIKE '" + lastname + "' " +
+                                                "AND " +
+                                                "dateofbirth <= '" + DateHelper.convertDate(endDate).toString() + "'");
+            } else if (firstname != null && lastname != null && startDate == null && endDate != null) {
+                return getPatientList(patients, "SELECT * FROM patient  WHERE firstname LIKE '" + firstname
+                                                + "' AND lastname LIKE '" + lastname + "' AND " +
+                                                "dateofbirth <= '" + DateHelper.convertDate(endDate).toString() + "'");
+            } else if (firstname != null && lastname != null && startDate != null && endDate == null) {
+                return getPatientList(patients, "SELECT * FROM patient  WHERE firstname LIKE '" + firstname
+                                                + "' AND lastname LIKE '" + lastname + "' AND " +
+                                                "dateofbirth >= '" + DateHelper.convertDate(startDate).toString() +
+                                                "'");
+            } else if (firstname != null && lastname == null && startDate != null && endDate != null) {
+                return getPatientList(patients, "SELECT * FROM patient  WHERE firstname LIKE '" + firstname
+                                                + "' AND " +
+                                                "dateofbirth >= '" + DateHelper.convertDate(startDate).toString()
+                                                + "' AND " +
+                                                "dateofbirth <= '" + DateHelper.convertDate(endDate).toString() + "'");
+            } else if (firstname == null && lastname != null && startDate != null && endDate != null) {
+                return getPatientList(patients, "SELECT * FROM patient  WHERE lastname LIKE '" + lastname
+                                                + "' AND '" +
+                                                "dateofbirth <= '" + DateHelper.convertDate(endDate).toString()
+                                                + "' AND " +
+                                                "dateofbirth >= '" + DateHelper.convertDate(startDate).toString() +
+                                                "'");
+            } else if (firstname != null && lastname != null && startDate != null && endDate != null) {
+                return getPatientList(patients, "SELECT * FROM patient WHERE name LIKE '" + firstname
+                                                + "' AND lastname LIKE '"
+                                                + lastname + "' AND dateofbirth >= '" +
+                                                DateHelper.convertDate(startDate).toString() +
+                                                "' AND dateofbirth <=  '" + DateHelper.convertDate(endDate).toString()
+                                                + "'");
+            }
+        } catch (SQLException e) {
+            throw new FetchException(e.getMessage());
+        }
+        return patients;
+    }
+
+    /**
+     * Tets.
+     * @ param patients
+     * @ param rs
+     * @ return
+     * @ throws SQLException
+     */
+    public List<Patient> test(List<Patient> patients, ResultSet rs) throws SQLException {
+        while (rs.next()) {
+            patients.add(new PatientImpl(this, rs.getLong(1), rs.getString(2),
+                    rs.getString(3), rs.getDate(4), rs.getString(5),
+                    rs.getString(6)));
         }
         return patients;
     }
