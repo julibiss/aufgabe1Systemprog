@@ -98,9 +98,8 @@ public class BasicDBServiceImpl implements BasicDBService {
                                                                                        SELECT * FROM patient
                                                                                        WHERE firstname LIKE ?
                                                                                        """)) {
-                    preparedStatement.setString(1,firstname);
-                    try (ResultSet rs = preparedStatement.executeQuery())
-                    {
+                    preparedStatement.setString(1, firstname);
+                    try (ResultSet rs = preparedStatement.executeQuery()) {
                         return test(patients, rs);
                     }
                 }
