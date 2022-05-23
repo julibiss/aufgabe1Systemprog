@@ -91,7 +91,7 @@ public class BasicDBServiceImpl implements BasicDBService {
                 try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM patient");
                              ResultSet rs = preparedStatement.executeQuery()) {
 
-                    return test(patients, rs);
+                    return getPatientList(patients, rs);
                 }
             } else if (firstname != null && lastname == null && startDate == null && endDate == null) {
                 try (PreparedStatement preparedStatement = connection.prepareStatement(""" 
@@ -100,7 +100,7 @@ public class BasicDBServiceImpl implements BasicDBService {
                                                                                        """)) {
                     preparedStatement.setString(1, firstname);
                     try (ResultSet rs = preparedStatement.executeQuery()) {
-                        return test(patients, rs);
+                        return getPatientList(patients, rs);
                     }
                 }
             } else if (firstname == null && lastname != null && startDate == null && endDate == null) {
@@ -110,7 +110,7 @@ public class BasicDBServiceImpl implements BasicDBService {
                                                                                        """)) {
                     preparedStatement.setString(1, lastname);
                     try (ResultSet rs = preparedStatement.executeQuery()) {
-                        return test(patients, rs);
+                        return getPatientList(patients, rs);
                     }
                 }
             } else if (firstname == null && lastname == null && startDate != null && endDate == null) {
@@ -120,7 +120,7 @@ public class BasicDBServiceImpl implements BasicDBService {
                                                                                        """)) {
                     preparedStatement.setDate(1, DateHelper.convertDate(startDate));
                     try (ResultSet rs = preparedStatement.executeQuery()) {
-                        return test(patients, rs);
+                        return getPatientList(patients, rs);
                     }
                 }
             } else if (firstname == null && lastname == null && startDate == null && endDate != null) {
@@ -130,7 +130,7 @@ public class BasicDBServiceImpl implements BasicDBService {
                                                                                        """)) {
                     preparedStatement.setDate(1, DateHelper.convertDate(endDate));
                     try (ResultSet rs = preparedStatement.executeQuery()) {
-                        return test(patients, rs);
+                        return getPatientList(patients, rs);
                     }
                 }
             } else if (firstname != null && lastname != null && startDate == null && endDate == null) {
@@ -142,7 +142,7 @@ public class BasicDBServiceImpl implements BasicDBService {
                     preparedStatement.setString(1, firstname);
                     preparedStatement.setString(2, lastname);
                     try (ResultSet rs = preparedStatement.executeQuery()) {
-                        return test(patients, rs);
+                        return getPatientList(patients, rs);
                     }
                 }
 
@@ -155,7 +155,7 @@ public class BasicDBServiceImpl implements BasicDBService {
                     preparedStatement.setString(1, lastname);
                     preparedStatement.setDate(2, DateHelper.convertDate(startDate));
                     try (ResultSet rs = preparedStatement.executeQuery()) {
-                        return test(patients, rs);
+                        return getPatientList(patients, rs);
                     }
                 }
             } else if (firstname == null && lastname == null && startDate != null && endDate != null) {
@@ -167,7 +167,7 @@ public class BasicDBServiceImpl implements BasicDBService {
                     preparedStatement.setDate(1, DateHelper.convertDate(startDate));
                     preparedStatement.setDate(2, DateHelper.convertDate(endDate));
                     try (ResultSet rs = preparedStatement.executeQuery()) {
-                        return test(patients, rs);
+                        return getPatientList(patients, rs);
                     }
                 }
 
@@ -180,7 +180,7 @@ public class BasicDBServiceImpl implements BasicDBService {
                     preparedStatement.setString(1, firstname);
                     preparedStatement.setDate(2, DateHelper.convertDate(startDate));
                     try (ResultSet rs = preparedStatement.executeQuery()) {
-                        return test(patients, rs);
+                        return getPatientList(patients, rs);
                     }
                 }
 
@@ -193,7 +193,7 @@ public class BasicDBServiceImpl implements BasicDBService {
                     preparedStatement.setString(1, firstname);
                     preparedStatement.setDate(2, DateHelper.convertDate(endDate));
                     try (ResultSet rs = preparedStatement.executeQuery()) {
-                        return test(patients, rs);
+                        return getPatientList(patients, rs);
                     }
                 }
 
@@ -206,7 +206,7 @@ public class BasicDBServiceImpl implements BasicDBService {
                     preparedStatement.setString(1, lastname);
                     preparedStatement.setDate(2, DateHelper.convertDate(endDate));
                     try (ResultSet rs = preparedStatement.executeQuery()) {
-                        return test(patients, rs);
+                        return getPatientList(patients, rs);
                     }
                 }
             } else if (firstname != null && lastname != null && startDate == null && endDate != null) {
@@ -220,7 +220,7 @@ public class BasicDBServiceImpl implements BasicDBService {
                     preparedStatement.setString(2, lastname);
                     preparedStatement.setDate(3, DateHelper.convertDate(endDate));
                     try (ResultSet rs = preparedStatement.executeQuery()) {
-                        return test(patients, rs);
+                        return getPatientList(patients, rs);
                     }
                 }
             } else if (firstname != null && lastname != null && startDate != null && endDate == null) {
@@ -234,7 +234,7 @@ public class BasicDBServiceImpl implements BasicDBService {
                     preparedStatement.setString(2, lastname);
                     preparedStatement.setDate(3, DateHelper.convertDate(startDate));
                     try (ResultSet rs = preparedStatement.executeQuery()) {
-                        return test(patients, rs);
+                        return getPatientList(patients, rs);
                     }
                 }
             } else if (firstname != null && lastname == null && startDate != null && endDate != null) {
@@ -248,7 +248,7 @@ public class BasicDBServiceImpl implements BasicDBService {
                     preparedStatement.setDate(2, DateHelper.convertDate(startDate));
                     preparedStatement.setDate(3, DateHelper.convertDate(endDate));
                     try (ResultSet rs = preparedStatement.executeQuery()) {
-                        return test(patients, rs);
+                        return getPatientList(patients, rs);
                     }
                 }
             } else if (firstname == null && lastname != null && startDate != null && endDate != null) {
@@ -262,7 +262,7 @@ public class BasicDBServiceImpl implements BasicDBService {
                     preparedStatement.setDate(2, DateHelper.convertDate(startDate));
                     preparedStatement.setDate(3, DateHelper.convertDate(endDate));
                     try (ResultSet rs = preparedStatement.executeQuery()) {
-                        return test(patients, rs);
+                        return getPatientList(patients, rs);
                     }
                 }
             } else if (firstname != null && lastname != null && startDate != null && endDate != null) {
@@ -278,7 +278,7 @@ public class BasicDBServiceImpl implements BasicDBService {
                     preparedStatement.setDate(3, DateHelper.convertDate(startDate));
                     preparedStatement.setDate(4, DateHelper.convertDate(endDate));
                     try (ResultSet rs = preparedStatement.executeQuery()) {
-                        return test(patients, rs);
+                        return getPatientList(patients, rs);
                     }
                 }
             }
@@ -289,13 +289,12 @@ public class BasicDBServiceImpl implements BasicDBService {
     }
 
     /**
-     * Tets.
+     * Returns an array filled with patient objects bases on the sql query.
      * @ param patients
      * @ param rs
-     * @ return
-     * @ throws SQLException
+     * @ returns an arraylist
      */
-    public List<Patient> test(List<Patient> patients, ResultSet rs) throws SQLException {
+    public List<Patient> getPatientList(List<Patient> patients, ResultSet rs) throws SQLException {
         while (rs.next()) {
             patients.add(new PatientImpl(this, rs.getLong(1), rs.getString(2),
                     rs.getString(3), rs.getDate(4), rs.getString(5),
@@ -304,25 +303,6 @@ public class BasicDBServiceImpl implements BasicDBService {
         return patients;
     }
 
-    /**
-     * Returns an array filled with patient objects bases on the sql query.
-     * @ param patients
-     * @ param sql
-     * @ returns an arraylist
-     */
-    private List<Patient> getPatientList(List<Patient> patients, String sql) {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql);
-             ResultSet rs = preparedStatement.executeQuery()) {
-            while (rs.next()) {
-                patients.add(new PatientImpl(this, rs.getLong(1), rs.getString(2),
-                        rs.getString(3), rs.getDate(4), rs.getString(5),
-                        rs.getString(6)));
-            }
-            return patients;
-        } catch (SQLException throwables) {
-            throw new FetchException("Error occurred while fetching a patient object!");
-        }
-    }
 
     @Override
     public Patient getPatient(long patientID) {
