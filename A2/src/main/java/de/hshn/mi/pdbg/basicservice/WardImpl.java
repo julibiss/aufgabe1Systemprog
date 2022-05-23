@@ -64,6 +64,7 @@ public class WardImpl extends PersistentJDBCObject implements Ward {
             preparedStatementWardInsert.setString(2, this.getName());
             preparedStatementWardInsert.setInt(3, this.getNumberOfBeds());
             preparedStatementWardInsert.executeUpdate();
+            preparedStatementWardInsert.close();
         } else {
             String sql = """
                     UPDATE ward
@@ -76,6 +77,7 @@ public class WardImpl extends PersistentJDBCObject implements Ward {
             preparedStatementWardUpdate.setInt(2, this.getNumberOfBeds());
             preparedStatementWardUpdate.setLong(3, this.getObjectID());
             preparedStatementWardUpdate.execute();
+            preparedStatementWardUpdate.close();
         }
         return getObjectID();
     }

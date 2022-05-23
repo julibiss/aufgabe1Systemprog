@@ -159,6 +159,7 @@ public class PatientImpl extends PersistentJDBCObject implements Patient {
             preparedStatementPatientInsert.setString(6, this.getInsuranceNumber());
 
             preparedStatementPatientInsert.execute();
+            preparedStatementPatientInsert.close();
         } else {
             String sql = """
                     UPDATE patient
@@ -183,6 +184,7 @@ public class PatientImpl extends PersistentJDBCObject implements Patient {
             preparedStatementPatientUpdate.setLong(6, this.getObjectID());
 
             preparedStatementPatientUpdate.execute();
+            preparedStatementPatientUpdate.close();
         }
         return getObjectID();
     }

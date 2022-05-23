@@ -8,11 +8,17 @@ import java.util.Date;
  * {@link ExaminationResult} describes the results obtained through the examination of the health status of a patient.
  */
 public interface ExaminationResult extends PersistentObject {
+
     /**
-     * Creates and returns a {@link ExaminationResult} object.
-     * @ param type
+     * @ param type type of examination that was performed.
      */
-    public ExaminationResult createExaminationResult(String type);
+    public void setExamination(String type);
+
+    /**
+     * @ param examinationID ID of the examination that we want.
+     * @ return an Examination object
+     */
+    public Examination getExamination(long examinationID);
 
     /**
      * @ param resultSummary must not be {@code null}, must not be {@code ""}.

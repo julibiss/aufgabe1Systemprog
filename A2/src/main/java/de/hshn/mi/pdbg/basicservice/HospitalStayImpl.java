@@ -111,6 +111,7 @@ public class HospitalStayImpl extends PersistentJDBCObject implements HospitalSt
                 preparedStatementHospitalStayInsert.setDate(5, null);
             }
             preparedStatementHospitalStayInsert.executeUpdate();
+            preparedStatementHospitalStayInsert.close();
         } else {
             String sql = """
                     UPDATE hospitalstay
@@ -130,6 +131,7 @@ public class HospitalStayImpl extends PersistentJDBCObject implements HospitalSt
                     new java.sql.Date(this.getDischargeDate().getTime()));
             preparedStatementHospitalStayUpdate.setLong(5, this.getObjectID());
             preparedStatementHospitalStayUpdate.execute();
+            preparedStatementHospitalStayUpdate.close();
         }
         return this.getObjectID();
     }
