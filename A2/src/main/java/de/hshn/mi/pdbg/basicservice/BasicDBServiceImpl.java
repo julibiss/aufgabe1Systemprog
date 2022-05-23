@@ -212,7 +212,7 @@ public class BasicDBServiceImpl implements BasicDBService {
         ) {
 
             preparedStatement.setLong(1, wardID);
-            try(ResultSet rs = preparedStatement.executeQuery()) {
+            try (ResultSet rs = preparedStatement.executeQuery()) {
                 while (rs.next()) {
                     WardImpl ward = new WardImpl(this, rs.getLong(1),
                             rs.getString(2), rs.getInt(3));
