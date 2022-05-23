@@ -149,13 +149,11 @@ public class BasicDBServiceImpl implements BasicDBService {
             } else if (firstname == null && lastname != null && startDate != null && endDate == null) {
                 try (PreparedStatement preparedStatement = connection.prepareStatement(""" 
                                                                                        SELECT * FROM patient 
-                                                                                       WHERE firstname LIKE ? 
                                                                                        AND lastname LIKE ? 
                                                                                        AND dateofbirth >= ?
                                                                                        """)) {
-                    preparedStatement.setString(1, firstname);
-                    preparedStatement.setString(2, lastname);
-                    preparedStatement.setDate(3, DateHelper.convertDate(startDate));
+                    preparedStatement.setString(1, lastname);
+                    preparedStatement.setDate(2, DateHelper.convertDate(startDate));
                     try (ResultSet rs = preparedStatement.executeQuery()) {
                         return test(patients, rs);
                     }
