@@ -104,7 +104,15 @@ public class BasicDBServiceImpl implements BasicDBService {
                     }
                 }
             } else if (firstname == null && lastname != null && startDate == null && endDate == null) {
-                return getPatientList(patients, "SELECT * FROM patient WHERE lastname LIKE '" + lastname + "'");
+                try (PreparedStatement preparedStatement = connection.prepareStatement(""" 
+                                                                                       SELECT * FROM patient 
+                                                                                       WHERE lastname LIKE ?
+                                                                                       """)) {
+                    preparedStatement.setString(1, lastname);
+                    try (ResultSet rs = preparedStatement.executeQuery()) {
+                        return test(patients, rs);
+                    }
+                }
             } else if (firstname == null && lastname == null && startDate != null && endDate == null) {
                 return getPatientList(patients, "SELECT * FROM patient WHERE dateofbirth >= '" +
                                                 DateHelper.convertDate(startDate).toString() + "'");
@@ -154,19 +162,32 @@ public class BasicDBServiceImpl implements BasicDBService {
                                                 + "' AND " +
                                                 "dateofbirth <= '" + DateHelper.convertDate(endDate).toString() + "'");
             } else if (firstname == null && lastname != null && startDate != null && endDate != null) {
-                return getPatientList(patients, "SELECT * FROM patient  WHERE lastname LIKE '" + lastname
-                                                + "' AND '" +
-                                                "dateofbirth <= '" + DateHelper.convertDate(endDate).toString()
-                                                + "' AND " +
-                                                "dateofbirth >= '" + DateHelper.convertDate(startDate).toString() +
-                                                "'");
+                try (PreparedStatement preparedStatement = connection.prepareStatement("""
+                                                                                           SELECT * FROM patient WHERE
+                                                                                           lastname LIKE ?
+                                                                                           AND dateofbirth >= ?
+                                                                                           AND dateofbirth <= ?                 
+                                                                                            """)) {
+                    preparedStatement.setString(1, lastname);
+                    preparedStatement.setDate(2, DateHelper.convertDate(startDate));
+                    preparedStatement.setDate(3, DateHelper.convertDate(endDate));
+                }
             } else if (firstname != null && lastname != null && startDate != null && endDate != null) {
-                return getPatientList(patients, "SELECT * FROM patient WHERE name LIKE '" + firstname
-                                                + "' AND lastname LIKE '"
-                                                + lastname + "' AND dateofbirth >= '" +
-                                                DateHelper.convertDate(startDate).toString() +
-                                                "' AND dateofbirth <=  '" + DateHelper.convertDate(endDate).toString()
-                                                + "'");
+                try (PreparedStatement preparedStatement = connection.prepareStatement(""" 
+                                                                                      SELECT * FROM patient WHERE 
+                                                                                      name LIKE  ?
+                                                                                      AND lastname LIKE ?
+                                                                                      AND dateofbirth >= ?
+                                                                                      AND dateofbirth <= ?
+                                                                                       """)) {
+                    preparedStatement.setString(1, firstname);
+                    preparedStatement.setString(2, lastname);
+                    preparedStatement.setDate(3, DateHelper.convertDate(startDate));
+                    preparedStatement.setDate(4, DateHelper.convertDate(endDate));
+                    try (ResultSet rs = preparedStatement.executeQuery()) {
+                        return test(patients, rs);
+                    }
+                }
             }
         } catch (SQLException e) {
             throw new FetchException(e.getMessage());
