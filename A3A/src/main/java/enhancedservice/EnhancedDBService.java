@@ -146,7 +146,7 @@ public interface EnhancedDBService extends BasicDBService {
      * @ throws AssertionError
      *             Thrown if a given parameter value is invalid.
      */
-    public List<Diagnosis> getDiagnose(String icdCode);
+    public List<Diagnosis> getDiagnosis(String icdCode);
 
 
     /**
