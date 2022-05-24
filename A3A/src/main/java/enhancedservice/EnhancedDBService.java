@@ -127,8 +127,8 @@ public interface EnhancedDBService extends BasicDBService {
      * Returns a List of {@link Examination} objects that matche a set of search
      * criteria. When searching via first name and last name, one may use the
      * SQL wildcards ("%", "*", "_") in the search string.
-     * @ param patientID
-     *            Must not be {@code null} and must be greater than 0
+     * @ param examinationName
+     *            Must not be {@code null} and must be {@code ""}
      * @ return A list of {@link Examination} objects is returned.
      * @ throws FetchException
      *             Thrown if an error occurred while fetching objects.
