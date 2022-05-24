@@ -60,6 +60,8 @@ public interface EnhancedDBService extends BasicDBService {
      *            must not be negative and must not be {@code null}
      * @ param resultDate
      *            must not be negative and must not be {@code null}
+     * @ param examination
+     *            must not be {@code null}
      * @ return A {@link ExaminationResult} object.
      * @ throws AssertionError
      *             Thrown if a given parameter value is invalid.
@@ -72,6 +74,10 @@ public interface EnhancedDBService extends BasicDBService {
      *            must not be {@code null}
      * @ param summary
      *            must not be {@code null} and must not be {@code ""}
+     * @ param diagnosisList
+     *            must not be {@code null}
+     * @ param examinationResults
+     *            must not be {@code null}
      * @ return A {@link Diagnosis} object.
      * @ throws AssertionError
      *             Thrown if a given parameter value is invalid.

@@ -14,8 +14,12 @@ public interface Finding extends PersistentObject {
      * Creates and returns a {@link Patient} object.
      * @ param firstname
      * @ param lastname
+     * @ param birthDate
+     * @ param insuranceCompany
+     * @ param insuranceNumber
      */
-    public void setPatient(String insuranceCompany, String insuranceNumber);
+    public void setPatient(String firstname, String lastname, Date birthDate,
+                           String insuranceCompany, String insuranceNumber);
 
     /**
      * Returns a {@link Patient} object based on the given patientID.
