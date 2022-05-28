@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * {@link Finding} references all the Diagnosis and the examination results of a patient.
  */
-public interface Finding extends PersistentObject {
+public interface Finding extends Examination {
     /**
      * Creates and returns a {@link Patient} object.
      * @ param firstname
@@ -18,21 +18,20 @@ public interface Finding extends PersistentObject {
      * @ param insuranceCompany
      * @ param insuranceNumber
      */
-    public void setPatient(String firstname, String lastname, Date birthDate,
-                           String insuranceCompany, String insuranceNumber);
+    public void setPatient(Patient patient);
 
     /**
      * Returns a {@link Patient} object based on the given patientID.
      * @ param patientID
      */
-    public Patient getPatient(long patientID);
+    public Patient getPatient();
 
     /**
      * Adds a {@link Diagnosis} object to our diagnosis list.
      * @ param iCDCode
      * @ param diagnosisText
      */
-    public void addDiagnosis(String icdCode, String diagnosisText);
+    public void addDiagnosis(Diagnosis diagnosis);
 
     /**
      * @ param icdCode must not be {@code null}.
@@ -44,7 +43,7 @@ public interface Finding extends PersistentObject {
      * @ throws AssertionError
      *             Thrown if a given parameter value is invalid.
      */
-    public List<Diagnosis> getDiagnosis(String icdCode);
+    public List<Diagnosis> getDiagnosis();
 
     /**
      * Adds a {@link Examination} object to our diagnosis list.
@@ -66,7 +65,7 @@ public interface Finding extends PersistentObject {
      * @ throws AssertionError
      *             Thrown if a given parameter value is invalid.
      */
-    List<ExaminationResult> getExaminationResults(long patientID);
+    List<ExaminationResult> getExaminationResults();
 
     /**
      * @ param date must not be {@code null}.

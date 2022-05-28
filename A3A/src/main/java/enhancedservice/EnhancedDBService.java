@@ -67,7 +67,7 @@ public interface EnhancedDBService extends BasicDBService {
      *             Thrown if a given parameter value is invalid.
      */
     ExaminationResult createExaminationResult(String resultSummary, Date requestDate, Date resultDate,
-                                              Examination examination);
+                                              List<Examination> examinations);
 
     /**
      * @ param date
@@ -151,8 +151,7 @@ public interface EnhancedDBService extends BasicDBService {
 
     /**
      * Returns a list of {@link ExaminationResult} objects that match a set of search
-     * criteria. When searching via first name and last name, one may use the
-     * SQL wildcards ("%", "*", "_") in the search string.
+     * criteria.
      * @ param patientID
      *            Must not be {@code null} and must be greater than 0
      * @ return A list of matching {@link ExaminationResult} objects is returned. It may be empty.

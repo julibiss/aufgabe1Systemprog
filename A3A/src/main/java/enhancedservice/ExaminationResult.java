@@ -3,6 +3,7 @@ package enhancedservice;
 import de.hshn.mi.pdbg.PersistentObject;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * {@link ExaminationResult} describes the results obtained through the examination of the health status of a patient.
@@ -12,13 +13,13 @@ public interface ExaminationResult extends PersistentObject {
     /**
      * @ param type type of examination that was performed.
      */
-    public void setExamination(String type);
+    public void setExamination(Examination examination);
 
     /**
      * @ param examinationID ID of the examination that we want.
      * @ return an Examination object
      */
-    public Examination getExamination(long examinationID);
+    public List<Examination> getExamination();
 
     /**
      * @ param resultSummary must not be {@code null}, must not be {@code ""}.

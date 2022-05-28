@@ -5,7 +5,7 @@ import de.hshn.mi.pdbg.PersistentObject;
 /**
  * A special type of examination.
  */
-public interface LaboratoryTest extends PersistentObject {
+public interface LaboratoryTest extends Examination {
 
     /**
      * @ param testType must not be {@code null}, must not be {@code ""}.
