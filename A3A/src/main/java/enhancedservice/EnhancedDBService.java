@@ -60,7 +60,7 @@ public interface EnhancedDBService extends BasicDBService {
      *            must not be negative and must not be {@code null}
      * @ param resultDate
      *            must not be negative and must not be {@code null}
-     * @ param examination
+     * @ param examinations
      *            must not be {@code null}
      * @ return A {@link ExaminationResult} object.
      * @ throws AssertionError
@@ -74,11 +74,13 @@ public interface EnhancedDBService extends BasicDBService {
      *            must not be {@code null}
      * @ param summary
      *            must not be {@code null} and must not be {@code ""}
+     * @ param patient
+     *            must not be {@code null}
      * @ param diagnosisList
      *            must not be {@code null}
      * @ param examinationResults
      *            must not be {@code null}
-     * @ return A {@link Diagnosis} object.
+     * @ return A {@link Finding} object.
      * @ throws AssertionError
      *             Thrown if a given parameter value is invalid.
      */
@@ -125,8 +127,7 @@ public interface EnhancedDBService extends BasicDBService {
 
     /**
      * Returns a List of {@link Examination} objects that matche a set of search
-     * criteria. When searching via first name and last name, one may use the
-     * SQL wildcards ("%", "*", "_") in the search string.
+     * criteria. One may use the SQL wildcards ("%", "*", "_") in the search string.
      * @ param examinationName
      *            Must not be {@code null} and must be {@code ""}
      * @ return A list of {@link Examination} objects is returned.
@@ -137,6 +138,9 @@ public interface EnhancedDBService extends BasicDBService {
 
 
     /**
+     *Returns a List of {@link Diagnosis} objects that matche a set of search
+     * criteria. One may use the SQL wildcards ("%", "*", "_") in the search string.
+     * @ param examinationName
      * @ param icdCode must not be {@code null}.
      *         Used to find a diagnosis based on the given code.
      * @ return A list of {@link Diagnosis} objects or {@code null}, if none was

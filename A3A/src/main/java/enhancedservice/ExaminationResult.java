@@ -16,8 +16,7 @@ public interface ExaminationResult extends PersistentObject {
     public void setExamination(Examination examination);
 
     /**
-     * @ param examinationID ID of the examination that we want.
-     * @ return an Examination object
+     * @ return a List of Examination object.
      */
     public List<Examination> getExamination();
 

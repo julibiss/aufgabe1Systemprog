@@ -21,27 +21,20 @@ public interface Finding extends Examination {
     public void setPatient(Patient patient);
 
     /**
-     * Returns a {@link Patient} object based on the given patientID.
-     * @ param patientID
+     * Returns a {@link Patient} object.
      */
     public Patient getPatient();
 
     /**
      * Adds a {@link Diagnosis} object to our diagnosis list.
-     * @ param iCDCode
-     * @ param diagnosisText
+     * @ param diagnosis
      */
     public void addDiagnosis(Diagnosis diagnosis);
 
     /**
-     * @ param icdCode must not be {@code null}.
-     *         Used to find a diagnosis based on the given code.
-     * @ return A list of {@link Diagnosis} objects or {@code null}, if none was
-     *         found with the given {@code icdCode}.
+     * @ return A list of {@link Diagnosis} objects.
      * @ throws FetchException
      *             Thrown if an error occurred while fetching an object.
-     * @ throws AssertionError
-     *             Thrown if a given parameter value is invalid.
      */
     public List<Diagnosis> getDiagnosis();
 
@@ -54,16 +47,10 @@ public interface Finding extends Examination {
     public void addExaminationResult(String resultSummary, Date requestDate, Date resultDate);
 
     /**
-     * Returns a list of {@link ExaminationResult} objects that match a set of search
-     * criteria. When searching via first name and last name, one may use the
-     * SQL wildcards ("%", "*", "_") in the search string.
-     * @ param patientID
-     *            Must not be {@code null} and must be greater than 0
+     * Returns a list of {@link ExaminationResult} objects.
      * @ return A list of matching {@link ExaminationResult} objects is returned. It may be empty.
      * @ throws FetchException
      *             Thrown if an error occurred while fetching an object.
-     * @ throws AssertionError
-     *             Thrown if a given parameter value is invalid.
      */
     List<ExaminationResult> getExaminationResults();
 
