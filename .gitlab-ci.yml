@@ -10,6 +10,10 @@ stages:
   - a2-tests
   - a3a-checks
   - a3a-tests
+  - a3b-checks
+  - a3b-tests
+  - a4-checks
+  - a4-tests
 
 variables:
   SIMPLE_LOG_PROPERTY: "-Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn"
@@ -106,5 +110,67 @@ compile-a3a:
   stage: a3a-checks
   script:
     - cd A3A;
+    - mvn initialize -B $SIMPLE_LOG_PROPERTY
+    - mvn compile -B $SIMPLE_LOG_PROPERTY
+
+#
+# EXERCISE A4A
+#
+test-perf-a4a:
+  stage: a4-tests
+  tags:
+    - db2
+  services:
+    - postgres:latest
+  variables:
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: "postgres"
+  before_script:
+    - export PGPASSWORD='postgres'; psql -h postgres -U postgres -c 'CREATE DATABASE "pdbg-baseline"';
+    - export PGPASSWORD='postgres'; psql -h postgres -U postgres -c 'CREATE DATABASE "pdbg-a4a"';
+  script:
+    - cd A4A;
+    - mvn initialize -B $SIMPLE_LOG_PROPERTY
+    - mvn clean test -Pa4-performance-tests -B $SIMPLE_LOG_PROPERTY
+  needs: ["test-jdk17-a4a"]
+
+test-jdk17-a4a:
+  stage: a4-tests
+  services:
+    - postgres:latest
+  variables:
+    POSTGRES_DB: pdbg-a4a
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: "postgres"
+  script:
+    - cd A4A;
+    - mvn initialize -B $SIMPLE_LOG_PROPERTY
+    - mvn clean test -Pa2-unit-tests -B $SIMPLE_LOG_PROPERTY
+  needs: ["checkstyle-a4a"]
+
+checkstyle-a4a:
+  stage: a4-checks
+  script:
+    - cd A4A;
+    - mvn checkstyle:check -Ptool-checkstyle -B $SIMPLE_LOG_PROPERTY
+  needs: ["checkstyle-report-a4a"]
+
+checkstyle-report-a4a:
+  stage: a4-checks
+  script:
+    - cd A4A;
+    - mvn initialize -B $SIMPLE_LOG_PROPERTY
+    - mvn checkstyle:checkstyle -Ptool-checkstyle-reporting -B $SIMPLE_LOG_PROPERTY
+    - mvn site -Ptool-checkstyle-reporting -B $SIMPLE_LOG_PROPERTY
+  artifacts:
+    paths:
+      - A4A/target/site
+    expire_in: 10 minutes
+  needs: ["compile-a4a"]
+
+compile-a4a:
+  stage: a4-checks
+  script:
+    - cd A4A;
     - mvn initialize -B $SIMPLE_LOG_PROPERTY
     - mvn compile -B $SIMPLE_LOG_PROPERTY

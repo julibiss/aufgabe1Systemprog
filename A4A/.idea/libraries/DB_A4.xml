@@ -1,0 +1,20 @@
+<component name="libraryTable">
+  <library name="DB_A4">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/DB2_A2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/DB2_A4A.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/DB2_A4A-gui.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/DB2_A4A-solution-obfuscated.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/DB2_Commons.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/DB2_A2-test.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/lib/DB2_A2-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/DB2_A4A-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/lib/DB2_A2-src.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/DB2_A4A-src.jar!/" />
+    </SOURCES>
+  </library>
+</component>
