@@ -16,9 +16,9 @@ public interface ExaminationResult extends PersistentObject {
     public void setExamination(Examination examination);
 
     /**
-     * @ return a List of Examination object.
+     * @ return an Examination object.
      */
-    public List<Examination> getExamination();
+    public Examination getExamination();
 
     /**
      * @ param resultSummary must not be {@code null}, must not be {@code ""}.
