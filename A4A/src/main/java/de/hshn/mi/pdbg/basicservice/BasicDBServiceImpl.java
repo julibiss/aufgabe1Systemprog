@@ -5,7 +5,11 @@ import de.hshn.mi.pdbg.exception.FetchException;
 import de.hshn.mi.pdbg.exception.StoreException;
 import de.hshn.mi.pdbg.util.DateHelper;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -48,15 +52,15 @@ public class BasicDBServiceImpl implements BasicDBService {
                         if (last == 1) {
                             temp += " AND firstname = ?";
                         }
-                         if(last == 2) {
-                             temp += " AND firstname LIKE ?";
-                          }
+                        if (last == 2) {
+                            temp += " AND firstname LIKE ?";
+                        }
                         if (first == 1) {
                             temp += " AND lastname = ?";
                         }
-                          if (first == 2) {
+                        if (first == 2) {
                             temp += " AND lastname = ?";
-                         }
+                        }
                         if (start == 1) {
                             temp += " AND dateOfBirth >= ?";
                         }
@@ -456,7 +460,8 @@ public class BasicDBServiceImpl implements BasicDBService {
         } else if (startDate != null && endDate != null) {
             try (PreparedStatement preparedStatement = connection.prepareStatement("""
                     SELECT * FROM "HospitalStay" AS hs, "Ward" AS wa, "Patient" AS p 
-                    WHERE  hs.w_id = wa.id AND hs.p_id = p.id AND p.id AND dateofadmission >= ? AND dateofdischarge <= ?;
+                    WHERE  hs.w_id = wa.id AND hs.p_id = p.id AND p.id AND dateofadmission >= ? 
+                    AND dateofdischarge <= ?;
                                                 """)) {
                 preparedStatement.setLong(1, patientID);
                 preparedStatement.setDate(2, DateHelper.convertDate(startDate));
@@ -545,8 +550,8 @@ public class BasicDBServiceImpl implements BasicDBService {
         assert ward == null || ward.isPersistent();
         if (ward == null) {
             try (PreparedStatement preparedStatement = connection.prepareStatement("""
-SELECT SUM(numberofbeds) FROM "Ward";
-"""
+                                SELECT SUM(numberofbeds) FROM "Ward";
+                        """
                     )) {
                 try (ResultSet rs = preparedStatement.executeQuery()) {
                     if (rs.next()) {

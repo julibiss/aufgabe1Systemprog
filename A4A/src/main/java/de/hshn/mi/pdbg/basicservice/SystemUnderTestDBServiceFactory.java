@@ -25,10 +25,14 @@ public class SystemUnderTestDBServiceFactory {
                 .generateDB(100);
     }
 
+    /**
+     * Test.
+     * @ return
+     */
     public static BasicDBService createSystemUnderTestDBService() {
         try {
             return new BasicDBServiceImpl("jdbc:postgresql://localhost:5432/postgres",
-                    "postgres","password");
+                    "postgres", "password");
         } catch (SQLException e) {
             throw new IllegalArgumentException(e.getMessage());
         }

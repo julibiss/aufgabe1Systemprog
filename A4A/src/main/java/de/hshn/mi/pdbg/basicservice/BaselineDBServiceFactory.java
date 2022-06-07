@@ -10,10 +10,16 @@ import de.hshn.mi.pdbg.basicservice.jdbc.PostgresSQLBaselineDBFactory;
  */
 public class BaselineDBServiceFactory {
 
-    public static void main (String[] args){
-        new de.hshn.mi.pdbg.basicservice.jdbc.PostgresSQLBaselineDBConstructor().construct("jdbc:postgresql://localhost:5432/postgres",
+    /**
+     * Main Method.
+     * @ param args
+     */
+    public static void main(String[] args) {
+        new de.hshn.mi.pdbg.basicservice.jdbc.PostgresSQLBaselineDBConstructor().construct(
+                "jdbc:postgresql://localhost:5432/postgres",
                 "postgres", "password");
     }
+
     /**
      * Factory method in order to create a instance of a baseline BasicDBService object.
      *

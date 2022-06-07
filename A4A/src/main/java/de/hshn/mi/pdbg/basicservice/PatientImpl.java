@@ -133,7 +133,7 @@ public class PatientImpl extends PersistentJDBCObject implements Patient {
     public long store(Connection connection) throws SQLException {
         assert connection != null;
         if (!this.isPersistent()) {
-            this.setObjectID(this.generateID(connection, "patientIDSequence"));
+            this.setObjectID(this.generateID(connection, "idsequence"));
             String sql = """
                     insert into "Patient" (
                     id,

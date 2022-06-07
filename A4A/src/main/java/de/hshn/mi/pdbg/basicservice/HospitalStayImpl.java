@@ -87,7 +87,7 @@ public class HospitalStayImpl extends PersistentJDBCObject implements HospitalSt
             if (ward.getObjectID() == PersistentObject.INVALID_OBJECT_ID) {
                 getBasicDBService().store(ward);
             }
-            this.setObjectID(this.generateID(connection,"hospitalStayIDSequence"));
+            this.setObjectID(this.generateID(connection, "idsequence"));
             String sql = """
                     insert into "HospitalStay" (
                     id,
