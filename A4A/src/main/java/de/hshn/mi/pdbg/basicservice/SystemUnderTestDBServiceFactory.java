@@ -10,28 +10,12 @@ import java.sql.SQLException;
 public class SystemUnderTestDBServiceFactory {
 
     /**
-     * main method.
-     *
-     * @param args optional arguments
-     * @throws Exception if input arguments are invalid
-     */
-    public static void main(String[] args) throws Exception { // Erzeugen und Nutzen des Datenbankgenerators :
-        // Erzeugen Sie Ihren Dienst so, dass er sich
-        // mit der passenden PostgreSQL−Datenbank verbindet .
-        // In der Datenbank muessen bereits die entsprechenden
-        // ( leeren ) Tabellen erzeugt sein .
-        new de.hshn.mi.pdbg.basicservice.dbgen.DBGenerator(SystemUnderTestDBServiceFactory
-                .createSystemUnderTestDBService())
-                .generateDB(100);
-    }
-
-    /**
      * Test.
      * @ return
      */
     public static BasicDBService createSystemUnderTestDBService() {
         try {
-            return new BasicDBServiceImpl("jdbc:postgresql://postgres/pdbg_baseline",
+            return new BasicDBServiceImpl("jdbc:postgresql://postgres/pdbg-baseline",
                     "postgres", "postgres");
         } catch (SQLException e) {
             throw new IllegalArgumentException(e.getMessage());
