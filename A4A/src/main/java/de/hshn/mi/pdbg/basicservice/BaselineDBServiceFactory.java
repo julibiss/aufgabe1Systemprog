@@ -11,16 +11,6 @@ import de.hshn.mi.pdbg.basicservice.jdbc.PostgresSQLBaselineDBFactory;
 public class BaselineDBServiceFactory {
 
     /**
-     * Main Method.
-     * @ param args
-     */
-    public static void main(String[] args) {
-        new de.hshn.mi.pdbg.basicservice.jdbc.PostgresSQLBaselineDBConstructor().construct(
-                "jdbc:postgresql://localhost:5432/dbOpt",
-                "postgres", "password");
-    }
-
-    /**
      * Factory method in order to create a instance of a baseline BasicDBService object.
      *
      * @return instance of a baseline BasicDBService object.
@@ -30,8 +20,8 @@ public class BaselineDBServiceFactory {
             //Use "jdbc:postgresql://postgres/pdbg-baseline", "postgres", "postgres" for jdbc url,
             // login and password in CI/CD context
             Class.forName(org.postgresql.Driver.class.getName());
-            return PostgresSQLBaselineDBFactory.createBaselineDBService("jdbc:postgresql://localhost:5432/dbOpt",
-                    "postgres", "password");
+            return PostgresSQLBaselineDBFactory.createBaselineDBService("jdbc:postgresql:pgdb_baseline",
+                    "postgres", "postgres");
         } catch (Exception e) {
             e.printStackTrace();
         }
