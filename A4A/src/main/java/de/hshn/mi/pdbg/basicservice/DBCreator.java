@@ -66,6 +66,12 @@ public class DBCreator implements SchemaGenerator {
                     CREATE index Wid
                     ON Ward (ID);
                     
+                    CREATE index HWID
+                    ON HospitalStay (W_ID);
+                    
+                    CREATE index HPID
+                    ON HospitalStay (P_ID);
+                    
                     CREATE index HSdoa
                     ON HospitalStay (dateofadmission);    
                       

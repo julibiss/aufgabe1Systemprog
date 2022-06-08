@@ -53,18 +53,17 @@ public class BasicDBServiceImpl implements BasicDBService {
                       "WHERE hs.w_id = wa.id AND hs.p_id = p.id AND p.id = ?";
 
         int index = 0;
-        for(int start = 0; start <= 1; start++) {
+        for (int start = 0; start <= 1; start++) {
             for (int end = 0; end <= 1; end++) {
                 String temp = base;
-                if(end == 1)
-                {
+                if (end == 1) {
                     temp += " AND dateofdischarge <= ?";
                 }
-                if(start == 1){
+                if (start == 1) {
                     temp += " AND dateofadmission >= ?";
                 }
                 temp += ";";
-                try{
+                try {
                     prepStatGetHS[index] = connection.prepareStatement(temp);
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
@@ -383,7 +382,7 @@ public class BasicDBServiceImpl implements BasicDBService {
                 while (rs.next()) {
                     hospitalStays.add(new HospitalStayImpl(this, rs.getLong(1),
                             rs.getDate(4), rs.getDate(5),
-                            getWard(rs.getLong(3)),getPatient(rs.getLong(2))));
+                            getWard(rs.getLong(3)), getPatient(rs.getLong(2))));
                 }
             }
 
@@ -405,15 +404,15 @@ public class BasicDBServiceImpl implements BasicDBService {
 
         int counter = 0;
 
-        if(startDate != null) {
-            counter = counter+2;
+        if (startDate != null) {
+            counter = counter + 2;
         }
-        if(endDate != null){
-            counter = counter+1;
+        if (endDate != null) {
+            counter = counter + 1;
         }
 
         if (counter == 0) {
-            try{
+            try {
                 prepStatGetHS[0].setLong(1, patientID);
                 try (ResultSet rs = prepStatGetHS[0].executeQuery()) {
                     while (rs.next()) {
@@ -429,7 +428,7 @@ public class BasicDBServiceImpl implements BasicDBService {
                 throw new FetchException(e.getMessage());
             }
         } else if (counter == 1) {
-            try{
+            try {
                 prepStatGetHS[1].setLong(1, patientID);
                 prepStatGetHS[1].setDate(2, DateHelper.convertDate(endDate));
                 try (ResultSet rs = prepStatGetHS[1].executeQuery()) {
@@ -446,7 +445,7 @@ public class BasicDBServiceImpl implements BasicDBService {
                 throw new FetchException(e.getMessage());
             }
         } else if (counter == 2) {
-            try{
+            try {
                 prepStatGetHS[2].setLong(1, patientID);
                 prepStatGetHS[2].setDate(2, DateHelper.convertDate(startDate));
                 try (ResultSet rs = prepStatGetHS[2].executeQuery()) {
@@ -463,7 +462,7 @@ public class BasicDBServiceImpl implements BasicDBService {
                 throw new FetchException(e.getMessage());
             }
         } else if (counter == 3) {
-            try{
+            try {
                 prepStatGetHS[3].setLong(1, patientID);
                 prepStatGetHS[3].setDate(2, DateHelper.convertDate(startDate));
                 prepStatGetHS[3].setDate(3, DateHelper.convertDate(endDate));
