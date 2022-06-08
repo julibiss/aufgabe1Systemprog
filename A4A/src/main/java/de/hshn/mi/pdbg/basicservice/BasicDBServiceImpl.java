@@ -20,6 +20,8 @@ import java.util.List;
 public class BasicDBServiceImpl implements BasicDBService {
     private Connection connection;
     PreparedStatement[] prepStatGetPatients = new PreparedStatement[36];
+    PreparedStatement[] prepStatGetHS = new PreparedStatement[4];
+    PreparedStatement prepStatgetOneHS;
     PreparedStatement prepStatGetWards;
     PreparedStatement prepStatGetWard;
 
@@ -31,18 +33,49 @@ public class BasicDBServiceImpl implements BasicDBService {
      */
     public BasicDBServiceImpl(String jdbcUrl, String sqlUser, String sqlPassword) throws SQLException {
         connection = getConnection(jdbcUrl, sqlUser, sqlPassword);
-        fillPrepStat();
-        prepStatGetWard = connection.prepareStatement("""
-                                                                               SELECT * FROM "Ward"
-                                                                               WHERE ID = ?
+        fillPrepStatPatients();
+        fillPrepStatHospitalStay();
+        prepStatgetOneHS = connection.prepareStatement("""
+                                                                               SELECT * FROM HospitalStay
+                                                                               WHERE p_id = ?;
                                                                                """);
+        prepStatGetWard = connection.prepareStatement("""
+                                                            SELECT * FROM Ward
+                                                            WHERE ID = ?
+                                                            """);
         prepStatGetWards = connection.prepareStatement("""
-                SELECT * FROM "Ward"
+                SELECT * FROM Ward
                 """);
     }
 
-    private void fillPrepStat() {
-        String base = "SELECT * FROM " + "\"Patient\"" + " WHERE '1' = '1'";
+    private void fillPrepStatHospitalStay() {
+        String base = "SELECT * FROM HospitalStay AS hs, Ward as wa, Patient as p " +
+                      "WHERE hs.w_id = wa.id AND hs.p_id = p.id AND p.id = ?";
+
+        int index = 0;
+        for(int start = 0; start <= 1; start++) {
+            for (int end = 0; end <= 1; end++) {
+                String temp = base;
+                if(end == 1)
+                {
+                    temp += " AND dateofdischarge <= ?";
+                }
+                if(start == 1){
+                    temp += " AND dateofadmission >= ?";
+                }
+                temp += ";";
+                try{
+                    prepStatGetHS[index] = connection.prepareStatement(temp);
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+                index++;
+            }
+        }
+    }
+
+    private void fillPrepStatPatients() {
+        String base = "SELECT * FROM Patient WHERE '1' = '1'";
         int index = 0;
         for (int last = 0; last <= 2; last++) {
             for (int first = 0; first <= 2; first++) {
@@ -126,7 +159,7 @@ public class BasicDBServiceImpl implements BasicDBService {
     public void removeHospitalStay(long hospitalStayID) {
         assert hospitalStayID > 0 && hospitalStayID != PersistentObject.INVALID_OBJECT_ID;
         try (PreparedStatement preparedStatement = connection.prepareStatement("""
-                                                DELETE FROM "Hospitalstay" WHERE id = ?;
+                                                DELETE FROM HospitalStay WHERE id = ?;
                                                 """)) {
             preparedStatement.setLong(1, hospitalStayID);
             preparedStatement.executeUpdate();
@@ -137,6 +170,8 @@ public class BasicDBServiceImpl implements BasicDBService {
 
     @Override
     public List<Patient> getPatients(String lastname, String firstname, Date startDate, Date endDate) {
+
+
         List<Patient> patients = new ArrayList();
 
         int counter = 0;
@@ -289,7 +324,7 @@ public class BasicDBServiceImpl implements BasicDBService {
         assert patientID > 0;
         Patient patient = null;
         try (PreparedStatement preparedStatement = connection.prepareStatement("""
-                                                                                SELECT * FROM "Patient" WHERE ID = ?;
+                                                                                SELECT * FROM Patient WHERE ID = ?;
                                                                                         """);) {
             preparedStatement.setLong(1, patientID);
             ResultSet rs = preparedStatement.executeQuery();
@@ -342,25 +377,13 @@ public class BasicDBServiceImpl implements BasicDBService {
         assert patientID > 0;
         assert getPatient(patientID).getObjectID() != PersistentObject.INVALID_OBJECT_ID;
         List<HospitalStay> hospitalStays = new ArrayList();
-        try (PreparedStatement preparedStatement = connection.prepareStatement("""
-                                                                               SELECT * FROM "HospitalStay"
-                                                                               AS hs, "Ward"
-                                                                               AS wa, "Patient"
-                                                                               AS p
-                                                                               WHERE hs.w_id = wa.id
-                                                                               AND hs.p_id = p.id
-                                                                               AND p.id = ?
-                                                                               """);) {
-
-            preparedStatement.setLong(1, patientID);
-            try (ResultSet rs = preparedStatement.executeQuery()) {
+        try {
+            prepStatgetOneHS.setLong(1, patientID);
+            try (ResultSet rs = prepStatgetOneHS.executeQuery()) {
                 while (rs.next()) {
                     hospitalStays.add(new HospitalStayImpl(this, rs.getLong(1),
                             rs.getDate(4), rs.getDate(5),
-                            new WardImpl(this, rs.getLong(3), rs.getString("name"),
-                                    rs.getInt("numberofbeds")),
-                            new PatientImpl(rs.getLong(2), rs.getString("firstname"),
-                                    rs.getString("lastname"), this)));
+                            getWard(rs.getLong(3)),getPatient(rs.getLong(2))));
                 }
             }
 
@@ -372,7 +395,6 @@ public class BasicDBServiceImpl implements BasicDBService {
 
     @Override
     public List<HospitalStay> getHospitalStays(long patientID, Date startDate, Date endDate) {
-
         assert patientID > 0;
         assert startDate == null && endDate == null || startDate != null && endDate == null
                || startDate == null && endDate != null
@@ -381,18 +403,19 @@ public class BasicDBServiceImpl implements BasicDBService {
         List<HospitalStay> hospitalStays = new ArrayList();
 
 
-        if (startDate == null && endDate == null) {
-            try (PreparedStatement preparedStatement = connection.prepareStatement("""
-                                                                              SELECT * FROM "Hospitalstay" 
-                                                                              AS hs, "Ward"
-                                                                              AS wa, "Patient"
-                                                                              AS p
-                                                                              WHERE hs.w_id = wa.id
-                                                                              AND  hs.p_id = p.id 
-                                                                              AND p.id  = ?
-                                                                              """)) {
-                preparedStatement.setLong(1, patientID);
-                try (ResultSet rs = preparedStatement.executeQuery()) {
+        int counter = 0;
+
+        if(startDate != null) {
+            counter = counter+2;
+        }
+        if(endDate != null){
+            counter = counter+1;
+        }
+
+        if (counter == 0) {
+            try{
+                prepStatGetHS[0].setLong(1, patientID);
+                try (ResultSet rs = prepStatGetHS[0].executeQuery()) {
                     while (rs.next()) {
                         hospitalStays.add(new HospitalStayImpl(this, rs.getLong(1),
                                rs.getDate(4), rs.getDate(5),
@@ -405,20 +428,11 @@ public class BasicDBServiceImpl implements BasicDBService {
             } catch (SQLException e) {
                 throw new FetchException(e.getMessage());
             }
-        } else if (startDate == null && endDate != null) {
-            try (PreparedStatement preparedStatement = connection.prepareStatement("""
-                                                                              SELECT * FROM "Hospitalstay"
-                                                                              AS hs, "Ward" 
-                                                                              AS wa, "Patient"
-                                                                              AS p
-                                                                              WHERE hs.w_id = wa.id AND
-                                                                              hs.p_id = p.id
-                                                                              AND p.id  = ?
-                                                                              AND dateofdischarge <= ?
-                                                                              """)) {
-                preparedStatement.setLong(1, patientID);
-                preparedStatement.setDate(2, DateHelper.convertDate(endDate));
-                try (ResultSet rs = preparedStatement.executeQuery()) {
+        } else if (counter == 1) {
+            try{
+                prepStatGetHS[1].setLong(1, patientID);
+                prepStatGetHS[1].setDate(2, DateHelper.convertDate(endDate));
+                try (ResultSet rs = prepStatGetHS[1].executeQuery()) {
                     while (rs.next()) {
                         hospitalStays.add(new HospitalStayImpl(this, rs.getLong(1),
                                 rs.getDate(4), rs.getDate(5),
@@ -431,20 +445,11 @@ public class BasicDBServiceImpl implements BasicDBService {
             } catch (SQLException e) {
                 throw new FetchException(e.getMessage());
             }
-        } else if (startDate != null && endDate == null) {
-            try (PreparedStatement preparedStatement = connection.prepareStatement("""
-                                                                              SELECT * FROM "Hospitalstay"
-                                                                              AS hs, "Ward"
-                                                                              AS wa, "Patient"
-                                                                              AS p
-                                                                              WHERE hs.w_id = wa.id AND
-                                                                              hs.p_id = p.id
-                                                                              AND p.id  = ?
-                                                                              AND dateofadmission >= ?
-                                                                              """)) {
-                preparedStatement.setLong(1, patientID);
-                preparedStatement.setDate(2, DateHelper.convertDate(startDate));
-                try (ResultSet rs = preparedStatement.executeQuery()) {
+        } else if (counter == 2) {
+            try{
+                prepStatGetHS[2].setLong(1, patientID);
+                prepStatGetHS[2].setDate(2, DateHelper.convertDate(startDate));
+                try (ResultSet rs = prepStatGetHS[2].executeQuery()) {
                     while (rs.next()) {
                         hospitalStays.add(new HospitalStayImpl(this, rs.getLong(1),
                                 rs.getDate(4), rs.getDate(5),
@@ -457,16 +462,12 @@ public class BasicDBServiceImpl implements BasicDBService {
             } catch (SQLException e) {
                 throw new FetchException(e.getMessage());
             }
-        } else if (startDate != null && endDate != null) {
-            try (PreparedStatement preparedStatement = connection.prepareStatement("""
-                    SELECT * FROM "HospitalStay" AS hs, "Ward" AS wa, "Patient" AS p 
-                    WHERE  hs.w_id = wa.id AND hs.p_id = p.id AND p.id AND dateofadmission >= ? 
-                    AND dateofdischarge <= ?;
-                                                """)) {
-                preparedStatement.setLong(1, patientID);
-                preparedStatement.setDate(2, DateHelper.convertDate(startDate));
-                preparedStatement.setDate(3, DateHelper.convertDate(endDate));
-                try (ResultSet rs = preparedStatement.executeQuery()) {
+        } else if (counter == 3) {
+            try{
+                prepStatGetHS[3].setLong(1, patientID);
+                prepStatGetHS[3].setDate(2, DateHelper.convertDate(startDate));
+                prepStatGetHS[3].setDate(3, DateHelper.convertDate(endDate));
+                try (ResultSet rs = prepStatGetHS[3].executeQuery()) {
                     while (rs.next()) {
                         hospitalStays.add(new HospitalStayImpl(this, rs.getLong(1),
                                 rs.getDate(4), rs.getDate(5),
@@ -476,6 +477,7 @@ public class BasicDBServiceImpl implements BasicDBService {
                                         rs.getString("lastname"), this)));
                     }
                 }
+                prepStatGetHS[3].close();
             } catch (SQLException e) {
                 throw new FetchException(e.getMessage());
             }
@@ -490,7 +492,7 @@ public class BasicDBServiceImpl implements BasicDBService {
         double average = 0;
         try (PreparedStatement preparedStatement = connection.prepareStatement("""
                                                     SELECT AVG(dateofdischarge-dateofadmission) AS test 
-                                                    FROM "HospitalStay" AS hs 
+                                                    FROM HospitalStay AS hs 
                                                     WHERE hs.w_id = ? AND dateofdischarge IS NOT NULL
                                                     """
         )) {
@@ -515,7 +517,7 @@ public class BasicDBServiceImpl implements BasicDBService {
 
         if (ward == null) {
             try (PreparedStatement preparedStatement = connection.prepareStatement("""
-                                                                        SELECT COUNT(*) FROM "HospitalStay"
+                                                                        SELECT COUNT(*) FROM HospitalStay
                                                                         WHERE dateofdischarge IS NULL;
                                                                         """);
                  ResultSet rs = preparedStatement.executeQuery();) {
@@ -550,7 +552,7 @@ public class BasicDBServiceImpl implements BasicDBService {
         assert ward == null || ward.isPersistent();
         if (ward == null) {
             try (PreparedStatement preparedStatement = connection.prepareStatement("""
-                                SELECT SUM(numberofbeds) FROM "Ward";
+                                SELECT SUM(numberofbeds) FROM Ward;
                         """
                     )) {
                 try (ResultSet rs = preparedStatement.executeQuery()) {
@@ -563,7 +565,7 @@ public class BasicDBServiceImpl implements BasicDBService {
             }
         } else {
             try (PreparedStatement preparedStatement = connection.prepareStatement("""
-                                    SELECT SUM(numberofbeds) FROM "Ward" WHERE "Ward".id = ?;
+                                    SELECT SUM(numberofbeds) FROM Ward WHERE Ward.id = ?;
                                       """
             )) {
                 preparedStatement.setLong(1, ward.getObjectID());

@@ -13,7 +13,7 @@ public class DBGeneratorBaseline {
 
         new de.hshn.mi.pdbg.basicservice
                 .jdbc.PostgresSQLBaselineDBConstructor().construct(
-                "jdbc:postgresql://localhost:5432/postgres",
+                "jdbc:postgresql://localhost:5432/dbOpt",
                 "postgres", "password"
         );
     }

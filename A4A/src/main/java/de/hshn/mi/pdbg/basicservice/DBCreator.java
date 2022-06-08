@@ -29,7 +29,7 @@ public class DBCreator implements SchemaGenerator {
         try {
             Connection connection = createConnection(jdbcUrl, user, password);
             String sql = """
-                    CREATE TABLE "Patient"(
+                    CREATE TABLE Patient(
                      ID int PRIMARY KEY ,
                      firstname varchar (50) NOT NULL,
                      lastname varchar (50) NOT NULL,
@@ -38,31 +38,40 @@ public class DBCreator implements SchemaGenerator {
                      insuranceNumber varchar (50)
                     );
                                         
-                    CREATE TABLE "Ward"(
+                    CREATE TABLE Ward(
                      ID int PRIMARY KEY ,
                      name varchar (50) NOT NULL,
                      numberOfBeds int NOT NULL CHECK (numberOfBeds > 0)
                     );
                                         
-                    CREATE TABLE "HospitalStay"(
+                    CREATE TABLE HospitalStay(
                      ID int PRIMARY KEY ,
                      P_ID int,
                      W_ID int,
-                     FOREIGN KEY (P_ID) REFERENCES "Patient"(ID) ON DELETE CASCADE,
-                     FOREIGN KEY (W_ID) REFERENCES "Ward"(ID) ON DELETE RESTRICT,
+                     FOREIGN KEY (P_ID) REFERENCES Patient(ID) ON DELETE CASCADE,
+                     FOREIGN KEY (W_ID) REFERENCES Ward(ID) ON DELETE RESTRICT,
                      dateOfAdmission date NOT NULL,
                      dateOfDischarge date CHECK (dateOfDischarge > dateOfAdmission)
                     );
                                  
-                    CREATE index Pid
-                    ON "Patient" (ID);
+                    CREATE index PatientFirst
+                    ON Patient (firstname);
+                    
+                    CREATE index PatientLast
+                    ON Patient (lastname);
+                    
+                    CREATE index PatientDoB
+                    ON Patient (dateofbirth);
                     
                     CREATE index Wid
-                    ON "Ward" (ID);
+                    ON Ward (ID);
                     
-                    CREATE index Hid
-                    ON "HospitalStay" (ID);    
+                    CREATE index HSdoa
+                    ON HospitalStay (dateofadmission);    
                       
+                    CREATE index HSdod
+                    ON HospitalStay (dateofdischarge);    
+  
                     CREATE Sequence idsequence
                     START WITH 1 INCREMENT BY 1 CACHE 10;             
                  

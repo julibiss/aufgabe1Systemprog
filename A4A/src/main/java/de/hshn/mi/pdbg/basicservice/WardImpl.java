@@ -59,7 +59,7 @@ public class WardImpl extends PersistentJDBCObject implements Ward {
         if (!this.isPersistent()) {
             this.setObjectID(this.generateID(connection, "idsequence"));
             preparedStatementWardInsert = connection.prepareStatement("""
-                                                                         INSERT INTO "Ward"(id, name, numberofbeds)
+                                                                         INSERT INTO ward(id, name, numberofbeds)
                                                                          VALUES (?,?,?);
                                                                           """);
             preparedStatementWardInsert.setLong(1, this.getObjectID());
@@ -69,7 +69,7 @@ public class WardImpl extends PersistentJDBCObject implements Ward {
             preparedStatementWardInsert.close();
         } else {
             String sql = """
-                    UPDATE "Ward"
+                    UPDATE ward
                     SET name = ?,
                     numberofbeds = ?
                     WHERE id = ?

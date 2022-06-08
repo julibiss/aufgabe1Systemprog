@@ -135,7 +135,7 @@ public class PatientImpl extends PersistentJDBCObject implements Patient {
         if (!this.isPersistent()) {
             this.setObjectID(this.generateID(connection, "idsequence"));
             String sql = """
-                    insert into "Patient" (
+                    insert into Patient (
                     id,
                     firstname,
                     lastname,
