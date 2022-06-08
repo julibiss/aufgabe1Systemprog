@@ -31,7 +31,7 @@ public class SystemUnderTestDBServiceFactory {
      */
     public static BasicDBService createSystemUnderTestDBService() {
         try {
-            return new BasicDBServiceImpl("jdbc:postgresql://localhost:5432/postgres",
+            return new BasicDBServiceImpl("jdbc:postgresql://postgres/pdbg-baseline",
                     "postgres", "password");
         } catch (SQLException e) {
             throw new IllegalArgumentException(e.getMessage());
