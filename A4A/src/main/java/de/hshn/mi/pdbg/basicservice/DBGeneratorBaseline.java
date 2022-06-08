@@ -13,7 +13,7 @@ public class DBGeneratorBaseline {
 
         new de.hshn.mi.pdbg.basicservice
                 .jdbc.PostgresSQLBaselineDBConstructor().construct(
-                "jdbc:postgresql://postgres/pgdb-baseline",
+                "jdbc:postgresql://postgres/pdgb-baseline",
                 "postgres", "postgres"
         );
     }
