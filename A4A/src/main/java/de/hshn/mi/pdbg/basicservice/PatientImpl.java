@@ -135,7 +135,7 @@ public class PatientImpl extends PersistentJDBCObject implements Patient {
         if (!this.isPersistent()) {
             this.setObjectID(this.generateID(connection, "idsequence"));
             String sql = """
-                    insert into Patient (
+                    insert into patient (
                     id,
                     firstname,
                     lastname,
@@ -162,7 +162,7 @@ public class PatientImpl extends PersistentJDBCObject implements Patient {
             preparedStatementPatientInsert.close();
         } else {
             String sql = """
-                    UPDATE Patient
+                    UPDATE patient
                     SET 
                     firstname = ?,
                     lastname = ?,

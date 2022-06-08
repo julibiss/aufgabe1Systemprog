@@ -89,7 +89,7 @@ public class HospitalStayImpl extends PersistentJDBCObject implements HospitalSt
             }
             this.setObjectID(this.generateID(connection, "idsequence"));
             String sql = """
-                    insert into HospitalStay (
+                    insert into hospitalstay (
                     id,
                     p_id,
                     w_id,
@@ -114,7 +114,7 @@ public class HospitalStayImpl extends PersistentJDBCObject implements HospitalSt
             preparedStatementHospitalStayInsert.close();
         } else {
             String sql = """
-                    UPDATE HospitalStay
+                    UPDATE hospitalstay
                     SET 
                     p_id = ?,
                     w_id = ?,
