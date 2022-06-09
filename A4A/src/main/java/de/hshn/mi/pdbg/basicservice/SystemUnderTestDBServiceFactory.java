@@ -15,7 +15,7 @@ public class SystemUnderTestDBServiceFactory {
      */
     public static BasicDBService createSystemUnderTestDBService() {
         try {
-            return new BasicDBServiceImpl("jdbc:postgresql://postgres/pdbg-baseline",
+            return new BasicDBServiceImpl("jdbc:postgresql://postgres/pdbg_baseline",
                     "postgres", "postgres");
         } catch (SQLException e) {
             throw new IllegalArgumentException(e.getMessage());
