@@ -54,14 +54,7 @@ public class DBCreator implements SchemaGenerator {
                      dateOfDischarge date CHECK (dateOfDischarge > dateOfAdmission)
                     );
                            
-                    CREATE index PatientID
-                    ON Patient (ID);
-                    
-                    CREATE index Wid
-                    ON Ward (ID);
-                    
-                    CREATE index HSID
-                    ON HospitalStay (ID);
+                
                     
                     CREATE index PatientFirst
                     ON Patient (firstname);
