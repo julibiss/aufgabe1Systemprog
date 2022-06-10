@@ -20,9 +20,8 @@ public class BaselineDBServiceFactory {
             //Use "jdbc:postgresql://postgres/pdbg-baseline", "postgres", "postgres" for jdbc url,
             // login and password in CI/CD context
             Class.forName(org.postgresql.Driver.class.getName());
-            return PostgresSQLBaselineDBFactory.createBaselineDBService("jdbc:postgresql://postgres/pdbg-baseline",
-                    "postgres",
-                    "postgres");
+            return PostgresSQLBaselineDBFactory.createBaselineDBService("jdbc:postgresql://localhost:5432/dbOpt",
+                    "postgres", "password");
         } catch (Exception e) {
             e.printStackTrace();
         }

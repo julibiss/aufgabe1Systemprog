@@ -53,7 +53,16 @@ public class DBCreator implements SchemaGenerator {
                      dateOfAdmission date NOT NULL,
                      dateOfDischarge date CHECK (dateOfDischarge > dateOfAdmission)
                     );
-                                 
+                           
+                    CREATE index PatientID
+                    ON Patient (ID);
+                    
+                    CREATE index Wid
+                    ON Ward (ID);
+                    
+                    CREATE index HSID
+                    ON HospitalStay (ID);
+                    
                     CREATE index PatientFirst
                     ON Patient (firstname);
                     
@@ -63,8 +72,7 @@ public class DBCreator implements SchemaGenerator {
                     CREATE index PatientDoB
                     ON Patient (dateofbirth);
                     
-                    CREATE index Wid
-                    ON Ward (ID);
+                   
                     
                     CREATE index HWID
                     ON HospitalStay (W_ID);

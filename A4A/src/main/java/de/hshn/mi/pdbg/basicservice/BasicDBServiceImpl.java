@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class BasicDBServiceImpl implements BasicDBService {
     private Connection connection;
-    PreparedStatement[] prepStatGetPatients = new PreparedStatement[36];
+    PreparedStatement[] prepStatGetPatients = new PreparedStatement[16];
     PreparedStatement[] prepStatGetHS = new PreparedStatement[4];
     PreparedStatement prepStatgetOneHS;
     PreparedStatement prepStatGetWards;
@@ -76,22 +76,16 @@ public class BasicDBServiceImpl implements BasicDBService {
     private void fillPrepStatPatients() {
         String base = "SELECT * FROM Patient WHERE '1' = '1'";
         int index = 0;
-        for (int last = 0; last <= 2; last++) {
-            for (int first = 0; first <= 2; first++) {
+        for (int last = 0; last <= 1; last++) {
+            for (int first = 0; first <= 1; first++) {
                 for (int start = 0; start <= 1; start++) {
                     for (int end = 0; end <= 1; end++) {
                         String temp = base;
                         if (last == 1) {
-                            temp += " AND firstname = ?";
-                        }
-                        if (last == 2) {
                             temp += " AND firstname LIKE ?";
                         }
                         if (first == 1) {
-                            temp += " AND lastname = ?";
-                        }
-                        if (first == 2) {
-                            temp += " AND lastname = ?";
+                            temp += " AND lastname LIKE ?";
                         }
                         if (start == 1) {
                             temp += " AND dateOfBirth >= ?";
@@ -178,7 +172,7 @@ public class BasicDBServiceImpl implements BasicDBService {
             counter = counter + 4;
         }
         if (firstname != null) {
-            counter = counter + 12;
+            counter = counter + 8;
         }
         if (startDate != null) {
             counter = counter + 2;
@@ -239,25 +233,25 @@ public class BasicDBServiceImpl implements BasicDBService {
                 }
 
 
-            } else if (counter == 12) {
+            } else if (counter == 8) {
                 prepStatGetPatients[counter].setString(1, firstname);
                 try (ResultSet rs = prepStatGetPatients[counter].executeQuery()) {
                     return getPatientList(patients, rs);
                 }
-            } else if (counter == 13) {
+            } else if (counter == 9) {
                 prepStatGetPatients[counter].setString(1, firstname);
                 prepStatGetPatients[counter].setDate(2, DateHelper.convertDate(endDate));
                 try (ResultSet rs = prepStatGetPatients[counter].executeQuery()) {
                     return getPatientList(patients, rs);
                 }
-            } else if (counter == 14) {
+            } else if (counter == 10) {
                 prepStatGetPatients[counter].setString(1, firstname);
                 prepStatGetPatients[counter].setDate(2, DateHelper.convertDate(startDate));
                 try (ResultSet rs =  prepStatGetPatients[counter].executeQuery()) {
                     return getPatientList(patients, rs);
                 }
 
-            } else if (counter == 15) {
+            } else if (counter == 11) {
 
                 prepStatGetPatients[counter].setString(1, firstname);
                 prepStatGetPatients[counter].setDate(2, DateHelper.convertDate(startDate));
@@ -266,13 +260,13 @@ public class BasicDBServiceImpl implements BasicDBService {
                     return getPatientList(patients, rs);
                 }
 
-            } else if (counter == 16) {
+            } else if (counter == 12) {
                 prepStatGetPatients[counter].setString(1, firstname);
                 prepStatGetPatients[counter].setString(2, lastname);
                 try (ResultSet rs = prepStatGetPatients[counter].executeQuery()) {
                     return getPatientList(patients, rs);
                 }
-            } else if (counter == 17) {
+            } else if (counter == 13) {
 
                 prepStatGetPatients[counter].setString(1, firstname);
                 prepStatGetPatients[counter].setString(2, lastname);
@@ -280,14 +274,14 @@ public class BasicDBServiceImpl implements BasicDBService {
                 try (ResultSet rs = prepStatGetPatients[counter].executeQuery()) {
                     return getPatientList(patients, rs);
                 }
-            } else if (counter == 18) {
+            } else if (counter == 14) {
                 prepStatGetPatients[counter].setString(1, firstname);
                 prepStatGetPatients[counter].setString(2, lastname);
                 prepStatGetPatients[counter].setDate(3, DateHelper.convertDate(startDate));
                 try (ResultSet rs = prepStatGetPatients[counter].executeQuery()) {
                     return getPatientList(patients, rs);
                 }
-            } else if (counter == 19) {
+            } else if (counter == 15) {
                 prepStatGetPatients[counter].setString(1, firstname);
                 prepStatGetPatients[counter].setString(2, lastname);
                 prepStatGetPatients[counter].setDate(3, DateHelper.convertDate(startDate));
