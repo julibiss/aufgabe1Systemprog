@@ -10,11 +10,12 @@ public class DBGeneratorBaseline {
      * @ throws Exception
      */
     public static void main(String[] args) throws Exception {
-
+        BaselineDBServiceFactory.createBaselineDBService();
         new de.hshn.mi.pdbg.basicservice
                 .jdbc.PostgresSQLBaselineDBConstructor().construct(
-                "jdbc:postgresql://postgres/pdbg-baseline",
-                "postgres", "postgres"
+                "jdbc:postgresql://localhost:5432/dbOpt",
+                "postgres", "password"
+
         );
     }
 }

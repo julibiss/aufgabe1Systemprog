@@ -21,7 +21,8 @@ public class BaselineDBServiceFactory {
             // login and password in CI/CD context
             Class.forName(org.postgresql.Driver.class.getName());
             return PostgresSQLBaselineDBFactory.createBaselineDBService("jdbc:postgresql://postgres/pdbg-baseline",
-                    "postgres", "postgres");
+                    "postgres",
+                    "postgres");
         } catch (Exception e) {
             e.printStackTrace();
         }
