@@ -286,6 +286,8 @@ public class BasicDBServiceImpl implements BasicDBService {
                     try (ResultSet rs = prepStatGetPatients[counter].executeQuery()) {
                         return getPatientList(patients, rs);
                     }
+                default:
+                    break;
             }
 
 
