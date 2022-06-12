@@ -13,9 +13,9 @@ public class DBGeneratorBaseline {
         BaselineDBServiceFactory.createBaselineDBService();
         new de.hshn.mi.pdbg.basicservice
                 .jdbc.PostgresSQLBaselineDBConstructor().construct(
-                "jdbc:postgresql://postgres/pdbg-a4a",
+                "jdbc:postgresql://localhost:5432/dbOpt",
                 "postgres",
-                "postgres"
+                "password"
         );
     }
 }
