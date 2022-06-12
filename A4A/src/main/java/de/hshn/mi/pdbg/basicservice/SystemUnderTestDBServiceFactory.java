@@ -10,9 +10,10 @@ import java.sql.SQLException;
 public class SystemUnderTestDBServiceFactory {
 
     /**
-     * Test.
-     * @ return
+     * Factory method in order to create a instance of your implementation of the BasicDBService.
+     * @ return instance of a system under test BasicDBService object.
      */
+
     public static BasicDBService createSystemUnderTestDBService() {
         try {
             return new BasicDBServiceImpl("jdbc:postgresql://localhost:5432/postgres",
