@@ -88,7 +88,7 @@ public class HospitalStayImpl extends PersistentJDBCObject implements HospitalSt
                 getBasicDBService().store(ward);
             }
             this.setObjectID(this.generateID(connection, "idsequence"));
-            String sql = """
+            preparedStatementHospitalStayInsert = connection.prepareStatement("""
                     insert into hospitalstay (
                     id,
                     p_id,
@@ -97,8 +97,7 @@ public class HospitalStayImpl extends PersistentJDBCObject implements HospitalSt
                     dateofdischarge
                     )
                     values (?, ?, ?, ?, ?)
-                    """;
-            preparedStatementHospitalStayInsert = connection.prepareStatement(sql);
+                    """);
             preparedStatementHospitalStayInsert.setLong(1, this.getObjectID());
             preparedStatementHospitalStayInsert.setLong(2, patient.getObjectID());
             preparedStatementHospitalStayInsert.setLong(3, ward.getObjectID());
@@ -113,7 +112,7 @@ public class HospitalStayImpl extends PersistentJDBCObject implements HospitalSt
             preparedStatementHospitalStayInsert.executeUpdate();
             preparedStatementHospitalStayInsert.close();
         } else {
-            String sql = """
+            preparedStatementHospitalStayUpdate = connection.prepareStatement("""
                     UPDATE hospitalstay
                     SET 
                     p_id = ?,
@@ -121,8 +120,7 @@ public class HospitalStayImpl extends PersistentJDBCObject implements HospitalSt
                     dateofadmission = ?,
                     dateofdischarge = ?
                     WHERE id = ?
-                    """;
-            preparedStatementHospitalStayUpdate = connection.prepareStatement(sql);
+                    """);
             preparedStatementHospitalStayUpdate.setLong(1, patient.getObjectID());
             preparedStatementHospitalStayUpdate.setLong(2, ward.getObjectID());
             preparedStatementHospitalStayUpdate.setDate(3,

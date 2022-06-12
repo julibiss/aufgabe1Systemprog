@@ -134,7 +134,7 @@ public class PatientImpl extends PersistentJDBCObject implements Patient {
         assert connection != null;
         if (!this.isPersistent()) {
             this.setObjectID(this.generateID(connection, "idsequence"));
-            String sql = """
+            preparedStatementPatientInsert = connection.prepareStatement( """
                     insert into patient (
                     id,
                     firstname,
@@ -143,9 +143,7 @@ public class PatientImpl extends PersistentJDBCObject implements Patient {
                     healthinsurancecompany,
                     insurancenumber)
                     values (?, ?, ?, ?, ?, ?)
-                    """;
-            preparedStatementPatientInsert = connection.prepareStatement(sql);
-
+                    """);;
             preparedStatementPatientInsert.setLong(1, this.getObjectID());
             preparedStatementPatientInsert.setString(2, this.getFirstname());
             preparedStatementPatientInsert.setString(3, this.getLastname());
@@ -161,7 +159,7 @@ public class PatientImpl extends PersistentJDBCObject implements Patient {
             preparedStatementPatientInsert.execute();
             preparedStatementPatientInsert.close();
         } else {
-            String sql = """
+            preparedStatementPatientUpdate = connection.prepareStatement("""
                     UPDATE patient
                     SET 
                     firstname = ?,
@@ -170,8 +168,7 @@ public class PatientImpl extends PersistentJDBCObject implements Patient {
                     healthinsurancecompany = ?,
                     insurancenumber = ?
                     WHERE id = ?
-                    """;
-            preparedStatementPatientUpdate = connection.prepareStatement(sql);
+                    """);
             preparedStatementPatientUpdate.setString(1, this.getFirstname());
             preparedStatementPatientUpdate.setString(2, this.getLastname());
             if (this.getDateOfBirth() != null) {
