@@ -25,6 +25,7 @@ public class BasicDBServiceImpl implements BasicDBService {
     PreparedStatement prepStatGetWards;
     PreparedStatement prepStatGetWard;
     PreparedStatement prepStatGetPatient;
+
     /**
      * Default constructor which creates a connection to the database.
      * @ param jdbcUrl link to our local database
@@ -228,9 +229,9 @@ public class BasicDBServiceImpl implements BasicDBService {
             } else if (firstname == null && lastname != null && startDate == null && endDate != null) {
                 prepStatGetPatients[5].setString(1, lastname);
                 prepStatGetPatients[5].setDate(2, DateHelper.convertDate(endDate));
-                    try (ResultSet rs = prepStatGetPatients[5].executeQuery()) {
-                        return getPatientList(patients, rs);
-                    }
+                try (ResultSet rs = prepStatGetPatients[5].executeQuery()) {
+                    return getPatientList(patients, rs);
+                }
             } else if (firstname != null && lastname != null && startDate == null && endDate != null) {
                 prepStatGetPatients[13].setString(1, firstname);
                 prepStatGetPatients[13].setString(2, lastname);
