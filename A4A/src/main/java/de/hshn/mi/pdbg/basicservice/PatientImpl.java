@@ -134,7 +134,7 @@ public class PatientImpl extends PersistentJDBCObject implements Patient {
         assert connection != null;
         if (!this.isPersistent()) {
             this.setObjectID(this.generateID(connection, "idsequence"));
-            preparedStatementPatientInsert = connection.prepareStatement( """
+            preparedStatementPatientInsert = connection.prepareStatement("""
                     insert into patient (
                     id,
                     firstname,
