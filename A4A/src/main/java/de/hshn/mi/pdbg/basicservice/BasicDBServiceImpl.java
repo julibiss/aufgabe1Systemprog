@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class BasicDBServiceImpl implements BasicDBService {
     private Connection connection;
-    PreparedStatement[] prepStatGetPatients = new PreparedStatement[16];
+    PreparedStatement[] prepStatGetPatients = new PreparedStatement[36];
     PreparedStatement[] prepStatGetHS = new PreparedStatement[4];
     PreparedStatement prepStatgetOneHS;
     PreparedStatement prepStatGetWards;
@@ -84,15 +84,21 @@ public class BasicDBServiceImpl implements BasicDBService {
     private void fillPrepStatPatients() {
         String base = "SELECT * FROM Patient WHERE '1' = '1'";
         int index = 0;
-        for (int last = 0; last <= 1; last++) {
-            for (int first = 0; first <= 1; first++) {
+        for (int last = 0; last <= 2; last++) {
+            for (int first = 0; first <= 2; first++) {
                 for (int start = 0; start <= 1; start++) {
                     for (int end = 0; end <= 1; end++) {
                         String temp = base;
                         if (last == 1) {
                             temp += " AND firstname LIKE ?";
                         }
+                        if (last == 2) {
+                            temp += " AND firstname LIKE ?";
+                        }
                         if (first == 1) {
+                            temp += " AND firstname LIKE ?";
+                        }
+                        if (first == 2) {
                             temp += " AND lastname LIKE ?";
                         }
                         if (start == 1) {
@@ -171,13 +177,13 @@ public class BasicDBServiceImpl implements BasicDBService {
         List<Patient> patients = new ArrayList();
 
         int counter = 0;
-        if (lastname != null) {
+        if (lastname != null && !lastname.contains("%")) {
             counter += 4;
         }
-        if (firstname != null) {
+        if (firstname != null && !firstname.contains("%")) {
             counter += 8;
         }
-        if (startDate != null) {
+        if (startDate != null ) {
             counter += 2;
         }
         if (endDate != null) {
