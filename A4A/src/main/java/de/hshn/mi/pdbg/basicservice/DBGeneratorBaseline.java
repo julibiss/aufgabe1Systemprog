@@ -15,7 +15,7 @@ public class DBGeneratorBaseline {
                 .jdbc.PostgresSQLBaselineDBConstructor().construct(
                 "jdbc:postgresql://localhost:5432/dbOpt",
                 "postgres",
-                "password"
+                "secret"
         );
     }
 }

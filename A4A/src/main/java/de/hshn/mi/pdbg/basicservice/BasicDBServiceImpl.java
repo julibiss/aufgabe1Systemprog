@@ -90,13 +90,13 @@ public class BasicDBServiceImpl implements BasicDBService {
                     for (int end = 0; end <= 1; end++) {
                         String temp = base;
                         if (last == 1) {
-                            temp += " AND firstname LIKE ?";
+                            temp += " AND firstname = ?";
                         }
                         if (last == 2) {
                             temp += " AND firstname LIKE ?";
                         }
                         if (first == 1) {
-                            temp += " AND firstname LIKE ?";
+                            temp += " AND lastname = ?";
                         }
                         if (first == 2) {
                             temp += " AND lastname LIKE ?";
@@ -177,11 +177,18 @@ public class BasicDBServiceImpl implements BasicDBService {
         List<Patient> patients = new ArrayList();
 
         int counter = 0;
-        if (lastname != null && !lastname.contains("%")) {
+        int index = 1;
+        if (lastname != null && !lastname.contains("%") && !lastname.contains("_") && !lastname.contains("*")) {
             counter += 4;
         }
-        if (firstname != null && !firstname.contains("%")) {
+        else if(lastname != null){
             counter += 8;
+        }
+        if (firstname != null && !firstname.contains("%") && !firstname.contains("_") && !firstname.contains("*")) {
+            counter += 12;
+        }
+        else if(firstname != null){
+            counter += 24;
         }
         if (startDate != null ) {
             counter += 2;
@@ -190,109 +197,27 @@ public class BasicDBServiceImpl implements BasicDBService {
             counter += 1;
         }
 
+
         try {
-
-            switch (counter) {
-                case 0:
-                    try (ResultSet rs = prepStatGetPatients[counter].executeQuery()) {
-                        return getPatientList(patients, rs);
-                    }
-                case 1:
-                    prepStatGetPatients[counter].setDate(1, DateHelper.convertDate(endDate));
-                    try (ResultSet rs = prepStatGetPatients[counter].executeQuery()) {
-                        return getPatientList(patients, rs);
-                    }
-                case 2:
-                    prepStatGetPatients[counter].setDate(1, DateHelper.convertDate(startDate));
-                    try (ResultSet rs = prepStatGetPatients[counter].executeQuery()) {
-                        return getPatientList(patients, rs);
-                    }
-                case 3:
-                    prepStatGetPatients[counter].setDate(1, DateHelper.convertDate(startDate));
-                    prepStatGetPatients[counter].setDate(2, DateHelper.convertDate(endDate));
-                    try (ResultSet rs = prepStatGetPatients[counter].executeQuery()) {
-                        return getPatientList(patients, rs);
-                    }
-                case 4:
-                    prepStatGetPatients[counter].setString(1, lastname);
-                    try (ResultSet rs = prepStatGetPatients[counter].executeQuery()) {
-                        return getPatientList(patients, rs);
-                    }
-                case 5:
-                    prepStatGetPatients[counter].setString(1, lastname);
-                    prepStatGetPatients[counter].setDate(2, DateHelper.convertDate(endDate));
-                    try (ResultSet rs = prepStatGetPatients[counter].executeQuery()) {
-                        return getPatientList(patients, rs);
-                    }
-                case 6:
-                    prepStatGetPatients[counter].setString(1, lastname);
-                    prepStatGetPatients[counter].setDate(2, DateHelper.convertDate(startDate));
-                    try (ResultSet rs = prepStatGetPatients[counter].executeQuery()) {
-                        return getPatientList(patients, rs);
-                    }
-
-                case 7:
-                    prepStatGetPatients[counter].setString(1, lastname);
-                    prepStatGetPatients[counter].setDate(2, DateHelper.convertDate(startDate));
-                    prepStatGetPatients[counter].setDate(3, DateHelper.convertDate(endDate));
-                    try (ResultSet rs = prepStatGetPatients[counter].executeQuery()) {
-                        return getPatientList(patients, rs);
-                    }
-                case 8:
-                    prepStatGetPatients[counter].setString(1, firstname);
-                    try (ResultSet rs = prepStatGetPatients[counter].executeQuery()) {
-                        return getPatientList(patients, rs);
-                    }
-                case 9:
-                    prepStatGetPatients[counter].setString(1, firstname);
-                    prepStatGetPatients[counter].setDate(2, DateHelper.convertDate(endDate));
-                    try (ResultSet rs = prepStatGetPatients[counter].executeQuery()) {
-                        return getPatientList(patients, rs);
-                    }
-                case 10:
-                    prepStatGetPatients[counter].setString(1, firstname);
-                    prepStatGetPatients[counter].setDate(2, DateHelper.convertDate(startDate));
-                    try (ResultSet rs = prepStatGetPatients[counter].executeQuery()) {
-                        return getPatientList(patients, rs);
-                    }
-                case 11:
-                    prepStatGetPatients[counter].setString(1, firstname);
-                    prepStatGetPatients[counter].setDate(2, DateHelper.convertDate(startDate));
-                    prepStatGetPatients[counter].setDate(3, DateHelper.convertDate(endDate));
-                    try (ResultSet rs = prepStatGetPatients[counter].executeQuery()) {
-                        return getPatientList(patients, rs);
-                    }
-
-                case 12:
-                    prepStatGetPatients[counter].setString(1, firstname);
-                    prepStatGetPatients[counter].setString(2, lastname);
-                    try (ResultSet rs = prepStatGetPatients[counter].executeQuery()) {
-                        return getPatientList(patients, rs);
-                    }
-                case 13:
-                    prepStatGetPatients[counter].setString(1, firstname);
-                    prepStatGetPatients[counter].setString(2, lastname);
-                    prepStatGetPatients[counter].setDate(3, DateHelper.convertDate(endDate));
-                    try (ResultSet rs = prepStatGetPatients[counter].executeQuery()) {
-                        return getPatientList(patients, rs);
-                    }
-                case 14:
-                    prepStatGetPatients[counter].setString(1, firstname);
-                    prepStatGetPatients[counter].setString(2, lastname);
-                    prepStatGetPatients[counter].setDate(3, DateHelper.convertDate(startDate));
-                    try (ResultSet rs = prepStatGetPatients[counter].executeQuery()) {
-                        return getPatientList(patients, rs);
-                    }
-                case 15:
-                    prepStatGetPatients[counter].setString(1, firstname);
-                    prepStatGetPatients[counter].setString(2, lastname);
-                    prepStatGetPatients[counter].setDate(3, DateHelper.convertDate(startDate));
-                    prepStatGetPatients[counter].setDate(4, DateHelper.convertDate(endDate));
-                    try (ResultSet rs = prepStatGetPatients[counter].executeQuery()) {
-                        return getPatientList(patients, rs);
-                    }
-                default:
-                    break;
+            if(firstname != null)
+            {
+                prepStatGetPatients[counter].setString(index,firstname);
+                index++;
+            }
+            if(lastname != null)
+            {
+                prepStatGetPatients[counter].setString(index,lastname);
+                index++;
+            }
+            if(startDate != null){
+                prepStatGetPatients[counter].setDate(index, DateHelper.convertDate(startDate));
+                index++;
+            }
+            if(endDate != null){
+                prepStatGetPatients[counter].setDate(index, DateHelper.convertDate(endDate));
+            }
+            try (ResultSet rs = prepStatGetPatients[counter].executeQuery()) {
+                return getPatientList(patients, rs);
             }
         } catch (SQLException e) {
             e.printStackTrace();

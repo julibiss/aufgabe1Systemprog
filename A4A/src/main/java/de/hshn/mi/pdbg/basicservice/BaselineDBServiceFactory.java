@@ -22,7 +22,7 @@ public class BaselineDBServiceFactory {
             Class.forName(org.postgresql.Driver.class.getName());
             return PostgresSQLBaselineDBFactory.createBaselineDBService("jdbc:postgresql://localhost:5432/dbOpt",
                     "postgres",
-                    "password");
+                    "secret");
         } catch (Exception e) {
             e.printStackTrace();
         }
