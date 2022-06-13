@@ -81,7 +81,11 @@ public class BasicDBServiceImpl implements BasicDBService {
                                       """);
     }
 
-    private void fillPrepStatHospitalStay() {
+    /**
+     * Fills the preparedStatement with all the necessary commands.
+     * The commands are used to create a table with all the hospitalStays that fulfill the conditions of the sql query.
+     */
+    private void fillPrepStatHospitalStay() throws SQLException {
         String base = "SELECT * FROM hospitalstay AS hs, ward as wa, patient as p " +
                       "WHERE hs.w_id = wa.id AND hs.p_id = p.id AND p.id = ?";
 
@@ -102,7 +106,11 @@ public class BasicDBServiceImpl implements BasicDBService {
         }
     }
 
-    private void fillPrepStatPatients() {
+    /**
+     * Fills the preparedStatement with all the necessary commands.
+     * The commands are used to create a table with all the patients that fulfill the conditions of the sql query.
+     */
+    private void fillPrepStatPatients() throws SQLException {
         String base = "SELECT * FROM Patient WHERE '1' = '1'";
         int index = 0;
         for (int last = 0; last <= 2; last++) {
@@ -430,13 +438,9 @@ public class BasicDBServiceImpl implements BasicDBService {
                 throw new FetchException(e.getMessage());
             }
         } else {
-            try (PreparedStatement preparedStatement = connection.prepareStatement("""
-                                                                            SELECT COUNT(*) From HospitalStay 
-                                                                            WHERE dateofdischarge IS NULL 
-                                                                            AND HospitalStay.w_id = ?;
-                                                                            """)) {
-                preparedStatement.setLong(1, ward.getObjectID());
-                try (ResultSet rs = preparedStatement.executeQuery()) {
+            try  {
+                prepStatGetBedsOneWard.setLong(1, ward.getObjectID());
+                try (ResultSet rs = prepStatGetBedsOneWard.executeQuery()) {
                     if (rs.next()) {
                         numberOfBeds += rs.getInt(1);
                     }
@@ -463,12 +467,9 @@ public class BasicDBServiceImpl implements BasicDBService {
                 throw new IllegalArgumentException(e.getMessage());
             }
         } else {
-            try (PreparedStatement preparedStatement = connection.prepareStatement("""
-                                    SELECT SUM(numberofbeds) FROM Ward WHERE Ward.id = ?;
-                                      """
-            )) {
-                preparedStatement.setLong(1, ward.getObjectID());
-                try (ResultSet rs = preparedStatement.executeQuery()) {
+            try  {
+                preparedStatementNumberOfBedsOneWard.setLong(1, ward.getObjectID());
+                try (ResultSet rs = preparedStatementNumberOfBedsOneWard.executeQuery()) {
                     if (rs.next()) {
                         freeBeds += rs.getLong(1) - getAllocatedBeds(ward);
                     }
