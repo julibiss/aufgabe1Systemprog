@@ -180,17 +180,15 @@ public class BasicDBServiceImpl implements BasicDBService {
         int index = 1;
         if (lastname != null && !lastname.contains("%") && !lastname.contains("_") && !lastname.contains("*")) {
             counter += 4;
-        }
-        else if(lastname != null){
+        } else if (lastname != null) {
             counter += 8;
         }
         if (firstname != null && !firstname.contains("%") && !firstname.contains("_") && !firstname.contains("*")) {
             counter += 12;
-        }
-        else if(firstname != null){
+        } else if (firstname != null) {
             counter += 24;
         }
-        if (startDate != null ) {
+        if (startDate != null) {
             counter += 2;
         }
         if (endDate != null) {
@@ -199,21 +197,19 @@ public class BasicDBServiceImpl implements BasicDBService {
 
 
         try {
-            if(firstname != null)
-            {
-                prepStatGetPatients[counter].setString(index,firstname);
+            if (firstname != null) {
+                prepStatGetPatients[counter].setString(index, firstname);
                 index++;
             }
-            if(lastname != null)
-            {
-                prepStatGetPatients[counter].setString(index,lastname);
+            if (lastname != null) {
+                prepStatGetPatients[counter].setString(index, lastname);
                 index++;
             }
-            if(startDate != null){
+            if (startDate != null) {
                 prepStatGetPatients[counter].setDate(index, DateHelper.convertDate(startDate));
                 index++;
             }
-            if(endDate != null){
+            if (endDate != null) {
                 prepStatGetPatients[counter].setDate(index, DateHelper.convertDate(endDate));
             }
             try (ResultSet rs = prepStatGetPatients[counter].executeQuery()) {
@@ -301,7 +297,7 @@ public class BasicDBServiceImpl implements BasicDBService {
         try {
             prepStatgetOneHS.setLong(1, patientID);
             try (ResultSet rs = prepStatgetOneHS.executeQuery()) {
-                getHS(hospitalStays,rs);
+                getHS(hospitalStays, rs);
 
             }
         } catch (SQLException throwables) {
@@ -333,7 +329,7 @@ public class BasicDBServiceImpl implements BasicDBService {
             try {
                 prepStatGetHS[0].setLong(1, patientID);
                 try (ResultSet rs = prepStatGetHS[0].executeQuery()) {
-                    getHS(hospitalStays,rs);
+                    getHS(hospitalStays, rs);
                 }
             } catch (SQLException e) {
                 throw new FetchException(e.getMessage());
@@ -343,7 +339,7 @@ public class BasicDBServiceImpl implements BasicDBService {
                 prepStatGetHS[1].setLong(1, patientID);
                 prepStatGetHS[1].setDate(2, DateHelper.convertDate(endDate));
                 try (ResultSet rs = prepStatGetHS[1].executeQuery()) {
-                    getHS(hospitalStays,rs);
+                    getHS(hospitalStays, rs);
                 }
             } catch (SQLException e) {
                 throw new FetchException(e.getMessage());
@@ -353,7 +349,7 @@ public class BasicDBServiceImpl implements BasicDBService {
                 prepStatGetHS[2].setLong(1, patientID);
                 prepStatGetHS[2].setDate(2, DateHelper.convertDate(startDate));
                 try (ResultSet rs = prepStatGetHS[2].executeQuery()) {
-                    getHS(hospitalStays,rs);
+                    getHS(hospitalStays, rs);
                 }
             } catch (SQLException e) {
                 throw new FetchException(e.getMessage());
@@ -364,7 +360,7 @@ public class BasicDBServiceImpl implements BasicDBService {
                 prepStatGetHS[3].setDate(2, DateHelper.convertDate(endDate));
                 prepStatGetHS[3].setDate(3, DateHelper.convertDate(startDate));
                 try (ResultSet rs = prepStatGetHS[3].executeQuery()) {
-                   getHS(hospitalStays,rs);
+                    getHS(hospitalStays, rs);
                 }
             } catch (SQLException e) {
                 throw new FetchException(e.getMessage());
@@ -384,6 +380,7 @@ public class BasicDBServiceImpl implements BasicDBService {
         }
         return hospitalStays;
     }
+
     @Override
     public double getAverageHospitalStayDuration(long wardID) {
         assert wardID > 0;
