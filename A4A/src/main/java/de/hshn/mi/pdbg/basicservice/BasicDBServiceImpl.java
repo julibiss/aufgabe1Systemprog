@@ -26,6 +26,11 @@ public class BasicDBServiceImpl implements BasicDBService {
     PreparedStatement prepStatGetWard;
     PreparedStatement prepStatGetPatient;
     PreparedStatement prepStatRemoveHS;
+    PreparedStatement prepStatGetAvgHS;
+    PreparedStatement prepStatGetBedsAllWards;
+    PreparedStatement prepStatGetBedsOneWard;
+    PreparedStatement prepStatGetNumOfBedsAllWards;
+    PreparedStatement preparedStatementNumberOfBedsOneWard;
 
     /**
      * Default constructor which creates a connection to the database.
@@ -54,6 +59,26 @@ public class BasicDBServiceImpl implements BasicDBService {
         prepStatGetWards = connection.prepareStatement("""
                                                            SELECT * FROM Ward
                                                            """);
+        prepStatGetAvgHS = connection.prepareStatement("""
+                                                    SELECT AVG(dateofdischarge-dateofadmission) AS test 
+                                                    FROM HospitalStay AS hs 
+                                                    WHERE hs.w_id = ? AND dateofdischarge IS NOT NULL
+                                                    """);
+        prepStatGetBedsAllWards = connection.prepareStatement("""
+                                                                        SELECT COUNT(*) FROM HospitalStay
+                                                                        WHERE dateofdischarge IS NULL;
+                                                                        """);
+        prepStatGetBedsOneWard = connection.prepareStatement("""
+                                                                            SELECT COUNT(*) From HospitalStay 
+                                                                            WHERE dateofdischarge IS NULL 
+                                                                            AND HospitalStay.w_id = ?;
+                                                                            """);
+        prepStatGetNumOfBedsAllWards = connection.prepareStatement("""
+                                SELECT SUM(numberofbeds) FROM Ward;
+                        """);
+        preparedStatementNumberOfBedsOneWard = connection.prepareStatement("""
+                                    SELECT SUM(numberofbeds) FROM Ward WHERE Ward.id = ?;
+                                      """);
     }
 
     private void fillPrepStatHospitalStay() {
@@ -71,11 +96,7 @@ public class BasicDBServiceImpl implements BasicDBService {
                     temp += " AND dateofadmission >= ?";
                 }
                 temp += ";";
-                try {
-                    prepStatGetHS[index] = connection.prepareStatement(temp);
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                }
+                prepStatGetHS[index] = connection.prepareStatement(temp);
                 index++;
             }
         }
@@ -109,11 +130,7 @@ public class BasicDBServiceImpl implements BasicDBService {
 
                         }
                         temp += ";";
-                        try {
-                            prepStatGetPatients[index] = connection.prepareStatement(temp);
-                        } catch (SQLException throwables) {
-                            throwables.printStackTrace();
-                        }
+                        prepStatGetPatients[index] = connection.prepareStatement(temp);
                         index++;
                     }
                 }
@@ -216,9 +233,8 @@ public class BasicDBServiceImpl implements BasicDBService {
                 return getPatientList(patients, rs);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new FetchException(e.getMessage());
         }
-        return patients;
     }
 
     /**
@@ -386,15 +402,9 @@ public class BasicDBServiceImpl implements BasicDBService {
         assert wardID > 0;
 
         double average = 0;
-        try (PreparedStatement preparedStatement = connection.prepareStatement("""
-                                                    SELECT AVG(dateofdischarge-dateofadmission) AS test 
-                                                    FROM HospitalStay AS hs 
-                                                    WHERE hs.w_id = ? AND dateofdischarge IS NOT NULL
-                                                    """
-        )) {
-
-            preparedStatement.setLong(1, wardID);
-            try (ResultSet rs = preparedStatement.executeQuery()) {
+        try {
+            prepStatGetAvgHS.setLong(1, wardID);
+            try (ResultSet rs = prepStatGetAvgHS.executeQuery()) {
                 if (rs.next()) {
                     average += rs.getDouble(1);
                 }
@@ -412,11 +422,7 @@ public class BasicDBServiceImpl implements BasicDBService {
 
 
         if (ward == null) {
-            try (PreparedStatement preparedStatement = connection.prepareStatement("""
-                                                                        SELECT COUNT(*) FROM HospitalStay
-                                                                        WHERE dateofdischarge IS NULL;
-                                                                        """);
-                 ResultSet rs = preparedStatement.executeQuery();) {
+            try (ResultSet rs = prepStatGetBedsAllWards.executeQuery();) {
                 if (rs.next()) {
                     numberOfBeds += rs.getInt(1);
                 }
@@ -447,11 +453,8 @@ public class BasicDBServiceImpl implements BasicDBService {
         int freeBeds = 0;
         assert ward == null || ward.isPersistent();
         if (ward == null) {
-            try (PreparedStatement preparedStatement = connection.prepareStatement("""
-                                SELECT SUM(numberofbeds) FROM Ward;
-                        """
-                    )) {
-                try (ResultSet rs = preparedStatement.executeQuery()) {
+            try  {
+                try (ResultSet rs = prepStatGetNumOfBedsAllWards.executeQuery()) {
                     if (rs.next()) {
                         freeBeds += rs.getLong(1) - getAllocatedBeds(ward);
                     }
